@@ -2,54 +2,131 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+    provider = "sqlite"
+    url      = "file:../src/database/sqlite/dev.db"
 }
 
 model Member {
-  id          Int      @id @default(autoincrement())
-  name        String
-  birth_date  DateTime
-  batism_date DateTime
-  titleChurch String
-  cpf         BigInt
-  rg          Int
-  login       String
-  email       String
-  password    String
-  foto        String?
+    id               Int          @id @default(autoincrement())
+    name             String
+    birth_date       DateTime
+    batism_date      DateTime
+    titleChurch      String
+    cpf              BigInt
+    rg               Int
+    login            String
+    email            String
+    password         String
+    foto             String?
+    id_special_offer Int
+    specialOffers    SpecialOffer @relation(fields: [id_special_offer], references: [id])
+    Manager          Manager[]
+    Treasurer        Treasurer[]
 
-  @@map("members")
+    @@map("members")
+}
+
+model Manager {
+    id        Int      @id @default(autoincrement())
+    id_member Int
+    member    Member   @relation(fields: [id_member], references: [id])
+    Church    Church[]
+
+    @@map("managers")
+}
+
+model Treasurer {
+    id        Int      @id @default(autoincrement())
+    startDate DateTime
+    endDate   DateTime
+    Offer     Offer[]
+    id_member Int
+    member    Member   @relation(fields: [id_member], references: [id])
+
+    @@map("treasurers")
 }
 
 model Offer {
-  id           Int            @id @default(autoincrement())
-  value        Int
-  SpecialOffer SpecialOffer[]
+    id           Int            @id @default(autoincrement())
+    value        Int
+    SpecialOffer SpecialOffer[]
+    id_treasurer Int
+    treasurer    Treasurer      @relation(fields: [id_treasurer], references: [id])
+    Cult         Cult[]
 
-  @@map("offers")
+    @@map("offers")
 }
 
 model SpecialOffer {
-  id       Int      @id @default(autoincrement())
-  reason   String
-  date     DateTime
-  id_offer Int
-  offer    Offer    @relation(fields: [id_offer], references: [id])
-  Tethe    Tethe[]
+    id       Int      @id @default(autoincrement())
+    reason   String
+    date     DateTime
+    id_offer Int
+    offer    Offer    @relation(fields: [id_offer], references: [id])
+    Member   Member[]
+    Tethe    Tethe[]
 
-  @@map("special_offers")
+    @@map("special_offers")
 }
 
 model Tethe {
-  id               Int          @id @default(autoincrement())
-  salaryValue      Int
-  id_special_offer Int
-  specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id])
+    id               Int          @id @default(autoincrement())
+    salaryValue      Int
+    id_special_offer Int
+    specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id])
 
-  @@map("tethes")
+    @@map("tethes")
+}
+
+model Church {
+    id         Int        @id @default(autoincrement())
+    date       DateTime
+    id_manager Int
+    manager    Manager    @relation(fields: [id_manager], references: [id])
+    Cult       Cult[]
+    Cost       Cost[]
+    Location   Location[]
+
+    @@map("churchs")
+}
+
+model Cult {
+    id        Int      @id @default(autoincrement())
+    date      DateTime
+    theme     String
+    id_offer  Int
+    offer     Offer    @relation(fields: [id_offer], references: [id])
+    id_church Int
+    church    Church   @relation(fields: [id_church], references: [id])
+
+    @@map("cults")
+}
+
+model Cost {
+    id          Int      @id @default(autoincrement())
+    value       Float
+    date        DateTime
+    description String
+    id_church   Int
+    church      Church   @relation(fields: [id_church], references: [id])
+
+    @@map("costs")
+}
+
+model Location {
+    id         Int    @id @default(autoincrement())
+    street String
+    district   String
+    city       String
+    state      String
+    country    String
+    cep        Int
+    id_church  Int
+    church     Church @relation(fields: [id_church], references: [id])
+
+    @@map("locations")
 }

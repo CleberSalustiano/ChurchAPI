@@ -1,3 +1,6 @@
+import { ITreasure } from "./ITreasurer";
+
 export interface IOffer {
-    value: String;
+  value: String;
+  treasurer: ITreasure;
 }

@@ -1,3 +1,4 @@
+import { IChurch } from "./IChurch";
 import { ISpecialOffer } from "./ISpecialOffer";
 
 export interface IMember {
@@ -12,4 +13,5 @@ export interface IMember {
     password: String;
     foto?: String;
     specialsOffers?: ISpecialOffer[];
+    church: IChurch;    
 }
