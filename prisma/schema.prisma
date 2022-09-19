@@ -11,16 +11,45 @@ datasource db {
 }
 
 model Member {
-  id Int @id @default(autoincrement())
-  name String 
-  birth_date DateTime
+  id          Int      @id @default(autoincrement())
+  name        String
+  birth_date  DateTime
   batism_date DateTime
   titleChurch String
-  cpf BigInt
-  rg Int
-  login String
-  email String
-  password String
-  foto String?
+  cpf         BigInt
+  rg          Int
+  login       String
+  email       String
+  password    String
+  foto        String?
+
+  @@map("members")
 }
 
+model Offer {
+  id           Int            @id @default(autoincrement())
+  value        Int
+  SpecialOffer SpecialOffer[]
+
+  @@map("offers")
+}
+
+model SpecialOffer {
+  id       Int      @id @default(autoincrement())
+  reason   String
+  date     DateTime
+  id_offer Int
+  offer    Offer    @relation(fields: [id_offer], references: [id])
+  Tethe    Tethe[]
+
+  @@map("special_offers")
+}
+
+model Tethe {
+  id               Int          @id @default(autoincrement())
+  salaryValue      Int
+  id_special_offer Int
+  specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id])
+
+  @@map("tethes")
+}
