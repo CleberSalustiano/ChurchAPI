@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/entities/ITithe.ts"],
+  "sourcesContent": ["import { ISpecialOffer } from \"./ISpecialOffer\";\n\nexport interface ITithe extends ISpecialOffer {\n  salaryValue: Number;\n}"],
+  "mappings": ";;AAAA;",
+  "names": []
+}

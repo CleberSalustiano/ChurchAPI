@@ -11,21 +11,20 @@ datasource db {
 }
 
 model Member {
-    id               Int          @id @default(autoincrement())
-    name             String
-    birth_date       DateTime
-    batism_date      DateTime
-    titleChurch      String
-    cpf              BigInt
-    rg               Int
-    login            String
-    email            String
-    password         String
-    foto             String?
-    id_special_offer Int
-    specialOffers    SpecialOffer @relation(fields: [id_special_offer], references: [id])
-    Manager          Manager[]
-    Treasurer        Treasurer[]
+    id           Int            @id @default(autoincrement())
+    name         String
+    birth_date   DateTime
+    batism_date  DateTime
+    titleChurch  String
+    cpf          BigInt
+    rg           Int
+    login        String
+    email        String
+    password     String
+    foto         String?
+    Manager      Manager[]
+    Treasurer    Treasurer[]
+    SpecialOffer SpecialOffer[]
 
     @@map("members")
 }
@@ -62,13 +61,16 @@ model Offer {
 }
 
 model SpecialOffer {
-    id       Int      @id @default(autoincrement())
-    reason   String
-    date     DateTime
-    id_offer Int
-    offer    Offer    @relation(fields: [id_offer], references: [id])
-    Member   Member[]
-    Tethe    Tethe[]
+    id        Int      @id @default(autoincrement())
+    reason    String
+    date      DateTime
+    id_offer  Int
+    offer     Offer    @relation(fields: [id_offer], references: [id])
+    id_member Int
+    member    Member   @relation(fields: [id_member], references: [id])
+    id_church Int
+    church    Church   @relation(fields: [id_church], references: [id])
+    Tethe     Tethe[]
 
     @@map("special_offers")
 }
@@ -83,13 +85,15 @@ model Tethe {
 }
 
 model Church {
-    id         Int        @id @default(autoincrement())
-    date       DateTime
-    id_manager Int
-    manager    Manager    @relation(fields: [id_manager], references: [id])
-    Cult       Cult[]
-    Cost       Cost[]
-    Location   Location[]
+    id           Int            @id @default(autoincrement())
+    creationDate DateTime
+    id_manager   Int?
+    manager      Manager?        @relation(fields: [id_manager], references: [id])
+    Cult         Cult[]
+    Cost         Cost[]
+    id_location  Int
+    location     Location       @relation(fields: [id_location], references: [id])
+    SpecialOffer SpecialOffer[]
 
     @@map("churchs")
 }
@@ -118,15 +122,14 @@ model Cost {
 }
 
 model Location {
-    id         Int    @id @default(autoincrement())
-    street String
-    district   String
-    city       String
-    state      String
-    country    String
-    cep        Int
-    id_church  Int
-    church     Church @relation(fields: [id_church], references: [id])
+    id       Int      @id @default(autoincrement())
+    street   String
+    district String
+    city     String
+    state    String
+    country  String
+    cep      Int
+    Church   Church[]
 
     @@map("locations")
 }

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/entities/IMember.ts"],
+  "sourcesContent": ["import { IChurch } from \"./IChurch\";\nimport { ISpecialOffer } from \"./ISpecialOffer\";\n\nexport interface IMember {\n    name: String;\n    bith_date: Date;\n    batism_date: Date;\n    titleChurch: String;\n    cpf: BigInt;\n    rg: Number;\n    login: String;\n    email: String;\n    password: String;\n    foto?: String;\n    specialsOffers?: ISpecialOffer[];\n    church: IChurch;    \n}"],
+  "mappings": ";;AAAA;",
+  "names": []
+}

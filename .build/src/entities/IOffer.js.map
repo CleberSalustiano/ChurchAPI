@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/entities/IOffer.ts"],
+  "sourcesContent": ["import { ITreasure } from \"./ITreasurer\";\n\nexport interface IOffer {\n  value: String;\n  treasurer: ITreasure;\n}"],
+  "mappings": ";;AAAA;",
+  "names": []
+}

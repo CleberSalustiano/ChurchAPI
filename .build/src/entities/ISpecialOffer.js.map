@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/entities/ISpecialOffer.ts"],
+  "sourcesContent": ["import { IChurch } from \"./IChurch\";\nimport { IMember } from \"./IMember\";\nimport { IOffer } from \"./IOffer\";\n\nexport interface ISpecialOffer extends IOffer {\n  reason: String;\n  date: Date;\n  member: IMember;\n  church: IChurch;\n}"],
+  "mappings": ";;AAAA;",
+  "names": []
+}

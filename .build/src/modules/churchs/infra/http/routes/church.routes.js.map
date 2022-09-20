@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../../src/modules/churchs/infra/http/routes/church.routes.ts"],
+  "sourcesContent": ["import { Router } from \"express\";\nimport ChurchController from \"../controllers/ChurchController\";\n\nconst churchRouter = Router();\n\nconst churchController = new ChurchController();\nchurchRouter.post(\"/\", churchController.create)\n\nexport default churchRouter;"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA,qBAAuB;AACvB,8BAA6B;AAE7B,MAAM,eAAe;AAErB,MAAM,mBAAmB,IAAI;AAC7B,aAAa,KAAK,KAAK,iBAAiB;AAExC,IAAO,wBAAQ;",
+  "names": []
+}

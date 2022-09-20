@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/entities/IManager.ts"],
+  "sourcesContent": ["import { IChurch } from \"./IChurch\";\nimport { IMember } from \"./IMember\";\n\nexport interface IManager extends IMember {\n  startDate: Date;\n  endDate: Date;\n  church: IChurch[]\n}"],
+  "mappings": ";;AAAA;",
+  "names": []
+}
