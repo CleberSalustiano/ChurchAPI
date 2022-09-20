@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/entities/IChurch.ts"],
-  "sourcesContent": ["import { ICost } from \"./ICost\";\nimport { ICult } from \"./ICult\";\nimport { ILocation } from \"./ILocation\";\nimport { IMember } from \"./IMember\";\nimport { ISpecialOffer } from \"./ISpecialOffer\";\n\nexport interface IChurch {\n  creationDate: Date;\n  location: ILocation;\n  costs: ICost[];\n  members: IMember[];\n  cults: ICult[];\n  specialOffers: ISpecialOffer[];\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

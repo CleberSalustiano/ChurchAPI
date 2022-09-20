@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../src/shared/infra/http/routes/routes.ts"],
-  "sourcesContent": ["import { Router } from \"express\";\nimport churchRouter from \"../../../../modules/churchs/infra/http/routes/church.routes\";\nimport memberRouter from \"../../../../modules/members/infra/http/routes/member.routes\";\n\nconst routes = Router();\n\nroutes.use(\"/member\", memberRouter);\nroutes.use(\"/church\", churchRouter);\n\nexport default routes;"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA,qBAAuB;AACvB,oBAAyB;AACzB,oBAAyB;AAEzB,MAAM,SAAS;AAEf,OAAO,IAAI,WAAW;AACtB,OAAO,IAAI,WAAW;AAEtB,IAAO,iBAAQ;",
-  "names": []
-}

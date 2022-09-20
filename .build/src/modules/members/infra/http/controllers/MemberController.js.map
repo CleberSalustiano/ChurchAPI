@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../../src/modules/members/infra/http/controllers/MemberController.ts"],
-  "sourcesContent": ["import { Request, Response } from \"express\";\n\nexport default class MemberController {\n  async create (request: Request, response: Response) {\n    \n  }\n}"],
-  "mappings": ";;;;;;;AAAA;AAAA;AAAA;AAEA,uBAAsC;AAAA,QAC9B,OAAQ,SAAkB,UAAoB;AAAA;AAAA;",
-  "names": []
-}

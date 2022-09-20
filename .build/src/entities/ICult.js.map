@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/entities/ICult.ts"],
-  "sourcesContent": ["import { IChurch } from \"./IChurch\";\nimport { IOffer } from \"./IOffer\";\n\nexport interface ICult {\n  date: Date;\n  theme: String;\n  church: IChurch;\n  offer: IOffer[];\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

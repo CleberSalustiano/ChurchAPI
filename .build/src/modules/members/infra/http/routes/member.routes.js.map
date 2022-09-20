@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../../src/modules/members/infra/http/routes/member.routes.ts"],
-  "sourcesContent": ["import { Router } from \"express\";\n\nconst memberRouter = Router();\n\nmemberRouter.get(\"/\", (request, response) => {\n  return response.json({ error: \"Aoba\" })\n})\n\nexport default memberRouter;"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA,qBAAuB;AAEvB,MAAM,eAAe;AAErB,aAAa,IAAI,KAAK,CAAC,SAAS,aAAa;AAC3C,SAAO,SAAS,KAAK,EAAE,OAAO;AAAA;AAGhC,IAAO,wBAAQ;",
-  "names": []
-}

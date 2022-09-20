@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/entities/ICost.ts"],
-  "sourcesContent": ["import { IChurch } from \"./IChurch\";\n\nexport interface ICost {\n  value: Number;\n  date: Date;\n  description: String;\n  church: IChurch;\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

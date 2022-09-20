@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/entities/ILocation.ts"],
-  "sourcesContent": ["import { IChurch } from \"./IChurch\";\n\nexport interface ILocation {\n  street: String\n  district: String\n  city: String\n  state: String\n  country: String\n  cep: String\n  location: IChurch\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

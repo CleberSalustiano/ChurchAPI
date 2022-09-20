@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../src/modules/churchs/dtos/ICreateChurchDTO.ts"],
-  "sourcesContent": ["export interface ICreateChurchDTO {\n  date: Date;\n  street: string;\n  district: string;\n  city: string;\n  state: string;\n  country: string;\n  cep: number;\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

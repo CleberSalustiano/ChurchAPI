@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../src/shared/infra/http/app.ts"],
-  "sourcesContent": ["import express from \"express\";\nimport routes from \"./routes/routes\";\n\nconst app = express();\n\napp.use(express.json());\napp.use(routes);\n\napp.listen(3333, () => console.log(\"Server is on PORT 3333\"));\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA,qBAAoB;AACpB,oBAAmB;AAEnB,MAAM,MAAM;AAEZ,IAAI,IAAI,uBAAQ;AAChB,IAAI,IAAI;AAER,IAAI,OAAO,MAAM,MAAM,QAAQ,IAAI;",
-  "names": []
-}

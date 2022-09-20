@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../src/modules/churchs/repositories/IChurchRepository.ts"],
-  "sourcesContent": ["import { Church } from \".prisma/client\";\nimport { ICreateChurchDTO } from \"../dtos/ICreateChurchDTO\";\n\nexport interface IChurchRepository {\n  create(data: ICreateChurchDTO): Promise<Church | undefined>\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/entities/ITreasurer.ts"],
-  "sourcesContent": ["import { IMember } from \"./IMember\"\nimport { IOffer } from \"./IOffer\";\n\nexport interface ITreasure extends IMember {\n  startDate: Date;\n  endDate: Date;\n  offer: IOffer[];\n}"],
-  "mappings": ";;AAAA;",
-  "names": []
-}

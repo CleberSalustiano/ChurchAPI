@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../../src/modules/churchs/infra/prisma/repositories/ChurchRepository.ts"],
-  "sourcesContent": ["import { Church } from \".prisma/client\";\nimport prismaClient from \"../../../../../shared/infra/database/prismaClient\";\nimport { ICreateChurchDTO } from \"../../../dtos/ICreateChurchDTO\";\nimport { IChurchRepository } from \"../../../repositories/IChurchRepository\";\n\nexport default class ChurchRepository implements IChurchRepository {\n  async create({ date, street, cep, city, country, district, state }: ICreateChurchDTO): Promise<Church | undefined> {\n    try {\n      //recreate this logic, don't create new locations, or churchs with same date.\n      const churchLocation = await prismaClient.location.create({\n        data: { cep, city, country, district, state, street }\n      })\n\n      const church = await prismaClient.church.create({\n        data: { creationDate: date, id_location: churchLocation.id }\n      })\n\n      return church;\n    } catch (error) {\n      console.log(error)\n    }\n  }\n}"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AACA,0BAAyB;AAIzB,uBAAmE;AAAA,QAC3D,OAAO,EAAE,MAAM,QAAQ,KAAK,MAAM,SAAS,UAAU,SAAwD;AACjH,QAAI;AAEF,YAAM,iBAAiB,MAAM,4BAAa,SAAS,OAAO;AAAA,QACxD,MAAM,EAAE,KAAK,MAAM,SAAS,UAAU,OAAO;AAAA;AAG/C,YAAM,SAAS,MAAM,4BAAa,OAAO,OAAO;AAAA,QAC9C,MAAM,EAAE,cAAc,MAAM,aAAa,eAAe;AAAA;AAG1D,aAAO;AAAA,aACA,OAAP;AACA,cAAQ,IAAI;AAAA;AAAA;AAAA;",
-  "names": []
-}

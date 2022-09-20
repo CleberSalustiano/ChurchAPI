@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../src/modules/churchs/services/CreateNewChurchService.ts"],
-  "sourcesContent": ["import { Church } from \".prisma/client\";\nimport { ICreateChurchDTO } from \"../dtos/ICreateChurchDTO\";\nimport { IChurchRepository } from \"../repositories/IChurchRepository\";\n\nclass CreateNewChurchService {\n\n  constructor(\n    private churchRepository: IChurchRepository\n  ) {\n    this.churchRepository = churchRepository;\n  }\n\n  public async execute(data: ICreateChurchDTO): Promise<Church | undefined> {\n    const church = await this.churchRepository.create(data);\n\n    return church;\n  }\n\n}\n\nexport default CreateNewChurchService;"],
-  "mappings": ";;;;;;;AAAA;AAAA;AAAA;AAIA,6BAA6B;AAAA,EAE3B,YACU,kBACR;AADQ;AAER,SAAK,mBAAmB;AAAA;AAAA,QAGb,QAAQ,MAAqD;AACxE,UAAM,SAAS,MAAM,KAAK,iBAAiB,OAAO;AAElD,WAAO;AAAA;AAAA;AAKX,IAAO,iCAAQ;",
-  "names": []
-}
