@@ -27,12 +27,10 @@ __export(exports, {
 var import_CreateNewChurchService = __toModule(require("../../../services/CreateNewChurchService"));
 var import_ChurchRepository = __toModule(require("../../prisma/repositories/ChurchRepository"));
 class ChurchController {
-  constructor() {
-    this.churchRepository = new import_ChurchRepository.default();
-  }
   async create(request, response) {
     const data = request.body;
-    const createNewChurch = new import_CreateNewChurchService.default(this.churchRepository);
+    const churchRepository = new import_ChurchRepository.default();
+    const createNewChurch = new import_CreateNewChurchService.default(churchRepository);
     const church = await createNewChurch.execute(data);
     return response.json({ church });
   }
