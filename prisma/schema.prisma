@@ -128,7 +128,7 @@ model Location {
     city     String
     state    String
     country  String
-    cep      Int
+    cep      Int @unique
     Church   Church[]
 
     @@map("locations")
