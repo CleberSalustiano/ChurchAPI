@@ -6,7 +6,7 @@
   "author": "CleberSalustiano <kleberdejesus45@hotmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "4.3.1",
+    "@prisma/client": "^4.3.1",
     "express": "^4.18.1"
   },
   "devDependencies": {
@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev:server": "ts-node-dev src/shared/infra/http/app.ts",
+    "dev:server": "ts-node-dev --transpile-only --ignore-watch node_modules src/shared/infra/http/app.ts",
     "start": "ts-node src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register node_modules/typeorm/cli.js",
     "test": "jest"

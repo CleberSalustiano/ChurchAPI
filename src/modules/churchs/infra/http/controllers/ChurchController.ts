@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { ICreateChurchDTO } from "../../../dtos/ICreateChurchDTO";
 import CreateNewChurchService from "../../../services/CreateNewChurchService";
+import DeleteChurchService from "../../../services/DeleteChurchService";
+import UpdateChurchService from "../../../services/UpdateChurchService";
 import ChurchRepository from "../../prisma/repositories/ChurchRepository";
 import LocationRepository from "../../prisma/repositories/LocationRepository";
 
@@ -22,6 +23,7 @@ export default class ChurchController {
 
       const churchRepository = new ChurchRepository();
       const locationRepository = new LocationRepository();
+
       const createNewChurch = new CreateNewChurchService(churchRepository, locationRepository);
       const church = await createNewChurch.execute({ date, id_location: -1 }, { cep, city, country, district, state, street });
 
@@ -38,5 +40,43 @@ export default class ChurchController {
     const churchs = await churchRepository.findAll();
 
     return response.json({ churchs });
+  }
+
+  async delete (request: Request, response: Response) {
+    try {
+      const { id_church } = request.params;
+
+      const churchRepository = new ChurchRepository();
+      const locationRepository = new LocationRepository();
+  
+      const deleteChurch = new DeleteChurchService(churchRepository, locationRepository);
+      await deleteChurch.execute(+id_church);
+
+      return response.status(201).json({})
+    }catch (error) {
+      if (error instanceof Error){
+        return response.status(400).json({ error: error.message });
+      }
+    }
+
+  }
+
+  async update (request: Request, response: Response) {
+    try {
+      const {id_church} = request.params;
+
+      const {date, street, cep, city, country, district, state} : IRequestChurchLocationParams = request.body;
+
+      const churchRepository = new ChurchRepository();
+      const locationRepository = new LocationRepository();
+
+      const updateChurch = new UpdateChurchService(churchRepository, locationRepository);
+      const newChurch = await updateChurch.execute({id_church: +id_church, date}, {street, cep, city, country, district,state, id_location: 0})
+      
+      return response.json({church: newChurch})
+    } catch (error) {
+      if (error instanceof Error)
+        return response.status(400).json({ error: error.message });
+    }
   }
 }

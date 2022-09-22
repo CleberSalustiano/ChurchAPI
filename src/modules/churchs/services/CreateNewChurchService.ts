@@ -1,4 +1,5 @@
-import { Church, Location } from ".prisma/client";
+import { Church, Location } from "@prisma/client";
+import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { ICreateChurchDTO } from "../dtos/ICreateChurchDTO";
 import { ICreateLocationDTO } from "../dtos/ICreateLocationDTO";
 import { IChurchRepository } from "../repositories/IChurchRepository";
@@ -15,6 +16,11 @@ class CreateNewChurchService {
   }
 
   public async execute(dataChurch: ICreateChurchDTO, dataLocation: ICreateLocationDTO): Promise<Church | undefined> {
+    if (confirmIsDate(dataChurch.date))
+      dataChurch.date = new Date(dataChurch.date)
+    else 
+      throw new Error("Date format is incorrect (yyyy-mm-dd)")
+    
     let location = await this.locationRepository.findByCep(dataLocation.cep);
 
     if (!location) {
@@ -28,7 +34,7 @@ class CreateNewChurchService {
     }
 
     const existChurch = await this.churchRepository.findByLocation(dataChurch.id_location)
-
+    
     if (existChurch) {
       throw new Error("Church already exists");
     }
