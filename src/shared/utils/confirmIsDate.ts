@@ -7,6 +7,8 @@ export const confirmIsDate = (date: Date) => {
     +date.toString().split("-")[2] <= 30 && +date.toString().split("-")[2] >= 1 
 	) {
     return true;
-	} else 
-    return false;
+	} else if (date.toString().split(" ")[0].length === 3 && date.toString().split(" ")[1].length === 3){
+		return true;
+	} 
+  return false;
 };
