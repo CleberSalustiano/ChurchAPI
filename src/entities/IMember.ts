@@ -1,17 +1,13 @@
-import { IChurch } from "./IChurch";
-import { ISpecialOffer } from "./ISpecialOffer";
-
 export interface IMember {
-    name: String;
-    bith_date: Date;
-    batism_date: Date;
-    titleChurch: String;
-    cpf: BigInt;
-    rg: Number;
-    login: String;
-    email: String;
-    password: String;
-    foto?: String;
-    specialsOffers?: ISpecialOffer[];
-    church: IChurch;    
+  id: number;
+  name: string;
+  birth_date: Date;
+  batism_date: Date;
+  titleChurch: string;
+  cpf: bigint;
+  rg: number;
+  login: string;
+  email: string;
+  password: string;
+  foto: string | null;
 }

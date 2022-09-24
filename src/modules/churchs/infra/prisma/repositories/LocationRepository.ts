@@ -1,4 +1,4 @@
-import { Church, Location } from ".prisma/client";
+import { ILocation } from "../../../../../entities/ILocation";
 import prismaClient from "../../../../../shared/infra/database/prismaClient";
 import { ICreateLocationDTO } from "../../../dtos/ICreateLocationDTO";
 import { IUpdateLocationDTO } from "../../../dtos/IUpdateLocationDTO";
@@ -12,14 +12,14 @@ export default class LocationRepository implements ILocationRepository {
 		district,
 		state,
 		street,
-	}: ICreateLocationDTO): Promise<Location | undefined> {
+	}: ICreateLocationDTO): Promise<ILocation | undefined> {
 		const location = await prismaClient.location.create({
 			data: { cep, city, country, district, state, street },
 		});
 		return location;
 	}
 
-	async findByCep(cep: number): Promise<Location | undefined> {
+	async findByCep(cep: number): Promise<ILocation | undefined> {
 		const location = await prismaClient.location.findUnique({ where: { cep } });
 
 		if (!location) return undefined;
@@ -43,7 +43,7 @@ export default class LocationRepository implements ILocationRepository {
 		id_location,
 		state,
 		street,
-	}: IUpdateLocationDTO): Promise<Location | undefined> {
+	}: IUpdateLocationDTO): Promise<ILocation | undefined> {
 		const location = await prismaClient.location.update({
 			where: { id: id_location },
 			data: {cep, city, country, district, state, street},

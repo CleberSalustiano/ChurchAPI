@@ -1,8 +1,7 @@
-import { IChurch } from "./IChurch";
-
 export interface ICost {
-  value: Number;
-  date: Date;
-  description: String;
-  church: IChurch;
+  id: number
+  value: number
+  date: Date
+  description: string
+  id_church: number
 }

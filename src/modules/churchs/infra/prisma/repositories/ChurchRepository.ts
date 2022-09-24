@@ -1,4 +1,4 @@
-import { Church } from ".prisma/client";
+import { IChurch } from "../../../../../entities/IChurch";
 import prismaClient from "../../../../../shared/infra/database/prismaClient";
 import { ICreateChurchDTO } from "../../../dtos/ICreateChurchDTO";
 import { IUpdateChurchDTO } from "../../../dtos/IUpdateChurchDTO";
@@ -8,7 +8,7 @@ export default class ChurchRepository implements IChurchRepository {
 	async create({
 		date,
 		id_location,
-	}: ICreateChurchDTO): Promise<Church | undefined> {
+	}: ICreateChurchDTO): Promise<IChurch | undefined> {
 		const church = await prismaClient.church.create({
 			data: { creationDate: date, id_location },
 			include: { location: true },
@@ -16,7 +16,7 @@ export default class ChurchRepository implements IChurchRepository {
 		return church;
 	}
 
-	async findAll(): Promise<Church[] | undefined> {
+	async findAll(): Promise<IChurch[] | undefined> {
 		const churchs = await prismaClient.church.findMany({
 			include: { location: true },
 		});
@@ -24,7 +24,7 @@ export default class ChurchRepository implements IChurchRepository {
 		return churchs;
 	}
 
-	async findByLocation(id_location: number): Promise<Church | undefined> {
+	async findByLocation(id_location: number): Promise<IChurch | undefined> {
 		const church = await prismaClient.church.findFirst({
 			where: { id_location },
 		});
@@ -42,7 +42,7 @@ export default class ChurchRepository implements IChurchRepository {
 		else return false;
 	}
 
-	async findById(id_church: number): Promise<Church | undefined> {
+	async findById(id_church: number): Promise<IChurch | undefined> {
 		const church = await prismaClient.church.findUnique({
 			where: { id: id_church },
 		});
@@ -54,7 +54,7 @@ export default class ChurchRepository implements IChurchRepository {
 	async update({
 		date,
 		id_church,
-	}: IUpdateChurchDTO): Promise<Church | undefined> {
+	}: IUpdateChurchDTO): Promise<IChurch | undefined> {
 		const church = await prismaClient.church.update({
 			where: { id: id_church },
 			data: { creationDate: date },

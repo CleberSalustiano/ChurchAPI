@@ -1,8 +1,4 @@
-import { IChurch } from "./IChurch";
-import { IMember } from "./IMember";
-
-export interface IManager extends IMember {
-  startDate: Date;
-  endDate: Date;
-  church: IChurch[]
+export interface IManager{
+  id: number
+  id_member: number
 }
