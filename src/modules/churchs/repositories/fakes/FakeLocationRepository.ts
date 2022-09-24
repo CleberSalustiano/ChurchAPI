@@ -1,10 +1,10 @@
-import { Location } from "@prisma/client";
+import { ILocation } from "../../../../entities/ILocation";
 import { ICreateLocationDTO } from "../../dtos/ICreateLocationDTO";
 import { IUpdateLocationDTO } from "../../dtos/IUpdateLocationDTO";
 import { ILocationRepository } from "../ILocationRepository";
 
 export default class FakeLocationRepository implements ILocationRepository {
-	private locations: Location[] = [];
+	private locations: ILocation[] = [];
 
 	public async create({
 		cep,
@@ -13,8 +13,8 @@ export default class FakeLocationRepository implements ILocationRepository {
 		district,
 		state,
 		street,
-	}: ICreateLocationDTO): Promise<Location | undefined> {
-		const location: Location = {
+	}: ICreateLocationDTO): Promise<ILocation | undefined> {
+		const location: ILocation = {
 			cep,
 			city,
 			country,
@@ -29,7 +29,7 @@ export default class FakeLocationRepository implements ILocationRepository {
 		return location;
 	}
 
-	public async findByCep(cep: number): Promise<Location | undefined> {
+	public async findByCep(cep: number): Promise<ILocation | undefined> {
 		const location = this.locations.find((location) => location.cep === cep);
 
 		return location;
@@ -57,7 +57,7 @@ export default class FakeLocationRepository implements ILocationRepository {
 		id_location,
 		state,
 		street,
-	}: IUpdateLocationDTO): Promise<Location | undefined> {
+	}: IUpdateLocationDTO): Promise<ILocation | undefined> {
 		const locationIndex = this.locations.findIndex(
 			(location) => location.id === id_location
 		);
