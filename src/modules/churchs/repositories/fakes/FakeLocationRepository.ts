@@ -40,7 +40,7 @@ export default class FakeLocationRepository implements ILocationRepository {
 			(location) => location.id === id_location
 		);
 
-		if (!locationIndex) return false;
+		if (locationIndex === -1) return false;
 
 		const location = this.locations.splice(locationIndex, 1);
 
@@ -62,7 +62,7 @@ export default class FakeLocationRepository implements ILocationRepository {
 			(location) => location.id === id_location
 		);
 
-		if (!locationIndex) return undefined;
+		if (locationIndex === -1) return undefined;
 
 		const location = this.locations[locationIndex];
 		location.cep = cep;

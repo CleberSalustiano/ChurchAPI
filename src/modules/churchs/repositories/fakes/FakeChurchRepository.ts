@@ -37,7 +37,7 @@ export default class FakeChurchRepository implements IChurchRepository {
 			(church) => church.id === id_church
 		);
 
-		if (!churchIndex) {
+		if (churchIndex === -1) {
 			return false;
 		}
 
@@ -59,7 +59,7 @@ export default class FakeChurchRepository implements IChurchRepository {
 			(church) => church.id === id_church
 		);
 
-		if (!churchIndex) {
+		if (churchIndex === -1) {
 			return undefined;
 		}
 
