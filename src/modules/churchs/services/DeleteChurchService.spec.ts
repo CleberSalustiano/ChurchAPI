@@ -24,4 +24,12 @@ describe("DeleteSomeChurch", () => {
     expect(allElements?.length).toBe(0);
 
   })
+
+  it("should not be able delete a church that doesn't exist", () => {
+    const fakeChurchRepository = new FakeChurchRepository();
+    const fakeLocationRepository = new FakeLocationRepository();
+    const deleteChurch = new DeleteChurchService(fakeChurchRepository, fakeLocationRepository);
+    
+    expect(deleteChurch.execute(0)).rejects.toBeInstanceOf(Error);
+  })
 })
