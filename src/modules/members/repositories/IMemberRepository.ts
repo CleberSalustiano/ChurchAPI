@@ -1,6 +1,6 @@
-import { Member } from "@prisma/client";
+import { IMember } from "../../../entities/IMember";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
 
 export interface IMemberRepository {
-  create(data : ICreateMemberDTO) : Promise<Member | undefined>
+  create(data : ICreateMemberDTO) : Promise<IMember | undefined>
 }

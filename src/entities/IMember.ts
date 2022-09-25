@@ -10,4 +10,5 @@ export interface IMember {
   email: string;
   password: string;
   foto: string | null;
+  id_church: number;
 }

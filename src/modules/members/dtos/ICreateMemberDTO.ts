@@ -8,4 +8,5 @@ export interface ICreateMemberDTO {
 	login: string;
 	email: string;
 	password: string;
+  id_church: number;
 }
