@@ -4,7 +4,7 @@ export interface IMember {
   birth_date: Date;
   batism_date: Date;
   titleChurch: string;
-  cpf: bigint;
+  cpf: bigint | number;
   rg: number;
   login: string;
   email: string;

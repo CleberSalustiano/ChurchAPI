@@ -36,4 +36,8 @@ export default class FakeMemberRepository implements IMemberRepository {
 
     return member;
   }
+
+  public async findAll(): Promise<IMember[] | undefined> {
+    return this.members;
+  }
 }

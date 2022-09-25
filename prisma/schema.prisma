@@ -16,7 +16,7 @@ model Member {
   birth_date   DateTime
   batism_date  DateTime
   titleChurch  String
-  cpf          BigInt
+  cpf          BigInt         @unique
   rg           Int
   login        String
   email        String

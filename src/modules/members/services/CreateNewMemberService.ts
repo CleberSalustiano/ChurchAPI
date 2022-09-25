@@ -10,6 +10,7 @@ export default class CreateNewMemberService {
   }
 
   public async execute(dataMember: ICreateMemberDTO) {
+    // Create verification for cpf
     if (dataMember.id_church === undefined)
       throw new Error("id_church pass undefined");
     

@@ -31,15 +31,15 @@ export default class MemberController {
         titleChurch,
         id_church,
       }: IRequest = request.body;
-  
+
       const memberRepository = new MemberRepository();
       const churchRepository = new ChurchRepository();
       const createNewMember = new CreateNewMemberService(
         memberRepository,
         churchRepository
-        );
-        
-        let member = await createNewMember.execute({
+      );
+
+      let member = await createNewMember.execute({
         batism_date,
         birth_date,
         cpf,
@@ -52,15 +52,21 @@ export default class MemberController {
         id_church,
       });
 
-      // @ts-ignore
-      // It's just to can return in JSON.
-      if (member) member.cpf = member.cpf.toString();
-  
+      if (member) member.cpf = +member.cpf.toString();
+
       return response.json({ member });
     } catch (error) {
       if (error instanceof Error) {
-        return response.status(401).json({error: error.message})
+        return response.status(401).json({ error: error.message });
       }
     }
+  }
+
+  async index(request: Request, response: Response) {
+    const memberRepository = new MemberRepository();
+
+    const members = await memberRepository.findAll();
+
+    return response.json({ members });
   }
 }
