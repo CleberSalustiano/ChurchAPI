@@ -8,11 +8,11 @@ describe("Create New Member", () => {
     const fakeMemberRepository = new FakeMemberRepository();
     const fakeChurchRepository = new FakeChurchRepository();
 
-    fakeChurchRepository.create({date: new Date("1999-12-12"), id_location: 0});
+    fakeChurchRepository.create({ date: new Date("1999-12-12"), id_location: 0 });
 
     const createNewMember = new CreateNewMemberService(fakeMemberRepository, fakeChurchRepository);
 
-    const dataMamber : ICreateMemberDTO = {
+    const dataMamber: ICreateMemberDTO = {
       id_church: 0,
       batism_date: new Date("1999-12-12"),
       birth_date: new Date("1999-11-12"),
@@ -35,11 +35,11 @@ describe("Create New Member", () => {
     const fakeMemberRepository = new FakeMemberRepository();
     const fakeChurchRepository = new FakeChurchRepository();
 
-    fakeChurchRepository.create({date: new Date("1999-12-12"), id_location: 0});
+    fakeChurchRepository.create({ date: new Date("1999-12-12"), id_location: 0 });
 
     const createNewMember = new CreateNewMemberService(fakeMemberRepository, fakeChurchRepository);
 
-    const dataMamber : ICreateMemberDTO = {
+    const dataMamber: ICreateMemberDTO = {
       id_church: 1,
       batism_date: new Date("1999-12-12"),
       birth_date: new Date("1999-11-12"),
@@ -60,11 +60,11 @@ describe("Create New Member", () => {
     const fakeMemberRepository = new FakeMemberRepository();
     const fakeChurchRepository = new FakeChurchRepository();
 
-    fakeChurchRepository.create({date: new Date("1999-12-12"), id_location: 0});
+    fakeChurchRepository.create({ date: new Date("1999-12-12"), id_location: 0 });
 
     const createNewMember = new CreateNewMemberService(fakeMemberRepository, fakeChurchRepository);
 
-    const dataMamber : ICreateMemberDTO = {
+    const dataMamber: ICreateMemberDTO = {
       id_church: 0,
       batism_date: new Date("1999-12-12"),
       birth_date: new Date("1999-11-12"),
@@ -85,14 +85,50 @@ describe("Create New Member", () => {
     const fakeMemberRepository = new FakeMemberRepository();
     const fakeChurchRepository = new FakeChurchRepository();
 
-    fakeChurchRepository.create({date: new Date("1999-12-12"), id_location: 0});
+    fakeChurchRepository.create({ date: new Date("1999-12-12"), id_location: 0 });
 
     const createNewMember = new CreateNewMemberService(fakeMemberRepository, fakeChurchRepository);
 
-    const dataMamber : ICreateMemberDTO = {
+    const dataMamber: ICreateMemberDTO = {
       id_church: 0,
       batism_date: new Date("1999-12-12"),
       birth_date: new Date("1999-12-12"),
+      cpf: BigInt(12312312312),
+      email: "email@email.com",
+      login: "email",
+      name: "Luvas Piruvicas",
+      password: "6969",
+      rg: 123123,
+      titleChurch: "Member"
+    };
+
+    expect(createNewMember.execute(dataMamber)).rejects.toThrowError(Error);
+  })
+
+  it("should not be able to create two equal CPF", async () => {
+    const fakeMemberRepository = new FakeMemberRepository();
+    const fakeChurchRepository = new FakeChurchRepository();
+
+    fakeChurchRepository.create({ date: new Date("1999-12-12"), id_location: 0 });
+    fakeMemberRepository.create({
+      id_church: 0,
+      birth_date: new Date("1999-11-12"),
+      batism_date: new Date("1999-12-12"),
+      cpf: BigInt(12312312312),
+      email: "email@email.com",
+      login: "email",
+      name: "Luvas Piruvicas",
+      password: "6969",
+      rg: 123123,
+      titleChurch: "Member"
+    })
+    const createNewMember = new CreateNewMemberService(fakeMemberRepository, fakeChurchRepository);
+
+
+    const dataMamber: ICreateMemberDTO = {
+      id_church: 0,
+      batism_date: new Date("1999-12-12"),
+      birth_date: new Date("1999-11-12"),
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",

@@ -40,4 +40,10 @@ export default class FakeMemberRepository implements IMemberRepository {
   public async findAll(): Promise<IMember[] | undefined> {
     return this.members;
   }
+
+  public async findByCPF(cpf: bigint): Promise<IMember | undefined> {
+    const member = this.members.find(member => member.cpf === cpf);
+
+    return member;
+  }
 }

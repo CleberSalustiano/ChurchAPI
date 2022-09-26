@@ -2,6 +2,7 @@ import { IMember } from "../../../entities/IMember";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
 
 export interface IMemberRepository {
-  create(data : ICreateMemberDTO) : Promise<IMember | undefined>
-  findAll() : Promise<IMember[] | undefined>
+  create(data: ICreateMemberDTO): Promise<IMember | undefined>
+  findAll(): Promise<IMember[] | undefined>
+  findByCPF(cpf: bigint): Promise<IMember | undefined>
 }
