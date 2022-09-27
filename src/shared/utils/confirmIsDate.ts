@@ -1,5 +1,8 @@
 export const confirmIsDate = (date: Date) => {
-	if (
+  if (date.toString() == "Invalid Date")
+    return false;
+
+  if (
 		date.toString().split("-")[0].length === 4 &&
 		date.toString().split("-")[1].length === 2 &&
 		date.toString().split("-")[2].length === 2 &&
@@ -7,7 +10,7 @@ export const confirmIsDate = (date: Date) => {
     +date.toString().split("-")[2] <= 30 && +date.toString().split("-")[2] >= 1 
 	) {
     return true;
-	} else if (date.toString().split(" ")[0].length === 3 && date.toString().split(" ")[1].length === 3){
+	} else if (date.toString().split(" ")[0].length === 3 && date.toString().split(" ")[1].length === 3 && date.toString().split(" ")[3].length === 4){
 		return true;
 	} 
   return false;
