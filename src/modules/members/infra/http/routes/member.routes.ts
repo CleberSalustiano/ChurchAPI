@@ -6,5 +6,6 @@ const memberController = new MemberController();
 
 memberRouter.get("/", memberController.index);
 memberRouter.post("/", memberController.create);
+memberRouter.put("/:id", memberController.update);
 
 export default memberRouter;

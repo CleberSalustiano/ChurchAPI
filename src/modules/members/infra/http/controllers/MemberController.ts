@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import ChurchRepository from "../../../../churchs/infra/prisma/repositories/ChurchRepository";
 import CreateNewMemberService from "../../../services/CreateNewMemberService";
+import UpdateNewMemberService from "../../../services/UpdateNewMemberService";
 import MemberRepository from "../../prisma/repositories/MemberRepository";
 
-interface IRequest {
+interface IRequestCreate {
   id_church: number;
   name: string;
   birth_date: Date;
@@ -14,6 +15,20 @@ interface IRequest {
   login: string;
   email: string;
   password: string;
+}
+
+interface IRequestUpdate {
+  id_church: number;
+  name: string;
+  birth_date: Date;
+  batism_date: Date;
+  titleChurch: string;
+  cpf?: bigint;
+  rg: number;
+  login: string;
+  email: string;
+  password: string;
+  id_member: number;
 }
 
 export default class MemberController {
@@ -30,7 +45,7 @@ export default class MemberController {
         rg,
         titleChurch,
         id_church,
-      }: IRequest = request.body;
+      }: IRequestCreate = request.body;
 
       const memberRepository = new MemberRepository();
       const churchRepository = new ChurchRepository();
@@ -68,5 +83,55 @@ export default class MemberController {
     const members = await memberRepository.findAll();
 
     return response.json({ members });
+  }
+
+  async update(request: Request, response: Response) {
+    try {
+      const {
+        batism_date,
+        birth_date,
+        cpf,
+        email,
+        login,
+        name,
+        password,
+        rg,
+        titleChurch,
+        id_church,
+      }: IRequestUpdate = request.body;
+
+      const {id} = request.params
+
+      console.log(id);
+
+      const memberRepository = new MemberRepository();
+      const churchRepository = new ChurchRepository();
+      const updateNewMember = new UpdateNewMemberService(
+        memberRepository,
+        churchRepository
+      );
+
+      let member = await updateNewMember.execute({
+        batism_date,
+        birth_date,
+        cpf,
+        email,
+        login,
+        name,
+        password,
+        rg,
+        titleChurch,
+        id_church,
+        id_member: +id
+      });
+
+      if (member) member.cpf = +member.cpf.toString();
+
+      return response.json({ member });
+    } catch (error) {
+      if (error instanceof Error) {
+        return response.status(401).json({ error: error.message });
+      }
+    }
   }
 }

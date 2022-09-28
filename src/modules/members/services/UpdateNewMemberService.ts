@@ -27,17 +27,16 @@ export default class UpdateNewMemberService {
     if (confirmIsDate(dataMember.batism_date))
       dataMember.batism_date = new Date(dataMember.batism_date);
     else throw new Error("Batism date format is incorrect (yyyy-mm-dd)");
-    
+
     if (dataMember.cpf){
       const memberCpf = await this.memberRepository.findByCPF(dataMember.cpf)
-
-      if (memberCpf && memberCpf !== member) {
+      
+      if (memberCpf && memberCpf.id !== member.id) {
         throw new Error("CPF already exists")
       } else if (member.cpf !== dataMember.cpf) {
         if (dataMember.cpf.toString().length !== 11)
           throw new Error("CPF format is incorrect");
-      }  
-      dataMember.cpf = undefined;      
+      } 
     }
 
     if (dataMember.birth_date.toString() === dataMember.batism_date.toString())

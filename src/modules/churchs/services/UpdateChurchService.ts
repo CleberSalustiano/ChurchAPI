@@ -30,7 +30,7 @@ export default class UpdateChurchService {
 
     const location = await this.locationRepository.findByCep(dataLocation.cep)
 
-    if (location)
+    if (location && location.id !== church.id_location)
       throw new Error("Location already exists with this CEP")
 
     const newLocation = await this.locationRepository.update(dataLocation);
