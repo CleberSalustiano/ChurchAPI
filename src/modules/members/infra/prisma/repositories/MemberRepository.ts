@@ -6,9 +6,9 @@ import { IMemberRepository } from "../../../repositories/IMemberRepository";
 
 export default class MemberRepository implements IMemberRepository {
   public async create(
-    dataMember
-      : ICreateMemberDTO): Promise<IMember | undefined> {
-    const member = await prismaClient.member.create({ data: dataMember })
+    dataMember: ICreateMemberDTO
+  ): Promise<IMember | undefined> {
+    const member = await prismaClient.member.create({ data: dataMember });
 
     return member;
   }
@@ -16,44 +16,67 @@ export default class MemberRepository implements IMemberRepository {
   public async findAll(): Promise<IMember[] | undefined> {
     const members = await prismaClient.member.findMany();
 
-    if (members) {
-      const membersJSON = members.map(member => {
-        // @ts-ignore
-        member.cpf = +member.cpf.toString();
-        return member;
-      })
-      return membersJSON;
-    }
-
     return members;
   }
 
   public async findByCPF(cpf: bigint): Promise<IMember | undefined> {
-    const member = await prismaClient.member.findFirst({ where: { cpf } })
+    const member = await prismaClient.member.findFirst({ where: { cpf } });
 
-    if (member)
-      return member;
+    if (member) return member;
 
     return undefined;
   }
 
   public async findById(id_member: number): Promise<IMember | undefined> {
-    const member = await prismaClient.member.findFirst({where: {id: id_member}})
-    
-    if (member)
-      return member
-    
+    const member = await prismaClient.member.findFirst({
+      where: { id: id_member },
+    });
+
+    if (member) return member;
+
     return undefined;
   }
 
-  public async update({batism_date, birth_date, email,id_church,id_member,login,name,password,
-  rg,titleChurch,cpf}: IUpdateMemberDTO): Promise<IMember | undefined> {
+  public async update({
+    batism_date,
+    birth_date,
+    email,
+    id_church,
+    id_member,
+    login,
+    name,
+    password,
+    rg,
+    titleChurch,
+    cpf,
+  }: IUpdateMemberDTO): Promise<IMember | undefined> {
     const member = await prismaClient.member.update({
-			where: { id: id_member },
-			data: { batism_date, birth_date,cpf,email, id_church,name,login, password, rg, titleChurch },
-			include: {church: true}
-		});
+      where: { id: id_member },
+      data: {
+        batism_date,
+        birth_date,
+        cpf,
+        email,
+        id_church,
+        name,
+        login,
+        password,
+        rg,
+        titleChurch,
+      },
+      include: { church: true },
+    });
 
-		return member;
+    return member;
+  }
+
+  public async findAllbyChurch(
+    id_church: number
+  ): Promise<IMember[] | undefined> {
+    const members = await prismaClient.member.findMany({
+      where: { id_church: id_church },
+    });
+
+    return members;
   }
 }

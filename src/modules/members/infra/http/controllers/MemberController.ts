@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import membersJsonCorrection from "../../../../../shared/utils/membersJsonCorrection";
 import ChurchRepository from "../../../../churchs/infra/prisma/repositories/ChurchRepository";
 import CreateNewMemberService from "../../../services/CreateNewMemberService";
 import UpdateNewMemberService from "../../../services/UpdateNewMemberService";
@@ -80,7 +81,9 @@ export default class MemberController {
   async index(request: Request, response: Response) {
     const memberRepository = new MemberRepository();
 
-    const members = await memberRepository.findAll();
+    const membersNoJson = await memberRepository.findAll();
+
+    const members = membersJsonCorrection(membersNoJson);
 
     return response.json({ members });
   }
@@ -134,4 +137,6 @@ export default class MemberController {
       }
     }
   }
+
+
 }

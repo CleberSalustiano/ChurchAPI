@@ -90,4 +90,10 @@ export default class FakeMemberRepository implements IMemberRepository {
 
     return member;
   }
+
+  async findAllbyChurch(id_church: number): Promise<IMember[] | undefined> {
+    const members = this.members.filter(member => member.id_church === id_church);
+
+    return members;
+  }
 }
