@@ -1,4 +1,5 @@
 import { Church } from "@prisma/client";
+import { IChurch } from "../../../entities/IChurch";
 import { IChurchRepository } from "../repositories/IChurchRepository";
 import { ILocationRepository } from "../repositories/ILocationRepository";
 
@@ -11,7 +12,7 @@ export default class DeleteChurchService {
     this.locationRepository = locationRepository;
   }
 
-  public async execute(id_church: number) : Promise<Church | undefined>{
+  public async execute(id_church: number) : Promise<IChurch | undefined>{
     const church = await this.churchRepository.findById(id_church);
 
     if (!church)

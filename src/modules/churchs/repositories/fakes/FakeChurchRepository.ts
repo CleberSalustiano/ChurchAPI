@@ -14,7 +14,6 @@ export default class FakeChurchRepository implements IChurchRepository {
 			creationDate: date,
 			id_location,
 			id: this.churchs.length,
-			id_manager: null,
 		};
 
 		this.churchs.push(church);
