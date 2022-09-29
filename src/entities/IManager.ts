@@ -1,4 +1,12 @@
-export interface IManager{
-  id: number
-  id_member: number
+import { IChurch } from "./IChurch";
+import { IMember } from "./IMember";
+
+export interface IManager {
+  id: number;
+  id_member: number;
+  member?: IMember;
+  id_church: number;
+  Church?: IChurch;
+  dateStart: Date;
+  dateEnd?: Date;
 }

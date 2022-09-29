@@ -35,7 +35,10 @@ model Manager {
   id        Int      @id @default(autoincrement())
   id_member Int
   member    Member   @relation(fields: [id_member], references: [id])
-  Church    Church[]
+  id_church Int
+  church    Church   @relation(fields: [id_church], references: [id])
+  dateStart DateTime @default(now())
+  dateEnd   DateTime?
 
   @@map("managers")
 }
@@ -89,14 +92,13 @@ model Tethe {
 model Church {
   id           Int            @id @default(autoincrement())
   creationDate DateTime
-  id_manager   Int?
-  manager      Manager?       @relation(fields: [id_manager], references: [id])
   Cult         Cult[]
   Cost         Cost[]
   id_location  Int
   location     Location       @relation(fields: [id_location], references: [id])
   SpecialOffer SpecialOffer[]
   Member       Member[]
+  Manager      Manager[]
 
   @@map("churchs")
 }

@@ -1,6 +1,8 @@
+import { IManager } from "./IManager"
+
 export interface IChurch {
   id: number
   creationDate: Date
-  id_manager: number | null
   id_location: number
+  manager?: IManager[]
 }
