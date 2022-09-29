@@ -96,4 +96,20 @@ export default class FakeMemberRepository implements IMemberRepository {
 
     return members;
   }
+
+  async delete(id_member: number): Promise<boolean> {
+    const memberIndex = this.members.findIndex(
+			(member) => member.id === id_member
+		);
+
+		if (memberIndex === -1) {
+			return false;
+		}
+
+		const member = this.members.splice(memberIndex, 1);
+
+		if (member) return true;
+
+		return false;
+  }
 }

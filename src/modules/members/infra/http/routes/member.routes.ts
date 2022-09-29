@@ -9,6 +9,7 @@ const memberInChurchController = new MemberInChurchController();
 memberRouter.get("/", memberController.index);
 memberRouter.post("/", memberController.create);
 memberRouter.put("/:id", memberController.update);
-memberRouter.get("/:id", memberInChurchController.index)
+memberRouter.get("/:id", memberInChurchController.index);
+memberRouter.delete("/:id", memberController.delete);
 
 export default memberRouter;

@@ -9,4 +9,5 @@ export interface IMemberRepository {
   update(data: IUpdateMemberDTO): Promise<IMember | undefined>
   findById(id_member: number): Promise<IMember | undefined>
   findAllbyChurch(id_church: number) : Promise<IMember[] | undefined>
+  delete(id_member: number) : Promise<boolean>
 }

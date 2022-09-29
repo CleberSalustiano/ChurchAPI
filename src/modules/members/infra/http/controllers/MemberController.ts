@@ -4,6 +4,7 @@ import ChurchRepository from "../../../../churchs/infra/prisma/repositories/Chur
 import CreateNewMemberService from "../../../services/CreateNewMemberService";
 import UpdateNewMemberService from "../../../services/UpdateNewMemberService";
 import MemberRepository from "../../prisma/repositories/MemberRepository";
+import DeleteMemberService from "../../../services/DeleteMemberService";
 
 interface IRequestCreate {
   id_church: number;
@@ -105,8 +106,6 @@ export default class MemberController {
 
       const {id} = request.params
 
-      console.log(id);
-
       const memberRepository = new MemberRepository();
       const churchRepository = new ChurchRepository();
       const updateNewMember = new UpdateNewMemberService(
@@ -138,5 +137,22 @@ export default class MemberController {
     }
   }
 
+  async delete(request: Request, response: Response) {
+    try {
+      const {id} = request.params;
+
+      const memberRepository = new MemberRepository();
+
+      const deleteMember = new DeleteMemberService(memberRepository);
+
+      const member = await deleteMember.execute(+id);
+
+      return response.status(201).json({});
+    } catch (error) {
+      if (error instanceof Error) {
+        return response.status(401).json({error: error.message})
+      }
+    }
+  }
 
 }

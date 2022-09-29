@@ -79,4 +79,13 @@ export default class MemberRepository implements IMemberRepository {
 
     return members;
   }
+
+  public async delete(id_member: number): Promise<boolean> {
+    const member = await prismaClient.member.delete({where: {id: id_member}});
+
+    if (!member)
+      return false;
+    
+    return true;  
+  }
 }

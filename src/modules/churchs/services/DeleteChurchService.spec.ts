@@ -30,6 +30,6 @@ describe("DeleteSomeChurch", () => {
     const fakeLocationRepository = new FakeLocationRepository();
     const deleteChurch = new DeleteChurchService(fakeChurchRepository, fakeLocationRepository);
     
-    expect(deleteChurch.execute(0)).rejects.toBeInstanceOf(Error);
+    expect(deleteChurch.execute(1)).rejects.toBeInstanceOf(Error);
   })
 })
