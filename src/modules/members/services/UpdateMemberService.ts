@@ -3,7 +3,7 @@ import { IChurchRepository } from "../../churchs/repositories/IChurchRepository"
 import { IUpdateMemberDTO } from "../dtos/IUpdateMemberDTO";
 import { IMemberRepository } from "../repositories/IMemberRepository";
 
-export default class UpdateNewMemberService {
+export default class UpdateMemberService {
   constructor(private memberRepository: IMemberRepository, private churchRepository: IChurchRepository) {
     this.memberRepository = memberRepository;
     this.churchRepository = churchRepository;

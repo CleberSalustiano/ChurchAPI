@@ -1,7 +1,7 @@
 import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
 import { IUpdateMemberDTO } from "../dtos/IUpdateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
-import UpdateNewMemberService from "./UpdateNewMemberService";
+import UpdateMemberService from "./UpdateMemberService";
 
 describe("Update new Member", () => {
   it("should be able to update a member", async () => {
@@ -25,7 +25,7 @@ describe("Update new Member", () => {
       titleChurch: "Member",
     });
 
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
@@ -61,7 +61,7 @@ describe("Update new Member", () => {
       id_location: 0,
     });
   
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
@@ -100,7 +100,7 @@ describe("Update new Member", () => {
       titleChurch: "Member",
     });
 
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
@@ -143,7 +143,7 @@ describe("Update new Member", () => {
       titleChurch: "Member",
     });
 
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
@@ -186,7 +186,7 @@ describe("Update new Member", () => {
       titleChurch: "Member",
     });
 
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
@@ -229,7 +229,7 @@ describe("Update new Member", () => {
       titleChurch: "Member",
     });
 
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
@@ -285,7 +285,7 @@ describe("Update new Member", () => {
       titleChurch: "Member",
     });
 
-    const updateNewMember = new UpdateNewMemberService(
+    const updateNewMember = new UpdateMemberService(
       fakeMemberRepository,
       fakeChurchRepository
     );
