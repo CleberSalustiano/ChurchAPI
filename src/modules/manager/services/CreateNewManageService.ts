@@ -21,10 +21,15 @@ export default class CreateNewManagerService {
     if (!member)
       throw new Error("This member doesn't exist")
     
-    // TODO: condition to verificate that have another Manager then doesn't have DATEEND. 
-    // If have but is less then 3 or equals, no problem. 
-    // But if greater then 3 throw a new Error.
+    const managersChurch = await this.managerRepository.findAllbyChurch(dataManager.id_church);
 
+    if(managersChurch){
+      const managersChurchActive = managersChurch.filter(manager => !(manager.dateEnd) )
+      
+      if (managersChurchActive.length >= 3)
+        throw new Error("This church have many managers, please delete someone or set dateEnd"); 
+    }
+    
     const manager = await this.managerRepository.create(dataManager);
 
     return manager;

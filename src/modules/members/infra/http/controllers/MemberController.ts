@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import membersJsonCorrection from "../../../utils/membersJsonCorrection";
 import ChurchRepository from "../../../../churchs/infra/prisma/repositories/ChurchRepository";
 import CreateNewMemberService from "../../../services/CreateNewMemberService";
-import UpdateNewMemberService from "../../../services/UpdateNewMemberService";
+import UpdateNewMemberService from "../../../services/UpdateMemberService";
 import MemberRepository from "../../prisma/repositories/MemberRepository";
 import DeleteMemberService from "../../../services/DeleteMemberService";
 

@@ -8,5 +8,5 @@ export interface IManager {
   id_church: number;
   Church?: IChurch;
   dateStart: Date;
-  dateEnd?: Date;
+  dateEnd?: Date | null;
 }

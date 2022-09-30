@@ -20,4 +20,11 @@ export default class FakeManagerRepository implements IManagerRepository {
 
     return manager;
   }
+
+
+  public async findAllbyChurch(id_church: number): Promise<IManager[] | undefined> {
+    const managers = this.managers.filter(member => member.id_church === id_church);
+
+    return managers;
+  }
 }
