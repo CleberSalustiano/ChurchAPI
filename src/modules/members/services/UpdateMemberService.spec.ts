@@ -1,3 +1,4 @@
+import NoExistError from "../../../shared/errors/NoExistError";
 import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
 import { IUpdateMemberDTO } from "../dtos/IUpdateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
@@ -80,7 +81,7 @@ describe("Update new Member", () => {
       titleChurch: "Shepherd",
     };
 
-    expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(Error);
+    expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(NoExistError);
   })
 
   it("should not be able to update id_church in member, that id_church doesn't exist", async () => {
@@ -119,7 +120,7 @@ describe("Update new Member", () => {
       titleChurch: "Shepherd",
     };
 
-    expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(Error);
+    expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(NoExistError);
   })
 
   it("should not be able to update member with birth_date/batism_date incorrect format", async () => {

@@ -1,3 +1,4 @@
+import NoExistError from "../../../shared/errors/NoExistError";
 import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeManagerRepository from "../repositories/fakes/FakeManagerRepository";
@@ -60,7 +61,7 @@ describe("Create a new manager for a church", () => {
 
     expect(
       createNewManager.execute({ id_church: 0, id_member: 0 })
-    ).rejects.toThrowError(Error);
+    ).rejects.toThrowError(NoExistError);
   });
 
   it("should not be able to create a manager with a nonexistent church", async () => {
@@ -89,7 +90,7 @@ describe("Create a new manager for a church", () => {
 
     expect(
       createNewManager.execute({ id_church: 0, id_member: 0 })
-    ).rejects.toThrowError(Error);
+    ).rejects.toThrowError(NoExistError);
   });
 
   it("should not be able to create more than three managers", async () => {

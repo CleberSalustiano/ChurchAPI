@@ -1,3 +1,5 @@
+import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
+import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
 import { IUpdateMemberDTO } from "../dtos/IUpdateMemberDTO";
@@ -13,12 +15,12 @@ export default class UpdateMemberService {
     const member = await this.memberRepository.findById(dataMember.id_member);
 
     if (!member) 
-      throw new Error("This member doesn't exist");
+      throw new NoExistError("member");
     
     const church = await this.churchRepository.findById(dataMember.id_church);
 
     if (!church) 
-      throw new Error("This church doesn't exist");
+      throw new NoExistError("church");
     
     if (confirmIsDate(dataMember.birth_date))
       dataMember.birth_date = new Date(dataMember.birth_date);
@@ -32,7 +34,7 @@ export default class UpdateMemberService {
       const memberCpf = await this.memberRepository.findByCPF(dataMember.cpf)
       
       if (memberCpf && memberCpf.id !== member.id) {
-        throw new Error("CPF already exists")
+        throw new AlreadyExistError("CPF")
       } else if (member.cpf !== dataMember.cpf) {
         if (dataMember.cpf.toString().length !== 11)
           throw new Error("CPF format is incorrect");

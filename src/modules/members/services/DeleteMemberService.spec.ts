@@ -1,3 +1,4 @@
+import NoExistError from "../../../shared/errors/NoExistError";
 import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
@@ -59,6 +60,6 @@ describe("Delete a member", () => {
 
     const deleteMember = new DeleteMemberService(fakeMemberRepository);
     
-    expect(deleteMember.execute(1)).rejects.toBeInstanceOf(Error);
+    expect(deleteMember.execute(1)).rejects.toBeInstanceOf(NoExistError);
   })
 })

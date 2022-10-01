@@ -1,3 +1,4 @@
+import NoExistError from "../../../shared/errors/NoExistError";
 import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository"
@@ -52,8 +53,7 @@ describe("Create New Member", () => {
       titleChurch: "Member"
     };
 
-
-    expect(createNewMember.execute(dataMamber)).rejects.toThrowError(Error);
+    expect(createNewMember.execute(dataMamber)).rejects.toThrowError(NoExistError);
   })
 
   it("should not be able to create a new Member with a cpf with incorrect format", async () => {

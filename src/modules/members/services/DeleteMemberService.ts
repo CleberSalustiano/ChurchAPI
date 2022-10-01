@@ -1,4 +1,5 @@
 import { IMember } from "../../../entities/IMember";
+import NoExistError from "../../../shared/errors/NoExistError";
 import { IMemberRepository } from "../repositories/IMemberRepository";
 
 export default class DeleteMemberService {
@@ -10,7 +11,7 @@ export default class DeleteMemberService {
     const member = await this.memberRepository.findById(id_member);
 
     if(!member)
-      throw new Error("This member doesn't exist")
+      throw new NoExistError("member")
     
     const isMemberDeleted = await this.memberRepository.delete(id_member);
 

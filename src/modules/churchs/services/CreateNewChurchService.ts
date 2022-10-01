@@ -1,4 +1,5 @@
 import { Church, Location } from "@prisma/client";
+import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { ICreateChurchDTO } from "../dtos/ICreateChurchDTO";
 import { ICreateLocationDTO } from "../dtos/ICreateLocationDTO";
@@ -36,7 +37,7 @@ class CreateNewChurchService {
     const existChurch = await this.churchRepository.findByLocation(dataChurch.id_location)
     
     if (existChurch) {
-      throw new Error("Church already exists");
+      throw new AlreadyExistError("church");
     }
 
     const church = await this.churchRepository.create(dataChurch);

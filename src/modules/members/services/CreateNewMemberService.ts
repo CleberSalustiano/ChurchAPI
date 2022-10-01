@@ -1,3 +1,5 @@
+import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
+import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
@@ -12,14 +14,14 @@ export default class CreateNewMemberService {
   public async execute(dataMember: ICreateMemberDTO) {
     const existMemberCPF = await this.memberRepository.findByCPF(dataMember.cpf)
     if (existMemberCPF)
-      throw new Error("Already exist a member with this CPF");
+      throw new AlreadyExistError("member with this CEP");
 
 
     if (dataMember.id_church === undefined)
       throw new Error("id_church pass undefined");
 
     const church = await this.churchRepository.findById(dataMember.id_church);
-    if (!church) throw new Error("Church doesn't exist");
+    if (!church) throw new NoExistError("church");
 
     if (confirmIsDate(dataMember.birth_date))
       dataMember.birth_date = new Date(dataMember.birth_date);

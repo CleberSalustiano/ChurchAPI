@@ -1,5 +1,6 @@
 import { Church } from "@prisma/client";
 import { IChurch } from "../../../entities/IChurch";
+import NoExistError from "../../../shared/errors/NoExistError";
 import { IChurchRepository } from "../repositories/IChurchRepository";
 import { ILocationRepository } from "../repositories/ILocationRepository";
 
@@ -16,7 +17,7 @@ export default class DeleteChurchService {
     const church = await this.churchRepository.findById(id_church);
 
     if (!church)
-      throw new Error("Church doesn't exist")
+      throw new NoExistError("church")
     
     const isChurchDeleted = await this.churchRepository.delete(id_church);
 

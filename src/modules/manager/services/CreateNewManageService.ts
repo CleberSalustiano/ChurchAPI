@@ -1,3 +1,4 @@
+import NoExistError from "../../../shared/errors/NoExistError";
 import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
 import { ICreateManagerDTO } from "../dtos/ICreateManagerDTO";
@@ -14,12 +15,12 @@ export default class CreateNewManagerService {
     const church = await this.churchRepository.findById(dataManager.id_church);
 
     if (!church)
-      throw new Error("This church doesn't exist")
+      throw new NoExistError("church");
     
     const member = await this.memberRepository.findById(dataManager.id_member);
 
     if (!member)
-      throw new Error("This member doesn't exist")
+      throw new NoExistError("member")
     
     const managersChurch = await this.managerRepository.findAllbyChurch(dataManager.id_church);
 

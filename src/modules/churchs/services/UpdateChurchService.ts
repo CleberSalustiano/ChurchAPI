@@ -1,4 +1,6 @@
 import { Church } from "@prisma/client";
+import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
+import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { IUpdateChurchDTO } from "../dtos/IUpdateChurchDTO";
 import { IUpdateLocationDTO } from "../dtos/IUpdateLocationDTO";
@@ -24,14 +26,14 @@ export default class UpdateChurchService {
     const church = await this.churchRepository.findById(dataChurch.id_church);
     
     if(!church) 
-      throw new Error("Church doesn't exist")
+      throw new NoExistError("church")
 
     dataLocation.id_location = church.id_location;
 
     const location = await this.locationRepository.findByCep(dataLocation.cep)
 
     if (location && location.id !== church.id_location)
-      throw new Error("Location already exists with this CEP")
+      throw new AlreadyExistError("location with this cep")
 
     const newLocation = await this.locationRepository.update(dataLocation);
 
