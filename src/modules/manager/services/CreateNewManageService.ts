@@ -1,3 +1,4 @@
+import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
@@ -21,7 +22,13 @@ export default class CreateNewManagerService {
 
     if (!member)
       throw new NoExistError("member")
-    
+
+    const managerExists = await this.managerRepository.findByMember(dataManager.id_member);
+
+    if (managerExists)
+      throw new AlreadyExistError("member with manager title")
+
+
     const managersChurch = await this.managerRepository.findAllbyChurch(dataManager.id_church);
 
     if(managersChurch){

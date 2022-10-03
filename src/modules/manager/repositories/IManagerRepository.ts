@@ -8,4 +8,6 @@ export interface IManagerRepository {
   findById(id_manager: number): Promise<IManager | undefined>
   update(dataManager: IUpdateManagerDTO): Promise<IManager | undefined>
   delete(id_manager: number): Promise<boolean>
+  findAll(): Promise<IManager[] | undefined>
+  findByMember(id_member: number):Promise<IManager | undefined>
 }
