@@ -69,4 +69,9 @@ export default class FakeChurchRepository implements IChurchRepository {
 
     return church;
   }
+  public async findFirstChurch(): Promise<IChurch | undefined> {
+    const church = this.churchs[0];
+
+    return church;
+  }
 }

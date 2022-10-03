@@ -7,4 +7,5 @@ export interface IManagerRepository {
   findAllbyChurch(id_church : number) : Promise<IManager[] | undefined>
   findById(id_manager: number): Promise<IManager | undefined>
   update(dataManager: IUpdateManagerDTO): Promise<IManager | undefined>
+  delete(id_manager: number): Promise<boolean>
 }

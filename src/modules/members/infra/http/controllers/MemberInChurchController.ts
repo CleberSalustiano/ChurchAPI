@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import membersJsonCorrection from "../../../utils/membersJsonCorrection";
+import membersJsonCorrection from "../../../../../shared/utils/membersJsonCorrection";
 import MemberRepository from "../../prisma/repositories/MemberRepository";
 
 export default class MemberInChurchController {

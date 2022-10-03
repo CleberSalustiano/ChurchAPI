@@ -9,4 +9,5 @@ export interface IChurchRepository {
   delete(id_church: number): Promise<boolean>
   findById(id_church: number): Promise<IChurch | undefined>
   update(data: IUpdateChurchDTO): Promise<IChurch | undefined>
+  findFirstChurch(): Promise<IChurch | undefined>
 }

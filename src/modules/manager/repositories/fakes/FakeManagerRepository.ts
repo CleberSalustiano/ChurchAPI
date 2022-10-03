@@ -49,4 +49,17 @@ export default class FakeManagerRepository implements IManagerRepository {
 
     return manager;    
   }
+
+  public async delete(id_manager: number): Promise<boolean> {
+    const managerIndex = this.managers.findIndex(
+			(manager) => manager.id === id_manager
+		);
+
+		if (managerIndex === -1) return false;
+
+		const manager = this.managers.splice(managerIndex, 1);
+
+		if (manager) return true;
+
+		return false;  }
 }
