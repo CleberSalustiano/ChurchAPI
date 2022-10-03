@@ -17,16 +17,29 @@ export default class TreasurerController {
       );
 
       const treasurer = await createNewTreasurer.execute(+id);
-      
-      if (treasurer?.member){
+
+      if (treasurer?.member) {
         // @ts-ignore
         treasurer.member.cpf = treasurer.member.cpf.toString();
       }
 
-      return response.json({treasurer});
+      return response.json({ treasurer });
     } catch (error) {
       if (error instanceof Error)
-        return response.status(401).json({error: error.message});
+        return response.status(401).json({ error: error.message });
+    }
+  }
+
+  async index(request: Request, response: Response) {
+    try {
+      const treasurerRepository = new TreasurerRepository();
+
+      const treasurers = await treasurerRepository.findAll();
+
+      return response.json({ treasurers });
+    } catch (error) {
+      if (error instanceof Error)
+        return response.status(401).json({ error: error.message });
     }
   }
 }
