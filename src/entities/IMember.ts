@@ -1,3 +1,5 @@
+import { IChurch } from "./IChurch";
+
 export interface IMember {
   id: number;
   name: string;
@@ -11,4 +13,5 @@ export interface IMember {
   password: string;
   foto: string | null;
   id_church: number;
+  church?: IChurch;
 }

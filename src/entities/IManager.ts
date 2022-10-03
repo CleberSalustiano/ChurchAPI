@@ -6,7 +6,7 @@ export interface IManager {
   id_member: number;
   member?: IMember;
   id_church: number;
-  Church?: IChurch;
+  church?: IChurch;
   dateStart: Date;
   dateEnd?: Date | null;
 }
