@@ -5,7 +5,9 @@ const treasurerRouter = Router();
 const treasurerController = new TreasurerController();
 
 treasurerRouter.post("/:id", treasurerController.create);
-treasurerRouter.get("/", treasurerController.index)
+treasurerRouter.get("/", treasurerController.index);
+treasurerRouter.put("/:id", treasurerController.update);
+treasurerRouter.delete("/:id", treasurerController.delete)
 
 export default treasurerRouter;
 

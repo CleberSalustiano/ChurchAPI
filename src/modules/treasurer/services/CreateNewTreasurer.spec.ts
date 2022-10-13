@@ -1,3 +1,4 @@
+import NoExistError from "../../../shared/errors/NoExistError";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeTreasurerRepository from "../repositories/fakes/FakeTreasurerRepository";
 import CreateNewTreasurerService from "./CreateNewTreasureService";
@@ -31,4 +32,16 @@ describe("Create new treasurer", () => {
     expect(treasurer?.id_member).toBe(0);
     expect(treasurer?.startDate).toBeTruthy();
   });
+  
+  it("should not be able to create a treasure with a unexistent member", async () => {
+    const memberRepository = new FakeMemberRepository();
+    const treasurerRepository = new FakeTreasurerRepository();
+
+    const createNewTreasurer = new CreateNewTreasurerService(
+      memberRepository,
+      treasurerRepository
+    ); 
+
+    expect(createNewTreasurer.execute(0)).rejects.toThrowError(NoExistError);
+  })
 });
