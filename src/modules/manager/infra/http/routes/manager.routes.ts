@@ -10,5 +10,6 @@ managerRouter.post("/", managerController.create);
 managerRouter.put("/:id", managerController.update);
 managerRouter.get("/", managerController.index);
 managerRouter.get("/:id", managerInChurchController.index);
+managerRouter.delete("/:id", managerController.delete)
 
 export default managerRouter;

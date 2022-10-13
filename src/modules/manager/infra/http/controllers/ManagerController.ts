@@ -2,19 +2,20 @@ import { Request, Response } from "express";
 import ChurchRepository from "../../../../churchs/infra/prisma/repositories/ChurchRepository";
 import MemberRepository from "../../../../members/infra/prisma/repositories/MemberRepository";
 import { ICreateManagerDTO } from "../../../dtos/ICreateManagerDTO";
-import { IUpdateManagerDTO } from "../../../dtos/IUploadManagerDTO";
 import CreateNewManagerService from "../../../services/CreateNewManageService";
+import DeleteManagerService from "../../../services/DeleteManagerService";
 import UpdateManagerService from "../../../services/UpdateManagerService";
 import ManagerRepository from "../../prisma/repositories/ManagerRepository";
+
+const memberRepository = new MemberRepository();
+const churchRepository = new ChurchRepository();
+const managerRepository = new ManagerRepository();
 
 export default class ManagerController {
   async create(request: Request, response: Response) {
     try {
       const { id_church, id_member }: ICreateManagerDTO = request.body;
 
-      const memberRepository = new MemberRepository();
-      const churchRepository = new ChurchRepository();
-      const managerRepository = new ManagerRepository();
       const createNewManager = new CreateNewManagerService(
         memberRepository,
         churchRepository,
@@ -33,9 +34,7 @@ export default class ManagerController {
 
   async index(request: Request, response: Response) {
     try {
-      const managerRepository = new ManagerRepository();
-
-      const managers = await managerRepository.findAll();
+      const managers = await managerRepository.findAllActive();
 
       return response.json({ managers });
     } catch (error) {
@@ -47,23 +46,42 @@ export default class ManagerController {
 
   async update(request: Request, response: Response) {
     try {
-      const {id} = request.params
+      const { id } = request.params;
 
-      const {id_church, id_member} = request.body
-      
-      const memberRepository = new MemberRepository();
-      const managerRepository = new ManagerRepository();
-      const churchRepository = new ChurchRepository();
+      const { id_church, id_member } = request.body;
 
-      const updateManager = new UpdateManagerService(memberRepository, churchRepository, managerRepository);
+      const updateManager = new UpdateManagerService(
+        memberRepository,
+        churchRepository,
+        managerRepository
+      );
 
-      const manager = await updateManager.execute({id_church, id_manager: +id, id_member});
+      const manager = await updateManager.execute({
+        id_church,
+        id_manager: +id,
+        id_member,
+      });
 
-      return response.json({manager});
+      return response.json({ manager });
     } catch (error) {
       if (error instanceof Error) {
         return response.status(401).json({ error: error.message });
       }
+    }
+  }
+
+  async delete(request: Request, response: Response) {
+    try {
+      const { id } = request.params;
+
+      const deleteManager = new DeleteManagerService(managerRepository);
+
+      const manager = await deleteManager.execute(+id);
+
+      return response.status(201).json({});
+    } catch (error) {
+      if (error instanceof Error)
+        return response.status(401).json({ error: error.message });
     }
   }
 }

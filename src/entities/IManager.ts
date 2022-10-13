@@ -7,6 +7,6 @@ export interface IManager {
   member?: IMember;
   id_church: number;
   church?: IChurch;
-  dateStart: Date;
-  dateEnd?: Date | null;
+  startDate: Date;
+  endDate?: Date | null;
 }

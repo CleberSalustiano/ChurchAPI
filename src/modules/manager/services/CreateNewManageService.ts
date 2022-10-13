@@ -32,7 +32,7 @@ export default class CreateNewManagerService {
     const managersChurch = await this.managerRepository.findAllbyChurch(dataManager.id_church);
 
     if(managersChurch){
-      const managersChurchActive = managersChurch.filter(manager => !(manager.dateEnd) )
+      const managersChurchActive = managersChurch.filter(manager => !(manager.endDate) )
       
       if (managersChurchActive.length >= 3)
         throw new Error("This church have many managers, please delete someone or set dateEnd"); 

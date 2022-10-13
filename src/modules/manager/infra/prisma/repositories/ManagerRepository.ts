@@ -1,3 +1,4 @@
+import { prisma } from "@prisma/client";
 import { IManager } from "../../../../../entities/IManager";
 import prismaClient from "../../../../../shared/infra/database/prismaClient";
 import { ICreateManagerDTO } from "../../../dtos/ICreateManagerDTO";
@@ -17,21 +18,23 @@ export default class ManagerRepository implements IManagerRepository {
     id_church: number
   ): Promise<IManager[] | undefined> {
     const managers = await prismaClient.manager.findMany({
-      where: { id_church },
+      where: { id_church, endDate: undefined },
     });
 
     return managers;
   }
 
-  public async findAll(): Promise<IManager[] | undefined> {
-    const managers = await prismaClient.manager.findMany();
+  public async findAllActive(): Promise<IManager[] | undefined> {
+    const managers = await prismaClient.manager.findMany({
+      where: { endDate: null },
+    });
 
     return managers;
   }
 
   public async findById(id_manager: number): Promise<IManager | undefined> {
     const manager = await prismaClient.manager.findFirst({
-      where: { id: id_manager },
+      where: { id: id_manager, endDate: null },
     });
 
     if (!manager) return undefined;
@@ -54,18 +57,14 @@ export default class ManagerRepository implements IManagerRepository {
     return true;
   }
 
-  public async update(
-    dataManager: IUpdateManagerDTO
-  ): Promise<IManager | undefined> {
-    const managerExists = await prismaClient.manager.findFirst({
-      where: { id: dataManager.id_manager },
-    });
-
-    if (!managerExists) return undefined;
-
+  public async update({
+    id_church,
+    id_manager,
+    id_member,
+  }: IUpdateManagerDTO): Promise<IManager | undefined> {
     const manager = await prismaClient.manager.update({
-      where: { id: dataManager.id_manager },
-      data: dataManager,
+      where: { id: id_manager },
+      data: { id_church, id_member },
     });
 
     if (!manager) return undefined;
@@ -75,11 +74,34 @@ export default class ManagerRepository implements IManagerRepository {
 
   public async findByMember(id_member: number): Promise<IManager | undefined> {
     const manager = await prismaClient.manager.findFirst({
-      where: {id_member}
-    })
+      where: { id_member },
+    });
 
-    if (!manager) return undefined
-    
-    return manager
+    if (!manager) return undefined;
+
+    return manager;
+  }
+
+  public async endManager(id_manager: number): Promise<IManager | undefined> {
+    const managerExists = await prismaClient.manager.findFirst({
+      where: { id: id_manager },
+    });
+
+    if (!managerExists) return undefined;
+
+    const manager = await prismaClient.manager.update({
+      where: { id: id_manager },
+      data: { endDate: new Date() },
+    });
+
+    if (!manager) return undefined;
+
+    return manager;
+  }
+
+  public async findAll(): Promise<IManager[] | undefined> {
+    const managers = await prismaClient.manager.findMany();
+
+    return managers;
   }
 }
