@@ -12,20 +12,33 @@ interface IRequestChurchLocationParams {
   city: string;
   state: string;
   country: string;
-  cep: number
+  cep: number;
 }
 
-export default class ChurchController {
+const churchRepository = new ChurchRepository();
+const locationRepository = new LocationRepository();
 
+export default class ChurchController {
   async create(request: Request, response: Response) {
     try {
-      const { date, street, cep, city, country, district, state }: IRequestChurchLocationParams = request.body;
+      const {
+        date,
+        street,
+        cep,
+        city,
+        country,
+        district,
+        state,
+      }: IRequestChurchLocationParams = request.body;
 
-      const churchRepository = new ChurchRepository();
-      const locationRepository = new LocationRepository();
-
-      const createNewChurch = new CreateNewChurchService(churchRepository, locationRepository);
-      const church = await createNewChurch.execute({ date, id_location: -1 }, { cep, city, country, district, state, street });
+      const createNewChurch = new CreateNewChurchService(
+        churchRepository,
+        locationRepository
+      );
+      const church = await createNewChurch.execute(
+        { date, id_location: -1 },
+        { cep, city, country, district, state, street }
+      );
 
       return response.json({ church });
     } catch (error) {
@@ -35,45 +48,53 @@ export default class ChurchController {
   }
 
   async index(request: Request, response: Response) {
-    const churchRepository = new ChurchRepository();
-
     const churchs = await churchRepository.findAll();
 
     return response.json({ churchs });
   }
 
-  async delete (request: Request, response: Response) {
+  async delete(request: Request, response: Response) {
     try {
       const { id_church } = request.params;
 
-      const churchRepository = new ChurchRepository();
-      const locationRepository = new LocationRepository();
-  
-      const deleteChurch = new DeleteChurchService(churchRepository, locationRepository);
+      const deleteChurch = new DeleteChurchService(
+        churchRepository,
+        locationRepository
+      );
       await deleteChurch.execute(+id_church);
 
-      return response.status(201).json({})
-    }catch (error) {
-      if (error instanceof Error){
+      return response.status(201).json({});
+    } catch (error) {
+      if (error instanceof Error) {
         return response.status(400).json({ error: error.message });
       }
     }
-
   }
 
-  async update (request: Request, response: Response) {
+  async update(request: Request, response: Response) {
     try {
-      const {id_church} = request.params;
+      const { id_church } = request.params;
 
-      const {date, street, cep, city, country, district, state} : IRequestChurchLocationParams = request.body;
+      const {
+        date,
+        street,
+        cep,
+        city,
+        country,
+        district,
+        state,
+      }: IRequestChurchLocationParams = request.body;
 
-      const churchRepository = new ChurchRepository();
-      const locationRepository = new LocationRepository();
+      const updateChurch = new UpdateChurchService(
+        churchRepository,
+        locationRepository
+      );
+      const newChurch = await updateChurch.execute(
+        { id_church: +id_church, date },
+        { street, cep, city, country, district, state, id_location: 0 }
+      );
 
-      const updateChurch = new UpdateChurchService(churchRepository, locationRepository);
-      const newChurch = await updateChurch.execute({id_church: +id_church, date}, {street, cep, city, country, district,state, id_location: 0})
-      
-      return response.json({church: newChurch})
+      return response.json({ church: newChurch });
     } catch (error) {
       if (error instanceof Error)
         return response.status(400).json({ error: error.message });

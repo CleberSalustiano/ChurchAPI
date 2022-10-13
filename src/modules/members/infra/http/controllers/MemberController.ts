@@ -33,6 +33,9 @@ interface IRequestUpdate {
   id_member: number;
 }
 
+const memberRepository = new MemberRepository();
+const churchRepository = new ChurchRepository();
+
 export default class MemberController {
   async create(request: Request, response: Response) {
     try {
@@ -49,8 +52,6 @@ export default class MemberController {
         id_church,
       }: IRequestCreate = request.body;
 
-      const memberRepository = new MemberRepository();
-      const churchRepository = new ChurchRepository();
       const createNewMember = new CreateNewMemberService(
         memberRepository,
         churchRepository
@@ -80,8 +81,6 @@ export default class MemberController {
   }
 
   async index(request: Request, response: Response) {
-    const memberRepository = new MemberRepository();
-
     const membersNoJson = await memberRepository.findAll();
 
     const members = membersJsonCorrection(membersNoJson);
@@ -104,10 +103,8 @@ export default class MemberController {
         id_church,
       }: IRequestUpdate = request.body;
 
-      const {id} = request.params
+      const { id } = request.params;
 
-      const memberRepository = new MemberRepository();
-      const churchRepository = new ChurchRepository();
       const updateNewMember = new UpdateNewMemberService(
         memberRepository,
         churchRepository
@@ -124,7 +121,7 @@ export default class MemberController {
         rg,
         titleChurch,
         id_church,
-        id_member: +id
+        id_member: +id,
       });
 
       if (member) member.cpf = +member.cpf.toString();
@@ -139,9 +136,7 @@ export default class MemberController {
 
   async delete(request: Request, response: Response) {
     try {
-      const {id} = request.params;
-
-      const memberRepository = new MemberRepository();
+      const { id } = request.params;
 
       const deleteMember = new DeleteMemberService(memberRepository);
 
@@ -150,9 +145,8 @@ export default class MemberController {
       return response.status(201).json({});
     } catch (error) {
       if (error instanceof Error) {
-        return response.status(401).json({error: error.message})
+        return response.status(401).json({ error: error.message });
       }
     }
   }
-
 }
