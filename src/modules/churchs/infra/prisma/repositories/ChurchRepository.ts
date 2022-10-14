@@ -10,7 +10,7 @@ export default class ChurchRepository implements IChurchRepository {
     id_location,
   }: ICreateChurchDTO): Promise<IChurch | undefined> {
     const church = await prismaClient.church.create({
-      data: { creationDate: date, id_location },
+      data: { creationDate: new Date(date.toString()), id_location },
       include: { location: true },
     });
     return church;
@@ -57,7 +57,7 @@ export default class ChurchRepository implements IChurchRepository {
   }: IUpdateChurchDTO): Promise<IChurch | undefined> {
     const church = await prismaClient.church.update({
       where: { id: id_church },
-      data: { creationDate: date },
+      data: { creationDate: date.toString() },
       include: { location: true },
     });
 

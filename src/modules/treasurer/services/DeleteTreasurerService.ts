@@ -1,5 +1,4 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import TreasurerRepository from "../infra/prisma/repositories/TreasureRepository";
 import { ITreasurerRepository } from "../repositories/ITreasurerRepository";
 
 export default class DeleteTreasurerService {

@@ -11,7 +11,7 @@ export default class FakeChurchRepository implements IChurchRepository {
 		id_location,
 	}: ICreateChurchDTO): Promise<IChurch | undefined> {
 		const church: IChurch = {
-			creationDate: date,
+			creationDate: new Date(date.toString()),
 			id_location,
 			id: this.churchs.length,
 		};
@@ -63,7 +63,7 @@ export default class FakeChurchRepository implements IChurchRepository {
 		}
 
     const church = this.churchs[churchIndex];
-    church.creationDate = date;
+    church.creationDate = new Date(date.toString());
 
 		this.churchs.splice(churchIndex, 1, church);
 

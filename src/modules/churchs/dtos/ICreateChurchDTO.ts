@@ -1,4 +1,4 @@
 export interface ICreateChurchDTO {
-  date: Date;
+  date: String;
   id_location: number;
 }

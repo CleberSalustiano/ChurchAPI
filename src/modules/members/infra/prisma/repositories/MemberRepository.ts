@@ -5,10 +5,32 @@ import { IUpdateMemberDTO } from "../../../dtos/IUpdateMemberDTO";
 import { IMemberRepository } from "../../../repositories/IMemberRepository";
 
 export default class MemberRepository implements IMemberRepository {
-  public async create(
-    dataMember: ICreateMemberDTO
-  ): Promise<IMember | undefined> {
-    const member = await prismaClient.member.create({ data: dataMember });
+  public async create({
+    batism_date,
+    birth_date,
+    cpf,
+    email,
+    id_church,
+    login,
+    name,
+    password,
+    rg,
+    titleChurch,
+  }: ICreateMemberDTO): Promise<IMember | undefined> {
+    const member = await prismaClient.member.create({
+      data: {
+        batism_date: new Date(batism_date.toString()),
+        birth_date: new Date(birth_date.toString()),
+        cpf,
+        email,
+        login,
+        name,
+        password,
+        rg,
+        titleChurch,
+        id_church,
+      },
+    });
 
     return member;
   }
@@ -53,8 +75,8 @@ export default class MemberRepository implements IMemberRepository {
     const member = await prismaClient.member.update({
       where: { id: id_member },
       data: {
-        batism_date,
-        birth_date,
+        batism_date: new Date(batism_date.toString()),
+        birth_date: new Date(birth_date.toString()),
         cpf,
         email,
         id_church,
@@ -81,11 +103,12 @@ export default class MemberRepository implements IMemberRepository {
   }
 
   public async delete(id_member: number): Promise<boolean> {
-    const member = await prismaClient.member.delete({where: {id: id_member}});
+    const member = await prismaClient.member.delete({
+      where: { id: id_member },
+    });
 
-    if (!member)
-      return false;
-    
-    return true;  
+    if (!member) return false;
+
+    return true;
   }
 }

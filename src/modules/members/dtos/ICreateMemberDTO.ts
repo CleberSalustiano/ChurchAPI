@@ -1,7 +1,7 @@
 export interface ICreateMemberDTO {
 	name: string;
-	birth_date: Date;
-	batism_date: Date;
+	birth_date: String;
+	batism_date: String;
 	titleChurch: string;
 	cpf: bigint;
 	rg: number;

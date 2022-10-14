@@ -6,7 +6,7 @@ import ChurchRepository from "../../prisma/repositories/ChurchRepository";
 import LocationRepository from "../../prisma/repositories/LocationRepository";
 
 interface IRequestChurchLocationParams {
-  date: Date;
+  date: string;
   street: string;
   district: string;
   city: string;

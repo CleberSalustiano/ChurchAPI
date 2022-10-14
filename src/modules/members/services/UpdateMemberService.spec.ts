@@ -10,13 +10,13 @@ describe("Update new Member", () => {
     const fakeChurchRepository = new FakeChurchRepository();
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date: "1999-12-12",
       id_location: 0,
     });
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -34,8 +34,8 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "emailk",
@@ -58,7 +58,7 @@ describe("Update new Member", () => {
     const fakeChurchRepository = new FakeChurchRepository();
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date: "1999-12-12",
       id_location: 0,
     });
   
@@ -70,8 +70,8 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "emailk",
@@ -90,8 +90,8 @@ describe("Update new Member", () => {
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -109,8 +109,8 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "emailk",
@@ -128,13 +128,13 @@ describe("Update new Member", () => {
     const fakeChurchRepository = new FakeChurchRepository();
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date: "1999-12-12",
       id_location: 0,
     });
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -152,9 +152,9 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("199911-12"),
-      cpf: BigInt(12312312312),
+      batism_date: "1999-12-12",
+      birth_date: "199911-12",
+     cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "emailk",
       name: "Luvas Piruvicas",
@@ -171,13 +171,13 @@ describe("Update new Member", () => {
     const fakeChurchRepository = new FakeChurchRepository();
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date:"1999-12-12",
       id_location: 0,
     });
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -195,8 +195,8 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "emailk",
@@ -214,13 +214,13 @@ describe("Update new Member", () => {
     const fakeChurchRepository = new FakeChurchRepository();
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date: "1999-12-12",
       id_location: 0,
     });
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -238,8 +238,8 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(1231232312),
       email: "email@email.com",
       login: "emailk",
@@ -257,13 +257,13 @@ describe("Update new Member", () => {
     const fakeChurchRepository = new FakeChurchRepository();
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date: "1999-12-12",
       id_location: 0,
     });
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -275,8 +275,8 @@ describe("Update new Member", () => {
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-10-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-10-12",
       cpf: BigInt(12312312313),
       email: "email@email.com",
       login: "email",
@@ -294,8 +294,8 @@ describe("Update new Member", () => {
     const dataMamber: IUpdateMemberDTO = {
       id_member: 0,
       id_church: 0,
-      batism_date: new Date("1999-11-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-11-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312313),
       email: "email@email.com",
       login: "emailk",

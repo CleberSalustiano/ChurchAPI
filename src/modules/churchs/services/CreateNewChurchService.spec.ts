@@ -13,7 +13,7 @@ describe("CreateChurchCorrectly", () => {
     );
 
     const dataChurch = {
-      date: new Date("1999-11-12"),
+      date: "1999-11-12",
       id_location: 0,
     };
 
@@ -45,12 +45,12 @@ describe("CreateChurchCorrectly", () => {
     );
 
     fakeChurchRepository.create({
-      date: new Date("1999-12-12"),
+      date: "1999-12-12",
       id_location: 0,
     });
 
     const dataChurch = {
-      date: new Date("1999-11-12"),
+      date: "1999-11-12",
       id_location: 0,
     };
 

@@ -11,7 +11,7 @@ describe("Test end-to-end for services",  () => {
     const fakeMemberRepository = new FakeMemberRepository();
     const fakeChurchRepository = new FakeChurchRepository();
 
-    fakeChurchRepository.create({ date: new Date("1999-12-12"), id_location: 0 });
+    fakeChurchRepository.create({ date: "1999-12-12", id_location: 0 });
 
     const createNewMember = new CreateNewMemberService(
       fakeMemberRepository,
@@ -27,8 +27,8 @@ describe("Test end-to-end for services",  () => {
     
     const dataMember : ICreateMemberDTO = {
       name: "Batata",
-      birth_date: new Date("1999-11-12"),
-      batism_date: new Date("1999-12-12"),
+      birth_date: "1999-11-12",
+      batism_date: "1999-12-12",
       titleChurch: "member",
       cpf: BigInt(12332112200),
       rg: 123123,
@@ -49,8 +49,8 @@ describe("Test end-to-end for services",  () => {
 
     const dataMemberUpdate : IUpdateMemberDTO = {
       name: "Batata",
-      birth_date: new Date("1999-11-12"),
-      batism_date: new Date("1999-12-12"),
+      birth_date: "1999-11-12",
+      batism_date: "1999-12-12",
       titleChurch: "manager",
       cpf: BigInt(12332112222),
       rg: 123123,

@@ -17,9 +17,7 @@ class CreateNewChurchService {
   }
 
   public async execute(dataChurch: ICreateChurchDTO, dataLocation: ICreateLocationDTO): Promise<Church | undefined> {
-    if (confirmIsDate(dataChurch.date))
-      dataChurch.date = new Date(dataChurch.date)
-    else 
+    if (!confirmIsDate(dataChurch.date)) 
       throw new Error("Date format is incorrect (yyyy-mm-dd)")
     
     let location = await this.locationRepository.findByCep(dataLocation.cep);

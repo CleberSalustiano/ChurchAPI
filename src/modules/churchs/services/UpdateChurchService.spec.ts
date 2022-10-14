@@ -7,7 +7,7 @@ describe("UpdateChurch", () => {
     const fakeChurchRepository = new FakeChurchRepository();
     const fakeLocationRepository = new FakeLocationRepository();
 
-    const church = await fakeChurchRepository.create({date: new Date("1999-11-12"), id_location: 0})
+    const church = await fakeChurchRepository.create({date: "1999-11-12", id_location: 0})
     await (fakeLocationRepository.create({cep: 123, city: "", country: "", district: "", street:"", state: ""}))
 
     const updateChurch = new UpdateChurchService(fakeChurchRepository, fakeLocationRepository);
@@ -16,7 +16,7 @@ describe("UpdateChurch", () => {
       return false;
     
     const dataChurch = {
-      date: new Date("1000-10-10"),
+      date: "1000-10-10",
       id_church: 0
     }
 
@@ -44,7 +44,7 @@ describe("UpdateChurch", () => {
     const updateChurch = new UpdateChurchService(fakeChurchRepository, fakeLocationRepository);
 
     const dataChurch = {
-      date: new Date("1000-10-10"),
+      date: "1000-10-10",
       id_church: 0
     }
 
@@ -65,7 +65,7 @@ describe("UpdateChurch", () => {
     const fakeChurchRepository = new FakeChurchRepository();
     const fakeLocationRepository = new FakeLocationRepository();
 
-    const church = await fakeChurchRepository.create({date: new Date("1999-11-12"), id_location: 0})
+    const church = await fakeChurchRepository.create({date:"1999-11-12", id_location: 0})
     await (fakeLocationRepository.create({cep: 123, city: "", country: "", district: "", street:"", state: ""}))
     await (fakeLocationRepository.create({cep: 1234, city: "", country: "", district: "", street:"", state: ""}))
 
@@ -75,7 +75,7 @@ describe("UpdateChurch", () => {
       return false;
     
     const dataChurch = {
-      date: new Date("1000-10-10"),
+      date: "1000-10-10",
       id_church: 0
     }
 

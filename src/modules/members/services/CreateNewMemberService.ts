@@ -23,13 +23,11 @@ export default class CreateNewMemberService {
     const church = await this.churchRepository.findById(dataMember.id_church);
     if (!church) throw new NoExistError("church");
 
-    if (confirmIsDate(dataMember.birth_date))
-      dataMember.birth_date = new Date(dataMember.birth_date);
-    else throw new Error("Birth date format is incorrect (yyyy-mm-dd)");
+    if (!confirmIsDate(dataMember.birth_date))
+      throw new Error("Birth date format is incorrect (yyyy-mm-dd)");
 
-    if (confirmIsDate(dataMember.batism_date))
-      dataMember.batism_date = new Date(dataMember.batism_date);
-    else throw new Error("Batism date format is incorrect (yyyy-mm-dd)");
+    if (!confirmIsDate(dataMember.batism_date))
+      throw new Error("Batism date format is incorrect (yyyy-mm-dd)");
 
     if (dataMember.cpf.toString().length !== 11)
       throw new Error("CPF format is incorrect");

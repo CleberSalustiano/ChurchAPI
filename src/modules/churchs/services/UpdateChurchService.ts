@@ -18,9 +18,7 @@ export default class UpdateChurchService {
   }
 
   public async execute(dataChurch: IUpdateChurchDTO, dataLocation: IUpdateLocationDTO) : Promise<Church | undefined> {
-    if (confirmIsDate(dataChurch.date))
-      dataChurch.date = new Date(dataChurch.date)
-    else 
+    if (!confirmIsDate(dataChurch.date))
       throw new Error("Date format is incorrect (yyyy-mm-dd)")    
     
     const church = await this.churchRepository.findById(dataChurch.id_church);
