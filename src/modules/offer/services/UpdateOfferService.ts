@@ -1,9 +1,9 @@
 import NoExistError from "../../../shared/errors/NoExistError";
 import { ITreasurerRepository } from "../../treasurer/repositories/ITreasurerRepository";
-import { ICreateOfferDTO } from "../dtos/ICreateOfferDTO";
+import { IUpdateOfferDTO } from "../dtos/IUpdateOfferDTO";
 import { IOfferRepository } from "../repositories/IOfferRepository";
 
-export default class CreateNewOfferService {
+export default class UpdateOfferService {
   constructor(
     private offerRepository: IOfferRepository,
     private treasurerRepository: ITreasurerRepository
@@ -12,17 +12,19 @@ export default class CreateNewOfferService {
     this.treasurerRepository = treasurerRepository;
   }
 
-  async execute(dataOffer: ICreateOfferDTO) {
+  async execute(dataOffer: IUpdateOfferDTO) {
     const treasurer = await this.treasurerRepository.findById(
       dataOffer.id_treasurer
     );
 
     if (!treasurer) throw new NoExistError("treasurer");
 
-    const offer = await this.offerRepository.create(dataOffer);
+    const offer = await this.offerRepository.findById(dataOffer.id_offer);
 
-    if (!offer) throw new Error("This offer wasn't created");
+    if (!offer) throw new NoExistError("offer");
 
-    return offer;
+    const offerUpdated = await this.offerRepository.update(dataOffer);
+
+    return offerUpdated;
   }
 }

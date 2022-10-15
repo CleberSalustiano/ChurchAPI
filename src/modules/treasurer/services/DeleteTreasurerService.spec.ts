@@ -10,8 +10,8 @@ describe("Delete Treasurer (desactive)", () => {
 
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
@@ -37,8 +37,8 @@ describe("Delete Treasurer (desactive)", () => {
 
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
       login: "email",
