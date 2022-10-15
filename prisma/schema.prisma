@@ -44,12 +44,12 @@ model Manager {
 }
 
 model Treasurer {
-  id        Int      @id @default(autoincrement())
-  startDate DateTime @default(now())
-  endDate   DateTime? 
+  id        Int       @id @default(autoincrement())
+  startDate DateTime  @default(now())
+  endDate   DateTime?
   Offer     Offer[]
   id_member Int
-  member    Member   @relation(fields: [id_member], references: [id])
+  member    Member    @relation(fields: [id_member], references: [id])
 
   @@map("treasurers")
 }
@@ -59,7 +59,7 @@ model Offer {
   value        Int
   SpecialOffer SpecialOffer[]
   id_treasurer Int
-  treasurer    Treasurer      @relation(fields: [id_treasurer], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  treasurer    Treasurer      @relation(fields: [id_treasurer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   Cult         Cult[]
 
   @@map("offers")
@@ -70,11 +70,11 @@ model SpecialOffer {
   reason    String
   date      DateTime
   id_offer  Int
-  offer     Offer    @relation(fields: [id_offer], references: [id])
+  offer     Offer    @relation(fields: [id_offer], references: [id], onDelete: Cascade, onUpdate: Cascade)
   id_member Int
-  member    Member   @relation(fields: [id_member], references: [id])
+  member    Member   @relation(fields: [id_member], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
-  church    Church   @relation(fields: [id_church], references: [id])
+  church    Church   @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   Tethe     Tethe[]
 
   @@map("special_offers")
@@ -82,9 +82,10 @@ model SpecialOffer {
 
 model Tethe {
   id               Int          @id @default(autoincrement())
-  salaryValue      Int
+  month            Int
+  year             Int
   id_special_offer Int
-  specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id])
+  specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("tethes")
 }
@@ -108,9 +109,9 @@ model Cult {
   date      DateTime
   theme     String
   id_offer  Int
-  offer     Offer    @relation(fields: [id_offer], references: [id])
+  offer     Offer    @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
-  church    Church   @relation(fields: [id_church], references: [id])
+  church    Church   @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
 
   @@map("cults")
 }
