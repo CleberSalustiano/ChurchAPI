@@ -1,4 +1,4 @@
-import NoExistError from "../../../shared/errors/NoExistError";
+import NoExistError from "../../../errors/NoExistError";
 import { IOfferRepository } from "../repositories/IOfferRepository";
 
 export default class DeleteOfferService {

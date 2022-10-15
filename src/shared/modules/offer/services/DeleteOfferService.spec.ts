@@ -1,4 +1,4 @@
-import NoExistError from "../../../shared/errors/NoExistError";
+import NoExistError from "../../../errors/NoExistError";
 import FakeOfferRepository from "../repositories/fakes/FakeOfferRepository";
 import DeleteOfferService from "./DeleteOfferService";
 

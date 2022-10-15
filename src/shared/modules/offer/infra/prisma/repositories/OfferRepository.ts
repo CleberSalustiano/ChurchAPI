@@ -1,5 +1,6 @@
-import { IOffer } from "../../../../../entities/IOffer";
-import prismaClient from "../../../../../shared/infra/database/prismaClient";
+
+import { IOffer } from "../../../../../../entities/IOffer";
+import prismaClient from "../../../../../infra/database/prismaClient";
 import { ICreateOfferDTO } from "../../../dtos/ICreateOfferDTO";
 import { IUpdateOfferDTO } from "../../../dtos/IUpdateOfferDTO";
 import { IOfferRepository } from "../../../repositories/IOfferRepository";

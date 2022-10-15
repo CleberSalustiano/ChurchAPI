@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import TreasurerRepository from "../../../../treasurer/infra/prisma/repositories/TreasureRepository";
+import TreasurerRepository from "../../../../../../modules/treasurer/infra/prisma/repositories/TreasureRepository";
 import { ICreateOfferDTO } from "../../../dtos/ICreateOfferDTO";
 import { IUpdateOfferDTO } from "../../../dtos/IUpdateOfferDTO";
 import CreateNewOfferService from "../../../services/CreateNewOfferService";

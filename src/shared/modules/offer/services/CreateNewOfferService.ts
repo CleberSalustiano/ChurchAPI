@@ -1,5 +1,6 @@
-import NoExistError from "../../../shared/errors/NoExistError";
-import { ITreasurerRepository } from "../../treasurer/repositories/ITreasurerRepository";
+
+import { ITreasurerRepository } from "../../../../modules/treasurer/repositories/ITreasurerRepository";
+import NoExistError from "../../../errors/NoExistError";
 import { ICreateOfferDTO } from "../dtos/ICreateOfferDTO";
 import { IOfferRepository } from "../repositories/IOfferRepository";
 

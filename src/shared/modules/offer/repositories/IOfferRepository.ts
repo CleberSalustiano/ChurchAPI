@@ -1,4 +1,4 @@
-import { IOffer } from "../../../entities/IOffer";
+import { IOffer } from "../../../../entities/IOffer";
 import { ICreateOfferDTO } from "../dtos/ICreateOfferDTO";
 import { IUpdateOfferDTO } from "../dtos/IUpdateOfferDTO";
 

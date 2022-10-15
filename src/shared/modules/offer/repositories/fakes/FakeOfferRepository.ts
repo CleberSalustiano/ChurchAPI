@@ -1,4 +1,4 @@
-import { IOffer } from "../../../../entities/IOffer";
+import { IOffer } from "../../../../../entities/IOffer";
 import { ICreateOfferDTO } from "../../dtos/ICreateOfferDTO";
 import { IUpdateOfferDTO } from "../../dtos/IUpdateOfferDTO";
 import { IOfferRepository } from "../IOfferRepository";
@@ -27,7 +27,11 @@ export default class FakeOfferRepository implements IOfferRepository {
     return offer;
   }
 
-  public async update({id_offer, id_treasurer, value}: IUpdateOfferDTO): Promise<IOffer | undefined> {
+  public async update({
+    id_offer,
+    id_treasurer,
+    value,
+  }: IUpdateOfferDTO): Promise<IOffer | undefined> {
     const offerIndex = this.offers.findIndex((offer) => offer.id === id_offer);
 
     const offer = this.offers[offerIndex];
