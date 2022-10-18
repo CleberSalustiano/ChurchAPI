@@ -1,5 +1,6 @@
 import { ISpecialOffer } from "../../../../entities/ISpecialOffer";
 import { ICreateSpecialOfferDTO } from "../../dtos/ICreateSpecialOfferDTO";
+import { IUpdateSpecialOfferDTO } from "../../dtos/IUpdateSpecialOfferDTO";
 import { ISpecialOfferRepository } from "../ISpecialOfferRepository";
 
 export default class FakeSpecialOfferRepository
@@ -37,4 +38,22 @@ export default class FakeSpecialOfferRepository
     return specialOffer;
   }
   
+  public async update({date,id_church,id_member,id_special_offer,reason}: IUpdateSpecialOfferDTO): Promise<ISpecialOffer | undefined> {
+    const specialOfferIndex = this.specialOffers.findIndex(
+      (specialOffer) => specialOffer.id === id_special_offer
+    );
+
+    if (specialOfferIndex === -1) return undefined;
+
+    const specialOffer = this.specialOffers[specialOfferIndex];
+
+    specialOffer.date = new Date(date.toString());
+    specialOffer.id_church = id_church;
+    specialOffer.id_member = id_member;
+    specialOffer.reason = reason;
+
+    this.specialOffers.splice(specialOfferIndex, 1, specialOffer);
+
+    return specialOffer;
+  }
 }

@@ -1,15 +1,14 @@
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { IOfferRepository } from "../../../shared/modules/offer/repositories/IOfferRepository";
-import CreateNewOfferService from "../../../shared/modules/offer/services/CreateNewOfferService";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
 import { ITreasurerRepository } from "../../treasurer/repositories/ITreasurerRepository";
-import { IRequestCreateSpecialOfferDTO } from "../dtos/IRequestCreateSpecialOfferDTO";
+import { IRequestUpdateSpecialOfferDTO } from "../dtos/IRequestUpdateSpecialOfferDTO";
 import { ISpecialOfferRepository } from "../repositories/ISpecialOfferRepository";
 
-export default class CreateNewSpecialOfferService {
+export default class UpdateSpecialOfferService {
   constructor(
     private offerRepository: IOfferRepository,
     private specialOfferRepository: ISpecialOfferRepository,
@@ -28,39 +27,54 @@ export default class CreateNewSpecialOfferService {
     date,
     id_church,
     id_member,
+    id_special_offer,
     id_treasurer,
     reason,
     value,
-  }: IRequestCreateSpecialOfferDTO) {
-    if (!confirmIsDate(date))
-      throw new DateError();
-
-    const createOffer = new CreateNewOfferService(
-      this.offerRepository,
-      this.treasurerRepository
+  }: IRequestUpdateSpecialOfferDTO) {
+    const specialOffer = await this.specialOfferRepository.findById(
+      id_special_offer
     );
-    const member = await this.memberRepository.findById(id_member);
 
-    if (!member) throw new NoExistError("member");
+    if (!specialOffer) throw new NoExistError("Special Offer");
+
+    if (!confirmIsDate(date)) throw new DateError();
 
     const church = await this.churchRepository.findById(id_church);
 
-    if (!church) throw new NoExistError("church");
+    if (!church) throw new NoExistError("Church");
 
-    const offer = await createOffer.execute({ id_treasurer, value });
+    const member = await this.memberRepository.findById(id_member);
 
-    if (!offer) throw new Error("This offer wasn't created");
+    if (!member) throw new NoExistError("Member");
 
-    const specialOffer = await this.specialOfferRepository.create({
+    const treasurer = await this.treasurerRepository.findById(id_treasurer);
+
+    if (!treasurer) throw new NoExistError("Treasuerer");
+
+    const offer = await this.offerRepository.findById(specialOffer.id_offer);
+
+    if (
+      offer &&
+      (offer?.value != value || offer.id_treasurer != id_treasurer)
+    ) {
+      await this.offerRepository.update({
+        id_offer: offer.id,
+        id_treasurer,
+        value,
+      });
+    }
+
+    const newSpecialOffer = await this.specialOfferRepository.update({
       date,
       id_church,
       id_member,
-      id_offer: offer.id,
+      id_special_offer,
       reason,
     });
 
-    if (!specialOffer) throw new Error("This specialOffer wasn't created");
+    if (!newSpecialOffer) throw new Error("This special offer wasn't updated");
 
-    return specialOffer;
+    return newSpecialOffer;
   }
 }
