@@ -295,19 +295,6 @@ describe("Update a special offer", () => {
       email: "bdegamer@email.com",
       id_church: 0,
       login: "aoba",
-      name: "Carlos",
-      password: "Cleber",
-      rg: 123233,
-      titleChurch: "Title",
-    });
-
-    memberRepository.create({
-      batism_date: "1999-12-12",
-      birth_date: "1999-12-13",
-      cpf: BigInt(12312312323),
-      email: "bdegamer@email.com",
-      id_church: 0,
-      login: "aoba",
       name: "Jordan",
       password: "Cleber",
       rg: 123233,
@@ -404,6 +391,6 @@ describe("Update a special offer", () => {
         id_treasurer: 0,
         reason: "Ofertas recebidas ",
       })
-    ).toBeTruthy();
+    ).rejects.toThrowError();
   });
 });
