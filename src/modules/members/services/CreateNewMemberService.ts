@@ -1,4 +1,5 @@
 import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
+import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
@@ -24,10 +25,10 @@ export default class CreateNewMemberService {
     if (!church) throw new NoExistError("church");
 
     if (!confirmIsDate(dataMember.birth_date))
-      throw new Error("Birth date format is incorrect (yyyy-mm-dd)");
+      throw new DateError();
 
     if (!confirmIsDate(dataMember.batism_date))
-      throw new Error("Batism date format is incorrect (yyyy-mm-dd)");
+      throw new DateError();
 
     if (dataMember.cpf.toString().length !== 11)
       throw new Error("CPF format is incorrect");

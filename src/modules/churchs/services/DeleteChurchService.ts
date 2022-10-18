@@ -1,4 +1,3 @@
-import { Church } from "@prisma/client";
 import { IChurch } from "../../../entities/IChurch";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { IChurchRepository } from "../repositories/IChurchRepository";
