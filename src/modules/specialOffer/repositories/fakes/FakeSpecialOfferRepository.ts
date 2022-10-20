@@ -32,13 +32,23 @@ export default class FakeSpecialOfferRepository
     return this.specialOffers;
   }
 
-  public async findById(id_special_offer: number): Promise<ISpecialOffer | undefined> {
-    const specialOffer = this.specialOffers.find(specialOffer => specialOffer.id === id_special_offer);
+  public async findById(
+    id_special_offer: number
+  ): Promise<ISpecialOffer | undefined> {
+    const specialOffer = this.specialOffers.find(
+      (specialOffer) => specialOffer.id === id_special_offer
+    );
 
     return specialOffer;
   }
-  
-  public async update({date,id_church,id_member,id_special_offer,reason}: IUpdateSpecialOfferDTO): Promise<ISpecialOffer | undefined> {
+
+  public async update({
+    date,
+    id_church,
+    id_member,
+    id_special_offer,
+    reason,
+  }: IUpdateSpecialOfferDTO): Promise<ISpecialOffer | undefined> {
     const specialOfferIndex = this.specialOffers.findIndex(
       (specialOffer) => specialOffer.id === id_special_offer
     );
@@ -55,5 +65,17 @@ export default class FakeSpecialOfferRepository
     this.specialOffers.splice(specialOfferIndex, 1, specialOffer);
 
     return specialOffer;
+  }
+
+  public async delete(id_special_offer: number): Promise<boolean> {
+    const specialOfferIndex = this.specialOffers.findIndex(
+      (specialOffer) => specialOffer.id === id_special_offer
+    );
+
+    if (specialOfferIndex === -1) return false;
+
+    this.specialOffers.splice(specialOfferIndex, 1);
+
+    return true;
   }
 }
