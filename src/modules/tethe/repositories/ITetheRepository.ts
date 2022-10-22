@@ -7,4 +7,5 @@ export interface ITetheRepository {
   findAll() : Promise<ITethe[] | undefined>
   findById(id_tethe: number) : Promise<ITethe | undefined>
   update(dataTethe: IUpdateTetheDTO) : Promise<ITethe | undefined>
+  delete(id_tethe: number): Promise<boolean>
 }

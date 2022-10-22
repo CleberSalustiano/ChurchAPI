@@ -22,11 +22,11 @@ export default class DeleteSpecialOfferService {
 
     if (!specialOffer) throw new NoExistError("special offer");
 
-    const specialOfferDeleted = await this.specialOfferRepository.delete(
+    const isSpecialOfferDeleted = await this.specialOfferRepository.delete(
       id_special_offer
     );
 
-    if (!specialOfferDeleted) throw new Error("The special offer doesn't deleted");
+    if (!isSpecialOfferDeleted) throw new Error("The special offer doesn't deleted");
 
     await deleteOffer.execute(specialOffer.id_offer);
 

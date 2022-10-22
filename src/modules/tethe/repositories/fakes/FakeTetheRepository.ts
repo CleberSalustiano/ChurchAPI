@@ -48,4 +48,14 @@ export default class FakeTetheRepository implements ITetheRepository {
 
     return tethe;
   }
+
+  public async delete(id_tethe: number): Promise<boolean> {
+    const tetheIndex = this.tethes.findIndex((tethe) => tethe.id === id_tethe);
+
+    if (tetheIndex === -1) return false;
+
+    this.tethes.splice(tetheIndex,1);
+
+    return true;     
+  }
 }
