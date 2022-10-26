@@ -11,21 +11,20 @@ describe("Delete a manager (desactive)", () => {
 
 
     churchRepository.create({
-      date: new Date("1991-12-12"),
+      date:"1991-12-12",
       id_location: 1,
     });
 
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date:"1999-12-12",
+      birth_date:"1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
 
     let manager = await managerRepository.create({id_church: 0, id_member: 0});

@@ -7,7 +7,7 @@ describe("DeleteSomeChurch", () => {
     const fakeChurchRepository = new FakeChurchRepository();
     const fakeLocationRepository = new FakeLocationRepository();
     
-    const church = await fakeChurchRepository.create({date: new Date("1999-11-12"), id_location: 0})
+    const church = await fakeChurchRepository.create({date: "1999-11-12", id_location: 0})
     await (fakeLocationRepository.create({cep: 123, city: "", country: "", district: "", street:"", state: ""}))
     
     if (!church) {

@@ -10,6 +10,12 @@ datasource db {
   url      = "file:../database/sqlite/dev.db"
 }
 
+model User {
+  id       Int      @id @default(autoincrement())
+  password String
+  Member   Member[]
+}
+
 model Member {
   id           Int            @id @default(autoincrement())
   name         String
@@ -18,15 +24,15 @@ model Member {
   titleChurch  String
   cpf          BigInt         @unique
   rg           Int
-  login        String
   email        String
-  password     String
   foto         String?
   Manager      Manager[]
   Treasurer    Treasurer[]
   SpecialOffer SpecialOffer[]
   id_church    Int
   church       Church         @relation(fields: [id_church], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id_user      Int            @unique
+  user         User           @relation(fields: [id_user], references: [id])
 
   @@map("members")
 }
@@ -109,7 +115,7 @@ model Cult {
   date      DateTime
   theme     String
   id_offer  Int?
-  offer     Offer?    @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  offer     Offer?   @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
   church    Church   @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
 

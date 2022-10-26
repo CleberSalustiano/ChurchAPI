@@ -11,12 +11,11 @@ export default class FakeMemberRepository implements IMemberRepository {
     birth_date,
     cpf,
     email,
-    login,
     name,
-    password,
     rg,
     titleChurch,
     id_church,
+    id_user,
   }: ICreateMemberDTO): Promise<IMember | undefined> {
     const member: IMember = {
       batism_date: new Date(batism_date.toString()),
@@ -24,9 +23,8 @@ export default class FakeMemberRepository implements IMemberRepository {
       cpf,
       email,
       id: this.members.length,
-      login,
       name,
-      password,
+      id_user,
       rg,
       titleChurch,
       foto: null,
@@ -54,15 +52,13 @@ export default class FakeMemberRepository implements IMemberRepository {
     email,
     id_church,
     id_member,
-    login,
     name,
-    password,
     rg,
     titleChurch,
     cpf,
   }: IUpdateMemberDTO): Promise<IMember | undefined> {
     const memberIndex = this.members.findIndex(
-      (member) => member.id === id_church
+      (member) => member.id === id_member
     );
 
     if (memberIndex === -1) return undefined;
@@ -72,9 +68,7 @@ export default class FakeMemberRepository implements IMemberRepository {
     member.birth_date = new Date(birth_date.toString());
     member.email = email;
     member.id_church = id_church;
-    member.login = login;
     member.name = name;
-    member.password = password;
     member.rg = rg;
     member.titleChurch = titleChurch;
 

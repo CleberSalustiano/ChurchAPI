@@ -29,11 +29,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -42,11 +41,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     treasurerRepository.create(0);
@@ -100,11 +98,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -113,11 +110,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     treasurerRepository.create(0);
@@ -160,11 +156,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -173,11 +168,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     treasurerRepository.create(0);
@@ -228,11 +222,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -241,11 +234,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     treasurerRepository.create(0);
@@ -294,11 +286,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     treasurerRepository.create(0);
@@ -349,11 +340,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -362,11 +352,10 @@ describe("Update a special offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0,
     });
 
     churchRepository.create({ date: "1923-12-25", id_location: 0 });

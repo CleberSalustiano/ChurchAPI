@@ -29,11 +29,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     memberRepository.create({
@@ -42,11 +41,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     treasurerRepository.create(0);
@@ -87,11 +85,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     memberRepository.create({
@@ -100,11 +97,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     treasurerRepository.create(0);
@@ -144,11 +140,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     treasurerRepository.create(0);
@@ -188,11 +183,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Carlos",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     memberRepository.create({
@@ -201,11 +195,10 @@ describe("Create a new Special Offer", () => {
       cpf: BigInt(12312312323),
       email: "bdegamer@email.com",
       id_church: 0,
-      login: "aoba",
       name: "Jordan",
-      password: "Cleber",
       rg: 123233,
       titleChurch: "Title",
+      id_user: 0
     });
 
     treasurerRepository.create(0);

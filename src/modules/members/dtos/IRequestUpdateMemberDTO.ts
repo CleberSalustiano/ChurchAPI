@@ -1,4 +1,4 @@
-export interface ICreateMemberDTO {
+export interface IRequestUpdateMemberDTO {
 	name: string;
 	birth_date: String;
 	batism_date: String;
@@ -6,6 +6,7 @@ export interface ICreateMemberDTO {
 	cpf: bigint;
 	rg: number;
 	email: string;
+	password: string;
   id_church: number;
-	id_user: number;
+  id_member: number;
 }

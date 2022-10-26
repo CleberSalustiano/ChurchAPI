@@ -2,14 +2,18 @@ import NoExistError from "../../../shared/errors/NoExistError";
 import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
+import FakeUserRepository from "../repositories/fakes/FakeUserRepository";
 import DeleteMemberService from "./DeleteMemberService";
 
 describe("Delete a member", () => {
   it("should be able delete a member", async () => {
-    const fakeMemberRepository = new FakeMemberRepository();
-    const fakeChurchRepository = new FakeChurchRepository();
+    const memberRepository = new FakeMemberRepository();
+    const churchRepository = new FakeChurchRepository();
+    const userRepository = new FakeUserRepository();
+    churchRepository.create({ date: "1999-12-12", id_location: 0 });
 
-    fakeChurchRepository.create({ date: "1999-12-12", id_location: 0 });
+    userRepository.create({ password: "1234" });
+    userRepository.create({ password: "12344" });
 
     const dataMamber: ICreateMemberDTO = {
       id_church: 0,
@@ -17,31 +21,35 @@ describe("Delete a member", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0,
     };
 
-    fakeMemberRepository.create(dataMamber);
-    dataMamber.login = "aoba";
-    fakeMemberRepository.create(dataMamber);
+    memberRepository.create(dataMamber);
+    dataMamber.id_user = 1;
+    dataMamber.name = "Aoba novo";
+    memberRepository.create(dataMamber);
 
-    const deleteMember = new DeleteMemberService(fakeMemberRepository);
+    const deleteMember = new DeleteMemberService(
+      memberRepository,
+      userRepository
+    );
 
     const member = await deleteMember.execute(1);
 
     expect(member).toBeTruthy();
-    expect(member?.password).toBe("6969");
-    expect(member?.login).toBe("aoba");
+    expect(member?.name).toBe("Aoba novo");
   });
 
   it("should not be able to delete a member that doesn't exist", async () => {
-    const fakeMemberRepository = new FakeMemberRepository();
-    const fakeChurchRepository = new FakeChurchRepository();
+    const memberRepository = new FakeMemberRepository();
+    const churchRepository = new FakeChurchRepository();
+    const userRepository = new FakeUserRepository();
 
-    fakeChurchRepository.create({ date: "1999-12-12", id_location: 0 });
+    churchRepository.create({ date: "1999-12-12", id_location: 0 });
+    userRepository.create({password: "1234"})
 
     const dataMamber: ICreateMemberDTO = {
       id_church: 0,
@@ -49,16 +57,15 @@ describe("Delete a member", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     };
 
-    fakeMemberRepository.create(dataMamber);
+    memberRepository.create(dataMamber);
 
-    const deleteMember = new DeleteMemberService(fakeMemberRepository);
+    const deleteMember = new DeleteMemberService(memberRepository, userRepository);
 
     expect(deleteMember.execute(1)).rejects.toBeInstanceOf(NoExistError);
   });

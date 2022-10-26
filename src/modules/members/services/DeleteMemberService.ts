@@ -1,10 +1,12 @@
 import { IMember } from "../../../entities/IMember";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { IMemberRepository } from "../repositories/IMemberRepository";
+import { IUserRepository } from "../repositories/IUserRepository";
 
 export default class DeleteMemberService {
-  constructor(private memberRepository: IMemberRepository) {
+  constructor(private memberRepository: IMemberRepository, private userRepository : IUserRepository) {
     this.memberRepository = memberRepository;
+    this.userRepository = userRepository;
   }
 
   public async execute(id_member : number) : Promise<IMember | undefined> {
@@ -17,6 +19,8 @@ export default class DeleteMemberService {
 
     if (!isMemberDeleted)
       throw new Error("This members hasn't been removed")
+
+    await this.userRepository.delete(member.id_user);
     
     return member;
   }

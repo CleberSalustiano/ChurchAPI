@@ -16,32 +16,30 @@ describe("Update a manager", () => {
       managerRepository
     );
 
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 2 });
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 1 });
+    churchRepository.create({ date: "1999-12-12", id_location: 2 });
+    churchRepository.create({ date: "1999-12-12", id_location: 1 });
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
 
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
     managerRepository.create({id_church: 0, id_member: 0})
 
@@ -63,19 +61,18 @@ describe("Update a manager", () => {
       managerRepository
     );
 
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 2 });
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 1 });
+    churchRepository.create({ date: "1999-12-12", id_location: 2 });
+    churchRepository.create({ date: "1999-12-12", id_location: 1 });
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
     managerRepository.create({id_church: 0, id_member: 0})
 
@@ -93,31 +90,29 @@ describe("Update a manager", () => {
       managerRepository
     );
 
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 2 });
+    churchRepository.create({ date: "1999-12-12", id_location: 2 });
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
 
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
     managerRepository.create({id_church: 0, id_member: 0})
 
@@ -135,32 +130,30 @@ describe("Update a manager", () => {
       managerRepository
     );
 
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 2 });
-    churchRepository.create({ date: new Date("1999-12-12"), id_location: 1 });
+    churchRepository.create({ date: "1999-12-12", id_location: 2 });
+    churchRepository.create({ date: "1999-12-12", id_location: 1 });
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
 
     memberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
       titleChurch: "Member",
+      id_user: 0
     });
 
     expect(updateManager.execute({id_church: 1, id_manager: 0, id_member: 1})).rejects.toThrowError(NoExistError);

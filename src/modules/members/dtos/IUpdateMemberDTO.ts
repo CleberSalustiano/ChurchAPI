@@ -6,8 +6,6 @@ export interface IUpdateMemberDTO {
   titleChurch: string;
   cpf?: bigint;
   rg: number;
-  login: string;
   email: string;
-  password: string;
   id_church: number;
 }

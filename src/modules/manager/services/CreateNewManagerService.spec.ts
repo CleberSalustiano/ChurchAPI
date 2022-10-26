@@ -18,21 +18,19 @@ describe("Create a new manager for a church", () => {
     );
 
     fakeChurchRepository.create({
-      date: new Date("1991-12-12"),
+      date:"1991-12-12",
       id_location: 1,
     });
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     const manager = await createNewManager.execute({
@@ -56,7 +54,7 @@ describe("Create a new manager for a church", () => {
     );
 
     fakeChurchRepository.create({
-      date: new Date("1991-12-12"),
+      date: "1991-12-12",
       id_location: 1,
     });
 
@@ -78,15 +76,13 @@ describe("Create a new manager for a church", () => {
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     expect(
@@ -106,60 +102,52 @@ describe("Create a new manager for a church", () => {
     );
 
     fakeChurchRepository.create({
-      date: new Date("1991-12-12"),
+      date: "1991-12-12",
       id_location: 1,
     });
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     await createNewManager.execute({
@@ -185,21 +173,19 @@ describe("Create a new manager for a church", () => {
     );
 
     fakeChurchRepository.create({
-      date: new Date("1991-12-12"),
+      date: "1991-12-12",
       id_location: 1,
     });
 
     fakeMemberRepository.create({
       id_church: 0,
-      batism_date: new Date("1999-12-12"),
-      birth_date: new Date("1999-11-12"),
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      titleChurch: "Member", id_user: 0
     });
 
     const manager = await createNewManager.execute({
