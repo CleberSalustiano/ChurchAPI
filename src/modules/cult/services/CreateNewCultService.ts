@@ -16,7 +16,7 @@ export default class CreateNewCultService {
 
     if (!church) throw new NoExistError("church");
 
-    if (confirmIsDate(date)) throw new DateError();
+    if (!confirmIsDate(date)) throw new DateError();
 
     const cult = await this.cultRepository.create({date, id_church, theme});
 
