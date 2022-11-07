@@ -67,6 +67,7 @@ model Offer {
   id_treasurer Int
   treasurer    Treasurer      @relation(fields: [id_treasurer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   Cult         Cult[]
+  CultOffer    CultOffer[]
 
   @@map("offers")
 }
@@ -111,13 +112,14 @@ model Church {
 }
 
 model Cult {
-  id        Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   date      DateTime
   theme     String
   id_offer  Int?
-  offer     Offer?   @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  offer     Offer?      @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
-  church    Church   @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  church    Church      @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  CultOffer CultOffer[]
 
   @@map("cults")
 }
@@ -144,4 +146,12 @@ model Location {
   Church   Church[]
 
   @@map("locations")
+}
+
+model CultOffer {
+  id       Int   @id @default(autoincrement())
+  id_cult  Int
+  cult     Cult  @relation(fields: [id_cult], references: [id])
+  id_offer Int
+  offer    Offer @relation(fields: [id_offer], references: [id])
 }
