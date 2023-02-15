@@ -34,10 +34,12 @@ export default class FakeSpecialOfferRepository
 
   public async findById(
     id_special_offer: number
-  ): Promise<ISpecialOffer | undefined> {
+  ): Promise<ISpecialOffer | null> {
     const specialOffer = this.specialOffers.find(
       (specialOffer) => specialOffer.id === id_special_offer
     );
+
+    if (!specialOffer) return null;
 
     return specialOffer;
   }
