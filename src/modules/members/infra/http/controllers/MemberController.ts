@@ -5,16 +5,16 @@ import CreateNewMemberService from "../../../services/CreateNewMemberService";
 import UpdateNewMemberService from "../../../services/UpdateMemberService";
 import MemberRepository from "../../prisma/repositories/MemberRepository";
 import DeleteMemberService from "../../../services/DeleteMemberService";
+import { UserRepository } from "../../prisma/repositories/UserRepository";
 
 interface IRequestCreate {
   id_church: number;
   name: string;
-  birth_date: Date;
-  batism_date: Date;
+  birth_date: string;
+  batism_date: string;
   titleChurch: string;
   cpf: bigint;
   rg: number;
-  login: string;
   email: string;
   password: string;
 }
@@ -22,12 +22,11 @@ interface IRequestCreate {
 interface IRequestUpdate {
   id_church: number;
   name: string;
-  birth_date: Date;
-  batism_date: Date;
+  birth_date: string;
+  batism_date: string;
   titleChurch: string;
-  cpf?: bigint;
+  cpf: bigint;
   rg: number;
-  login: string;
   email: string;
   password: string;
   id_member: number;
@@ -35,6 +34,7 @@ interface IRequestUpdate {
 
 const memberRepository = new MemberRepository();
 const churchRepository = new ChurchRepository();
+const userRepository = new UserRepository();
 
 export default class MemberController {
   async create(request: Request, response: Response) {
@@ -44,7 +44,6 @@ export default class MemberController {
         birth_date,
         cpf,
         email,
-        login,
         name,
         password,
         rg,
@@ -54,6 +53,7 @@ export default class MemberController {
 
       const createNewMember = new CreateNewMemberService(
         memberRepository,
+        userRepository,
         churchRepository
       );
 
@@ -62,7 +62,6 @@ export default class MemberController {
         birth_date,
         cpf,
         email,
-        login,
         name,
         password,
         rg,
@@ -95,7 +94,6 @@ export default class MemberController {
         birth_date,
         cpf,
         email,
-        login,
         name,
         password,
         rg,
@@ -107,6 +105,7 @@ export default class MemberController {
 
       const updateNewMember = new UpdateNewMemberService(
         memberRepository,
+        userRepository,
         churchRepository
       );
 
@@ -115,7 +114,6 @@ export default class MemberController {
         birth_date,
         cpf,
         email,
-        login,
         name,
         password,
         rg,
@@ -138,9 +136,9 @@ export default class MemberController {
     try {
       const { id } = request.params;
 
-      const deleteMember = new DeleteMemberService(memberRepository);
+      const deleteMember = new DeleteMemberService(memberRepository, userRepository);
 
-      const member = await deleteMember.execute(+id);
+      await deleteMember.execute(+id);
 
       return response.status(201).json({});
     } catch (error) {
