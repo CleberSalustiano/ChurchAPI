@@ -5,5 +5,6 @@ const specialOfferRouter = Router();
 const specialOfferController = new SpecialOfferController(); 
 
 specialOfferRouter.post("/", specialOfferController.create);
+specialOfferRouter.get("/", specialOfferController.index);
 
 export default specialOfferRouter;

@@ -27,10 +27,11 @@ export default class CreateNewMemberService {
     name,
     password,
     rg,
+    login,
     titleChurch,
   }: IRequestCreateMemberDTO) {
     const existMemberCPF = await this.memberRepository.findByCPF(cpf);
-    if (existMemberCPF) throw new AlreadyExistError("member with this CEP");
+    if (existMemberCPF) throw new AlreadyExistError("member with this CPF");
 
     if (id_church === undefined) throw new Error("id_church pass undefined");
 
@@ -47,9 +48,13 @@ export default class CreateNewMemberService {
     if (birth_date.toString() === batism_date.toString())
       throw new Error("Birth date and Batism date can not be equals");
 
-    const user = await this.userRepository.create({ password });
+    const existUser = await this.userRepository.findByLogin(login);
 
-    if (!user) throw new Error("This user doesn't created");
+    if (existUser) throw new Error("Already exist this user!");
+
+    const user = await this.userRepository.create({ login, password });
+
+    if (!user) throw new Error("This user doesn't created, database error.");
 
     const member = await this.memberRepository.create({
       batism_date,

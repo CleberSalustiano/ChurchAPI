@@ -15,6 +15,7 @@ interface IRequestCreate {
   titleChurch: string;
   cpf: bigint;
   rg: number;
+  login: string;
   email: string;
   password: string;
 }
@@ -27,6 +28,7 @@ interface IRequestUpdate {
   titleChurch: string;
   cpf: bigint;
   rg: number;
+  login: string;
   email: string;
   password: string;
   id_member: number;
@@ -46,6 +48,7 @@ export default class MemberController {
         email,
         name,
         password,
+        login, 
         rg,
         titleChurch,
         id_church,
@@ -65,6 +68,7 @@ export default class MemberController {
         name,
         password,
         rg,
+        login,
         titleChurch,
         id_church,
       });
@@ -80,11 +84,16 @@ export default class MemberController {
   }
 
   async index(request: Request, response: Response) {
-    const membersNoJson = await memberRepository.findAll();
+    try {
+      const membersNoJson = await memberRepository.findAll();
 
     const members = membersJsonCorrection(membersNoJson);
 
     return response.json({ members });
+    } catch (err) {
+      if (err instanceof Error) 
+        return response.status(401).json({error: err.message})
+    }
   }
 
   async update(request: Request, response: Response) {
@@ -97,6 +106,7 @@ export default class MemberController {
         name,
         password,
         rg,
+        login,
         titleChurch,
         id_church,
       }: IRequestUpdate = request.body;
@@ -117,6 +127,7 @@ export default class MemberController {
         name,
         password,
         rg,
+        login,
         titleChurch,
         id_church,
         id_member: +id,

@@ -27,6 +27,7 @@ export default class UpdateMemberService {
     id_member,
     name,
     password,
+    login,
     rg,
     titleChurch,
   }: IRequestUpdateMemberDTO) {
@@ -56,7 +57,7 @@ export default class UpdateMemberService {
     if (birth_date.toString() === batism_date.toString())
       throw new Error("Birth date and Batism date can not be equals");
 
-    await this.userRepository.update({id_user: member.id_user, password})
+    await this.userRepository.update({id_user: member.id_user, login, password})
     
     const newMember = await this.memberRepository.update({
       batism_date,

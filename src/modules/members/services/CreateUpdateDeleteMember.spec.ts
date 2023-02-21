@@ -41,6 +41,7 @@ describe("Test end-to-end for services", () => {
       rg: 123123,
       email: "reidelas@email.com",
       id_church: 0,
+      login: "teste",
       password: "123123",
     };
 
@@ -62,6 +63,7 @@ describe("Test end-to-end for services", () => {
       rg: 123123,
       email: "reidelas@email.com",
       password: "senha",
+      login: "teste",
       id_church: 0,
       id_member: 1,
     };

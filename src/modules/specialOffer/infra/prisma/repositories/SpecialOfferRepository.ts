@@ -13,7 +13,7 @@ export default class SpecialOfferRepository implements ISpecialOfferRepository {
     reason,
   }: ICreateSpecialOfferDTO): Promise<ISpecialOffer | undefined> {
     const specialOffer = await prismaClient.specialOffer.create({
-      data: { date: date.toString(), reason, id_church, id_member, id_offer },
+      data: { date: new Date(date.toString()), reason, id_church, id_member, id_offer },
     });
 
     return specialOffer;

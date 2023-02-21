@@ -15,7 +15,7 @@ describe("Update new Member", () => {
       date: "1999-12-12",
       id_location: 0,
     });
-    userRepository.create({ password: "123" });
+    userRepository.create({ login: "teste",password: "123" });
     memberRepository.create({
       id_church: 0,
       batism_date: "1999-11-12",
@@ -44,6 +44,7 @@ describe("Update new Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Shepherd",
     };
 
@@ -80,6 +81,7 @@ describe("Update new Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Shepherd",
     };
 
@@ -93,7 +95,7 @@ describe("Update new Member", () => {
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
 
-    userRepository.create({ password: "123" });
+    userRepository.create({ login: "teste",password: "123" });
 
     memberRepository.create({
       id_church: 0,
@@ -123,6 +125,7 @@ describe("Update new Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Shepherd",
     };
 
@@ -136,7 +139,7 @@ describe("Update new Member", () => {
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
 
-    userRepository.create({ password: "1234" });
+    userRepository.create({ login: "teste",password: "1234" });
     churchRepository.create({
       date: "1999-12-12",
       id_location: 0,
@@ -169,6 +172,7 @@ describe("Update new Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Shepherd",
     };
 
@@ -180,7 +184,7 @@ describe("Update new Member", () => {
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
 
-    userRepository.create({ password: "90" });
+    userRepository.create({ login: "teste",password: "90" });
     churchRepository.create({
       date: "1999-12-12",
       id_location: 0,
@@ -213,6 +217,7 @@ describe("Update new Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Shepherd",
     };
 
@@ -224,7 +229,7 @@ describe("Update new Member", () => {
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
 
-    userRepository.create({ password: "123" });
+    userRepository.create({ login: "teste",password: "123" });
     churchRepository.create({
       date: "1999-12-12",
       id_location: 0,
@@ -257,6 +262,7 @@ describe("Update new Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Shepherd",
     };
 
@@ -268,7 +274,7 @@ describe("Update new Member", () => {
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
 
-    userRepository.create({ password: "12310" });
+    userRepository.create({login: "teste", password: "12310" });
     churchRepository.create({
       date: "1999-12-12",
       id_location: 0,
@@ -285,7 +291,7 @@ describe("Update new Member", () => {
       id_user: 0,
     });
 
-    userRepository.create({ password: "12310" });
+    userRepository.create({login: "teste1", password: "12310" });
     memberRepository.create({
       id_church: 0,
       batism_date: "1999-11-12",
@@ -313,6 +319,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       password: "6969",
+      login: "teste",
       rg: 123123,
       titleChurch: "Shepherd",
     };

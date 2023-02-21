@@ -6,6 +6,7 @@ export interface IRequestCreateMemberDTO {
 	cpf: bigint;
 	rg: number;
 	email: string;
+  login: string;
 	password: string;
   id_church: number;
 }

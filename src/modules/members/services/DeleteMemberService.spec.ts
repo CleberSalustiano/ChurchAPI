@@ -12,8 +12,9 @@ describe("Delete a member", () => {
     const userRepository = new FakeUserRepository();
     churchRepository.create({ date: "1999-12-12", id_location: 0 });
 
-    userRepository.create({ password: "1234" });
-    userRepository.create({ password: "12344" });
+      
+    userRepository.create({ login: "teste", password: "1234" });
+    userRepository.create({ login: "teste1", password: "12344" });
 
     const dataMamber: ICreateMemberDTO = {
       id_church: 0,
@@ -49,7 +50,7 @@ describe("Delete a member", () => {
     const userRepository = new FakeUserRepository();
 
     churchRepository.create({ date: "1999-12-12", id_location: 0 });
-    userRepository.create({password: "1234"})
+    userRepository.create({login: "teste", password: "1234"})
 
     const dataMamber: ICreateMemberDTO = {
       id_church: 0,

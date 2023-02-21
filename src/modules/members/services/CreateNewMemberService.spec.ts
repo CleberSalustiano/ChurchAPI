@@ -28,6 +28,7 @@ describe("Create New Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Member",
     };
 
@@ -59,6 +60,7 @@ describe("Create New Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Member",
     };
 
@@ -89,6 +91,7 @@ describe("Create New Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Member",
     };
 
@@ -117,6 +120,7 @@ describe("Create New Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Member",
     };
 
@@ -129,7 +133,7 @@ describe("Create New Member", () => {
     const userRepository = new FakeUserRepository();
 
     churchRepository.create({ date: "1999-12-12", id_location: 0 });
-    userRepository.create({password: "6868"});
+    userRepository.create({login: "teste",password: "6868"});
     memberRepository.create({
       id_church: 0,
       birth_date: "1999-11-12",
@@ -156,6 +160,7 @@ describe("Create New Member", () => {
       name: "Luvas Piruvicas",
       password: "6969",
       rg: 123123,
+      login: "teste",
       titleChurch: "Member",
     };
 

@@ -13,24 +13,30 @@ export class UserRepository implements IUserRepository {
     const users = await prismaClient.user.findMany();
     return users;
   }
-  async create({ password }: ICreateUserDTO): Promise<IUser | undefined> {
+  async create({ login, password }: ICreateUserDTO): Promise<IUser | undefined> {
     const user = await prismaClient.user.create({
-      data: { password },
+      data: { login, password },
     });
     return user;
   }
   async update({
     id_user,
+    login,
     password,
   }: IUpdateUserDTO): Promise<IUser | undefined> {
     const user = await prismaClient.user.update({
       where: { id: id_user },
-      data: { password },
+      data: { login, password },
     });
     return user;
   }
   async delete(id_user: number): Promise<boolean> {
     const user = await prismaClient.user.delete({ where: { id: id_user } });
     return user ? true : false;
+  }
+
+  async findByLogin(login: string): Promise<IUser | undefined> {
+    const user = await prismaClient.user.findFirst({where: {login}});
+    return user ? user : undefined;
   }
 }
