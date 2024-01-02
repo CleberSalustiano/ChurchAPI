@@ -1,4 +1,3 @@
-import { prisma } from "@prisma/client";
 import { IManager } from "../../../../../entities/IManager";
 import prismaClient from "../../../../../shared/infra/database/prismaClient";
 import { ICreateManagerDTO } from "../../../dtos/ICreateManagerDTO";
