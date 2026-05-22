@@ -51,6 +51,12 @@ docker-compose run --rm api npx prisma migrate deploy
 - Healthcheck: `http://localhost:3333/health`
 - Swagger: `http://localhost:3333/api-docs/`
 
+### CORS para frontend local
+
+- A API aceita configuracao de origens via `CORS_ORIGINS`.
+- O exemplo padrao libera `http://localhost:3000` e `http://localhost:5173`.
+- Para liberar outras origens, ajuste a variavel separando por virgula.
+
 ### Observacoes
 
 - O banco principal do projeto agora e `PostgreSQL`.
