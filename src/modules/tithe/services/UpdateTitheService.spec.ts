@@ -33,7 +33,7 @@ describe("Update a Tithe Service", () => {
       id_church: 0,
       name: "Carlos",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0,
     });
 
@@ -45,7 +45,7 @@ describe("Update a Tithe Service", () => {
       id_church: 0,
       name: "Jordan",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 1,
     });
 
@@ -107,7 +107,7 @@ describe("Update a Tithe Service", () => {
       id_church: 0,
       name: "Carlos",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0,
     });
 
@@ -119,7 +119,7 @@ describe("Update a Tithe Service", () => {
       id_church: 0,
       name: "Jordan",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 1,
     });
 

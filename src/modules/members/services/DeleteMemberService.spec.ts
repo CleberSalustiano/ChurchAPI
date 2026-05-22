@@ -24,7 +24,7 @@ describe("Delete a member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     };
 
@@ -60,7 +60,7 @@ describe("Delete a member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     };
 

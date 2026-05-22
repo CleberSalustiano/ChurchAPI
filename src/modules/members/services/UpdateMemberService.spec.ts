@@ -24,7 +24,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -45,14 +45,14 @@ describe("Update new Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     const member = await updateNewMember.execute(dataMamber);
 
     expect(member).toBeTruthy();
     expect(member?.rg).toBe(123123);
-    expect(member?.titleChurch).toBe("Shepherd");
+    expect(member?.ecclesiasticalRole).toBe("Shepherd");
   });
 
   it("should not be able to update a member that doesn't exist", async () => {
@@ -82,7 +82,7 @@ describe("Update new Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(
@@ -105,7 +105,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -126,7 +126,7 @@ describe("Update new Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(
@@ -152,7 +152,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -173,7 +173,7 @@ describe("Update new Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(Error);
@@ -197,7 +197,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -218,7 +218,7 @@ describe("Update new Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(Error);
@@ -242,7 +242,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -263,7 +263,7 @@ describe("Update new Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(Error);
@@ -287,7 +287,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -300,7 +300,7 @@ describe("Update new Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123456,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 1
     });
 
@@ -321,7 +321,7 @@ describe("Update new Member", () => {
       password: "6969",
       login: "teste",
       rg: 123123,
-      titleChurch: "Shepherd",
+      ecclesiasticalRole: "Shepherd",
     };
 
     expect(updateNewMember.execute(dataMamber)).rejects.toThrowError(Error);

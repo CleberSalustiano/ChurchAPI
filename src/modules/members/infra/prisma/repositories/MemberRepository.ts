@@ -14,7 +14,7 @@ export default class MemberRepository implements IMemberRepository {
     name,
     rg,
     id_user,
-    titleChurch,
+    ecclesiasticalRole,
   }: ICreateMemberDTO): Promise<IMember | undefined> {
     const member = await prismaClient.member.create({
       data: {
@@ -24,7 +24,7 @@ export default class MemberRepository implements IMemberRepository {
         email,
         name,
         rg,
-        titleChurch,
+        ecclesiasticalRole,
         id_church,
         id_user,
       },
@@ -65,7 +65,7 @@ export default class MemberRepository implements IMemberRepository {
     id_member,
     name,
     rg,
-    titleChurch,
+    ecclesiasticalRole,
     cpf,
   }: IUpdateMemberDTO): Promise<IMember | undefined> {
     const member = await prismaClient.member.update({
@@ -78,7 +78,7 @@ export default class MemberRepository implements IMemberRepository {
         id_church,
         name,
         rg,
-        titleChurch,
+        ecclesiasticalRole,
       },
       include: { church: true },
     });

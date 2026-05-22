@@ -88,7 +88,7 @@ const options = {
             "name",
             "birth_date",
             "batism_date",
-            "titleChurch",
+            "ecclesiasticalRole",
             "cpf",
             "rg",
             "login",
@@ -108,7 +108,7 @@ const options = {
               format: "date",
               example: "2008-04-10",
             },
-            titleChurch: { type: "string", example: "Member" },
+            ecclesiasticalRole: { type: "string", example: "Member" },
             cpf: {
               type: "string",
               example: "12345678901",

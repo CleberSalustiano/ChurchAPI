@@ -36,7 +36,7 @@ describe("Test end-to-end for services", () => {
       name: "Batata",
       birth_date: "1999-11-12",
       batism_date: "1999-12-12",
-      titleChurch: "member",
+      ecclesiasticalRole: "member",
       cpf: BigInt(12332112200),
       rg: 123123,
       email: "reidelas@email.com",
@@ -60,7 +60,7 @@ describe("Test end-to-end for services", () => {
       name: "Batata",
       birth_date: "1999-11-12",
       batism_date: "1999-12-12",
-      titleChurch: "manager",
+      ecclesiasticalRole: "manager",
       cpf: BigInt(12332112222),
       rg: 123123,
       email: "reidelas@email.com",
@@ -73,12 +73,12 @@ describe("Test end-to-end for services", () => {
     const memberUpdate = await updateMember.execute(dataMemberUpdate);
 
     expect(memberUpdate).toBeTruthy();
-    expect(memberUpdate?.titleChurch).toBe("manager");
+    expect(memberUpdate?.ecclesiasticalRole).toBe("manager");
 
     const memberDeleted = await deleteMember.execute(0);
 
     expect(memberDeleted).toBeTruthy();
-    expect(memberDeleted?.titleChurch).toBe("member");
+    expect(memberDeleted?.ecclesiasticalRole).toBe("member");
 
     const members = await memberRepository.findAll();
 

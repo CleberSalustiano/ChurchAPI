@@ -29,7 +29,7 @@ describe("Create New Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
     };
 
     const member = await createNewMember.execute(dataMamber);
@@ -61,7 +61,7 @@ describe("Create New Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
     };
 
     expect(createNewMember.execute(dataMamber)).rejects.toThrowError(
@@ -92,7 +92,7 @@ describe("Create New Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
     };
 
     expect(createNewMember.execute(dataMamber)).rejects.toThrowError(Error);
@@ -121,7 +121,7 @@ describe("Create New Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
     };
 
     expect(createNewMember.execute(dataMamber)).rejects.toThrowError(Error);
@@ -142,7 +142,7 @@ describe("Create New Member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
     const createNewMember = new CreateNewMemberService(
@@ -161,7 +161,7 @@ describe("Create New Member", () => {
       password: "6969",
       rg: 123123,
       login: "teste",
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
     };
 
     expect(createNewMember.execute(dataMamber)).rejects.toThrowError(Error);

@@ -13,7 +13,7 @@ export default class FakeMemberRepository implements IMemberRepository {
     email,
     name,
     rg,
-    titleChurch,
+    ecclesiasticalRole,
     id_church,
     id_user,
   }: ICreateMemberDTO): Promise<IMember | undefined> {
@@ -26,7 +26,7 @@ export default class FakeMemberRepository implements IMemberRepository {
       name,
       id_user,
       rg,
-      titleChurch,
+      ecclesiasticalRole,
       foto: null,
       id_church,
     };
@@ -54,7 +54,7 @@ export default class FakeMemberRepository implements IMemberRepository {
     id_member,
     name,
     rg,
-    titleChurch,
+    ecclesiasticalRole,
     cpf,
   }: IUpdateMemberDTO): Promise<IMember | undefined> {
     const memberIndex = this.members.findIndex(
@@ -70,7 +70,7 @@ export default class FakeMemberRepository implements IMemberRepository {
     member.id_church = id_church;
     member.name = name;
     member.rg = rg;
-    member.titleChurch = titleChurch;
+    member.ecclesiasticalRole = ecclesiasticalRole;
 
     if (cpf) member.cpf = cpf;
 

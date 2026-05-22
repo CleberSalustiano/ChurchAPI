@@ -21,7 +21,7 @@ describe("Update new Treasurer", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -33,7 +33,7 @@ describe("Update new Treasurer", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 1,
     });
 
@@ -64,7 +64,7 @@ describe("Update new Treasurer", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 
@@ -76,7 +76,7 @@ describe("Update new Treasurer", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 1,
     });
 
@@ -101,7 +101,7 @@ describe("Update new Treasurer", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
     treasurerRepository.create(0);

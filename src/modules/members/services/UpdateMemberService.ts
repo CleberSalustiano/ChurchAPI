@@ -29,7 +29,7 @@ export default class UpdateMemberService {
     password,
     login,
     rg,
-    titleChurch,
+    ecclesiasticalRole,
   }: IRequestUpdateMemberDTO) {
     const member = await this.memberRepository.findById(id_member);
 
@@ -67,7 +67,7 @@ export default class UpdateMemberService {
       id_member,
       name,
       rg,
-      titleChurch,
+      ecclesiasticalRole,
     });
 
     return newMember;

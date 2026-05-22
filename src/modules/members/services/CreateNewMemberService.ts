@@ -28,7 +28,7 @@ export default class CreateNewMemberService {
     password,
     rg,
     login,
-    titleChurch,
+    ecclesiasticalRole,
   }: IRequestCreateMemberDTO) {
     const existMemberCPF = await this.memberRepository.findByCPF(cpf);
     if (existMemberCPF) throw new AlreadyExistError("member with this CPF");
@@ -65,7 +65,7 @@ export default class CreateNewMemberService {
       id_user: user.id,
       name,
       rg,
-      titleChurch,
+      ecclesiasticalRole,
     });
 
     return member;

@@ -12,7 +12,7 @@ interface IRequestCreate {
   name: string;
   birth_date: string;
   batism_date: string;
-  titleChurch: string;
+  ecclesiasticalRole: string;
   cpf: bigint;
   rg: number;
   login: string;
@@ -25,7 +25,7 @@ interface IRequestUpdate {
   name: string;
   birth_date: string;
   batism_date: string;
-  titleChurch: string;
+  ecclesiasticalRole: string;
   cpf: bigint;
   rg: number;
   login: string;
@@ -45,7 +45,7 @@ export default class MemberController {
       password,
       login, 
       rg,
-      titleChurch,
+      ecclesiasticalRole,
       id_church,
     }: IRequestCreate = request.body;
 
@@ -60,7 +60,7 @@ export default class MemberController {
       password,
       rg,
       login,
-      titleChurch,
+      ecclesiasticalRole,
       id_church,
     });
 
@@ -87,7 +87,7 @@ export default class MemberController {
       password,
       rg,
       login,
-      titleChurch,
+      ecclesiasticalRole,
       id_church,
     }: IRequestUpdate = request.body;
 
@@ -104,7 +104,7 @@ export default class MemberController {
       password,
       rg,
       login,
-      titleChurch,
+      ecclesiasticalRole,
       id_church,
       id_member: +id,
     });

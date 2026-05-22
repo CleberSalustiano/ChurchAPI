@@ -21,7 +21,7 @@ describe("Create new treasurer", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     });
 

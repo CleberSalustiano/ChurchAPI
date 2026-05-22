@@ -33,7 +33,7 @@ model Member {
   name         String
   birth_date   DateTime
   batism_date  DateTime
-  titleChurch  String
+  ecclesiasticalRole  String
   cpf          BigInt         @unique
   rg           Int
   email        String

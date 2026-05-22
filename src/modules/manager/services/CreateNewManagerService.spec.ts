@@ -30,7 +30,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     const manager = await createNewManager.execute({
@@ -82,7 +82,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     expect(
@@ -114,7 +114,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     fakeMemberRepository.create({
@@ -125,7 +125,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     fakeMemberRepository.create({
@@ -136,7 +136,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     fakeMemberRepository.create({
@@ -147,7 +147,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     await createNewManager.execute({
@@ -185,7 +185,7 @@ describe("Create a new manager for a church", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member", id_user: 0
+      ecclesiasticalRole: "Member", id_user: 0
     });
 
     const manager = await createNewManager.execute({
