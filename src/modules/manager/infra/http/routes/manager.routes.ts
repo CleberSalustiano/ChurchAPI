@@ -1,4 +1,5 @@
 import { Router } from "express";
+import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import ManagerController from "../controllers/ManagerController";
 import ManagerInChurchController from "../controllers/ManagerInChurchController";
 
@@ -6,10 +7,90 @@ const managerRouter = Router();
 const managerController = new ManagerController();
 const managerInChurchController = new ManagerInChurchController();
 
-managerRouter.post("/", managerController.create);
-managerRouter.put("/:id", managerController.update);
-managerRouter.get("/", managerController.index);
-managerRouter.get("/:id", managerInChurchController.index);
-managerRouter.delete("/:id", managerController.delete)
+/**
+ * @openapi
+ * /manager:
+ *   get:
+ *     tags:
+ *       - Manager
+ *     summary: List active managers
+ *     responses:
+ *       200:
+ *         description: Manager list
+ *   post:
+ *     tags:
+ *       - Manager
+ *     summary: Create a manager assignment
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ManagerRequest'
+ *     responses:
+ *       200:
+ *         description: Manager created
+ *       401:
+ *         description: Validation or business error
+ *
+ * /manager/{id}:
+ *   get:
+ *     tags:
+ *       - Manager
+ *     summary: List managers by church
+ *     description: Returns active managers linked to a church id.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Managers from the given church
+ *       401:
+ *         description: Validation or business error
+ *   put:
+ *     tags:
+ *       - Manager
+ *     summary: Update a manager assignment
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ManagerRequest'
+ *     responses:
+ *       200:
+ *         description: Manager updated
+ *       401:
+ *         description: Validation or business error
+ *   delete:
+ *     tags:
+ *       - Manager
+ *     summary: Deactivate a manager assignment
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       201:
+ *         description: Manager deactivated
+ *       401:
+ *         description: Validation or business error
+ */
+managerRouter.post("/", asyncHandler(managerController.create.bind(managerController)));
+managerRouter.put("/:id", asyncHandler(managerController.update.bind(managerController)));
+managerRouter.get("/", asyncHandler(managerController.index.bind(managerController)));
+managerRouter.get("/:id", asyncHandler(managerInChurchController.index.bind(managerInChurchController)));
+managerRouter.delete("/:id", asyncHandler(managerController.delete.bind(managerController)));
 
 export default managerRouter;

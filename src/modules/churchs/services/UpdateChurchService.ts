@@ -1,4 +1,4 @@
-import { Church } from "@prisma/client";
+import { IChurch } from "../../../entities/IChurch";
 import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
@@ -17,7 +17,7 @@ export default class UpdateChurchService {
     this.locationRepository = locationRepository;
   }
 
-  public async execute(dataChurch: IUpdateChurchDTO, dataLocation: IUpdateLocationDTO) : Promise<Church | undefined> {
+  public async execute(dataChurch: IUpdateChurchDTO, dataLocation: IUpdateLocationDTO) : Promise<IChurch | undefined> {
     if (!confirmIsDate(dataChurch.date))
       throw new Error("Date format is incorrect (yyyy-mm-dd)")    
     

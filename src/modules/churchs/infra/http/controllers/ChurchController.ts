@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import CreateNewChurchService from "../../../services/CreateNewChurchService";
-import DeleteChurchService from "../../../services/DeleteChurchService";
-import UpdateChurchService from "../../../services/UpdateChurchService";
-import ChurchRepository from "../../prisma/repositories/ChurchRepository";
-import LocationRepository from "../../prisma/repositories/LocationRepository";
+import {
+  churchRepository,
+  makeCreateChurchService,
+  makeDeactivateChurchService,
+  makeDeleteChurchService,
+  makeReactivateChurchService,
+  makeUpdateChurchService,
+} from "../../../../../shared/container";
+import { ChurchType } from "../../../../../entities/IChurch";
 
 interface IRequestChurchLocationParams {
   date: string;
@@ -13,38 +17,29 @@ interface IRequestChurchLocationParams {
   state: string;
   country: string;
   cep: number;
+  type?: ChurchType;
 }
-
-const churchRepository = new ChurchRepository();
-const locationRepository = new LocationRepository();
 
 export default class ChurchController {
   async create(request: Request, response: Response) {
-    try {
-      const {
-        date,
-        street,
-        cep,
-        city,
-        country,
-        district,
-        state,
-      }: IRequestChurchLocationParams = request.body;
+    const {
+      date,
+      street,
+      cep,
+      city,
+      country,
+      district,
+      state,
+      type,
+    }: IRequestChurchLocationParams = request.body;
 
-      const createNewChurch = new CreateNewChurchService(
-        churchRepository,
-        locationRepository
-      );
-      const church = await createNewChurch.execute(
-        { date, id_location: -1 },
-        { cep, city, country, district, state, street }
-      );
+    const createNewChurch = makeCreateChurchService();
+    const church = await createNewChurch.execute(
+      { date, id_location: -1, type },
+      { cep, city, country, district, state, street }
+    );
 
-      return response.json({ church });
-    } catch (error) {
-      if (error instanceof Error)
-        return response.status(400).json({ error: error.message });
-    }
+    return response.json({ church });
   }
 
   async index(request: Request, response: Response) {
@@ -54,50 +49,51 @@ export default class ChurchController {
   }
 
   async delete(request: Request, response: Response) {
-    try {
-      const { id_church } = request.params;
+    const { id_church } = request.params;
 
-      const deleteChurch = new DeleteChurchService(
-        churchRepository,
-        locationRepository
-      );
-      await deleteChurch.execute(+id_church);
+    const deleteChurch = makeDeleteChurchService();
+    await deleteChurch.execute(+id_church);
 
-      return response.status(201).json({});
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(400).json({ error: error.message });
-      }
-    }
+    return response.status(204).send();
+  }
+
+  async deactivate(request: Request, response: Response) {
+    const { id_church } = request.params;
+
+    const deactivateChurch = makeDeactivateChurchService();
+    const church = await deactivateChurch.execute(+id_church);
+
+    return response.json({ church });
+  }
+
+  async reactivate(request: Request, response: Response) {
+    const { id_church } = request.params;
+
+    const reactivateChurch = makeReactivateChurchService();
+    const church = await reactivateChurch.execute(+id_church);
+
+    return response.json({ church });
   }
 
   async update(request: Request, response: Response) {
-    try {
-      const { id_church } = request.params;
+    const { id_church } = request.params;
 
-      const {
-        date,
-        street,
-        cep,
-        city,
-        country,
-        district,
-        state,
-      }: IRequestChurchLocationParams = request.body;
+    const {
+      date,
+      street,
+      cep,
+      city,
+      country,
+      district,
+      state,
+    }: IRequestChurchLocationParams = request.body;
 
-      const updateChurch = new UpdateChurchService(
-        churchRepository,
-        locationRepository
-      );
-      const newChurch = await updateChurch.execute(
-        { id_church: +id_church, date },
-        { street, cep, city, country, district, state, id_location: 0 }
-      );
+    const updateChurch = makeUpdateChurchService();
+    const newChurch = await updateChurch.execute(
+      { id_church: +id_church, date },
+      { street, cep, city, country, district, state, id_location: 0 }
+    );
 
-      return response.json({ church: newChurch });
-    } catch (error) {
-      if (error instanceof Error)
-        return response.status(400).json({ error: error.message });
-    }
+    return response.json({ church: newChurch });
   }
 }

@@ -9,11 +9,18 @@ export default class FakeChurchRepository implements IChurchRepository {
 	public async create({
 		date,
 		id_location,
+    parent_church_id,
+    type,
 	}: ICreateChurchDTO): Promise<IChurch | undefined> {
 		const church: IChurch = {
 			creationDate: new Date(date.toString()),
+      deactivatedAt: null,
+      deletedAt: null,
 			id_location,
 			id: this.churchs.length,
+      parentChurchId: parent_church_id ?? null,
+      status: "ACTIVE",
+      type: type ?? "BRANCH",
 		};
 
 		this.churchs.push(church);
@@ -40,15 +47,46 @@ export default class FakeChurchRepository implements IChurchRepository {
 			return false;
 		}
 
-		const church = this.churchs.splice(churchIndex, 1);
+    const church = this.churchs[churchIndex];
+    church.status = "DELETED";
+    church.deletedAt = new Date();
+    church.deactivatedAt = church.deactivatedAt ?? new Date();
 
-		if (church) return true;
+		this.churchs.splice(churchIndex, 1, church);
 
-		return false;
+		return true;
 	}
 
+  public async deactivate(id_church: number): Promise<IChurch | undefined> {
+    const churchIndex = this.churchs.findIndex((church) => church.id === id_church);
+
+    if (churchIndex === -1) return undefined;
+
+    const church = this.churchs[churchIndex];
+    church.status = "INACTIVE";
+    church.deactivatedAt = new Date();
+
+    this.churchs.splice(churchIndex, 1, church);
+
+    return church;
+  }
+
+  public async reactivate(id_church: number): Promise<IChurch | undefined> {
+    const churchIndex = this.churchs.findIndex((church) => church.id === id_church);
+
+    if (churchIndex === -1) return undefined;
+
+    const church = this.churchs[churchIndex];
+    church.status = "ACTIVE";
+    church.deactivatedAt = null;
+
+    this.churchs.splice(churchIndex, 1, church);
+
+    return church;
+  }
+
   public async findByLocation(id_location: number): Promise<IChurch | undefined> {
-      const church = this.churchs.find((church) => church.id_location === id_location);
+      const church = this.churchs.find((church) => church.id_location === id_location && church.status !== "DELETED");
 
       return church;
   }
@@ -73,5 +111,11 @@ export default class FakeChurchRepository implements IChurchRepository {
     const church = this.churchs[0];
 
     return church;
+  }
+
+  public async findHeadquarter(): Promise<IChurch | undefined> {
+    return this.churchs.find(
+      (church) => church.type === "HEADQUARTER" && church.status !== "DELETED"
+    );
   }
 }

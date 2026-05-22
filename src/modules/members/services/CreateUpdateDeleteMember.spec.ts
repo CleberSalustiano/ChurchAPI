@@ -47,8 +47,10 @@ describe("Test end-to-end for services", () => {
 
     await createNewMember.execute(dataMember);
     dataMember.cpf = BigInt(12332112210);
+    dataMember.login = "teste-2";
     await createNewMember.execute(dataMember);
     dataMember.cpf = BigInt(12332112211);
+    dataMember.login = "teste-3";
     const member = await createNewMember.execute(dataMember);
 
     expect(member).toBeTruthy();

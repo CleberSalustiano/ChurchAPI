@@ -7,7 +7,10 @@ export interface IChurchRepository {
   findAll(): Promise<IChurch[] | undefined>
   findByLocation(id_location: number): Promise<IChurch | undefined>
   delete(id_church: number): Promise<boolean>
+  deactivate(id_church: number): Promise<IChurch | undefined>
+  reactivate(id_church: number): Promise<IChurch | undefined>
   findById(id_church: number): Promise<IChurch | undefined>
   update(data: IUpdateChurchDTO): Promise<IChurch | undefined>
   findFirstChurch(): Promise<IChurch | undefined>
+  findHeadquarter(): Promise<IChurch | undefined>
 }

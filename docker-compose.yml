@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: churchapi-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-church_api}
+      POSTGRES_USER: ${POSTGRES_USER:-church_api}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-church_api}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-church_api} -d ${POSTGRES_DB:-church_api}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      target: development
+    container_name: churchapi-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${PORT:-3333}
+      DATABASE_URL: ${DATABASE_URL_DOCKER:-postgresql://church_api:church_api@postgres:5432/church_api?schema=public}
+    ports:
+      - "${PORT:-3333}:3333"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npx prisma generate && npm run dev:server"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3333/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

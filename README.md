@@ -17,3 +17,42 @@ O cadastro do membro é feito pelo setor de cadastro na igreja sede, esse faz um
 - controle de congregações
 
 ## Routes:
+
+## Ambiente local
+
+### Requisitos
+
+- Docker
+- Docker Compose
+
+### Subir a stack
+
+1. Criar o arquivo de ambiente:
+
+```bash
+cp .env.example .env
+```
+
+2. Subir banco e API:
+
+```bash
+docker-compose up -d --build
+```
+
+3. Aplicar as migrations:
+
+```bash
+docker-compose run --rm api npx prisma migrate deploy
+```
+
+### Endpoints de apoio
+
+- API: `http://localhost:3333`
+- Healthcheck: `http://localhost:3333/health`
+- Swagger: `http://localhost:3333/api-docs/`
+
+### Observacoes
+
+- O banco principal do projeto agora e `PostgreSQL`.
+- As migrations antigas de `SQLite` foram preservadas em `prisma/migrations_sqlite_legacy`.
+- A trilha atual de migrations da aplicacao fica em `prisma/migrations`.

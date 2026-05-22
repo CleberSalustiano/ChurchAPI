@@ -17,9 +17,12 @@ export default class FakeUserRepository implements IUserRepository {
   }
 
   public async create({
+    login,
     password,
   }: ICreateUserDTO): Promise<IUser | undefined> {
-    const user: IUser = { id: this.users.length, password };
+    const user: IUser = { id: this.users.length, login, password };
+
+    this.users.push(user);
 
     return user;
   }
@@ -36,12 +39,14 @@ export default class FakeUserRepository implements IUserRepository {
 
   public async update({
     id_user,
+    login,
     password,
   }: IUpdateUserDTO): Promise<IUser | undefined> {
     const userIndex = this.users.findIndex((user) => (user.id === id_user));
 
     if(userIndex === -1) return undefined;
     const user = this.users[userIndex];
+    user.login = login;
     user.password = password;
 
     this.users.splice(userIndex, 1, user);
