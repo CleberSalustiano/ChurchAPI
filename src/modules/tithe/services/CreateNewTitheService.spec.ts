@@ -1,5 +1,5 @@
 import FakeOfferRepository from "../../../shared/modules/offer/repositories/fakes/FakeOfferRepository";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeSpecialOfferRepository from "../../specialOffer/repositories/fakes/FakeSpecialOfferRepository";
 import FakeTreasurerRepository from "../../treasurer/repositories/fakes/FakeTreasurerRepository";

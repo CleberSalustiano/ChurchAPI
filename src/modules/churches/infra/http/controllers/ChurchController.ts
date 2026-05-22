@@ -43,9 +43,9 @@ export default class ChurchController {
   }
 
   async index(request: Request, response: Response) {
-    const churchs = await churchRepository.findAll();
+    const churches = await churchRepository.findAll();
 
-    return response.json({ churchs });
+    return response.json({ churches });
   }
 
   async delete(request: Request, response: Response) {

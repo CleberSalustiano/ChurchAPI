@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
 import FakeUserRepository from "../repositories/fakes/FakeUserRepository";

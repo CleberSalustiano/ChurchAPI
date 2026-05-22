@@ -2,7 +2,7 @@ import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import { IMemberRepository } from "../repositories/IMemberRepository";
 import { IUserRepository } from "../repositories/IUserRepository";

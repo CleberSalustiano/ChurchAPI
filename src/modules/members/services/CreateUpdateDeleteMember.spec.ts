@@ -1,4 +1,4 @@
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import { IRequestUpdateMemberDTO } from "../dtos/IRequestUpdateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";

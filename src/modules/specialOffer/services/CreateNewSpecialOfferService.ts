@@ -3,7 +3,7 @@ import NoExistError from "../../../shared/errors/NoExistError";
 import { IOfferRepository } from "../../../shared/modules/offer/repositories/IOfferRepository";
 import CreateNewOfferService from "../../../shared/modules/offer/services/CreateNewOfferService";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
 import { ITreasurerRepository } from "../../treasurer/repositories/ITreasurerRepository";
 import { IRequestCreateSpecialOfferDTO } from "../dtos/IRequestCreateSpecialOfferDTO";

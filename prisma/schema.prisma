@@ -127,7 +127,7 @@ model Church {
   Member         Member[]
   Manager        Manager[]
 
-  @@map("churchs")
+  @@map("churches")
 }
 
 model Cult {

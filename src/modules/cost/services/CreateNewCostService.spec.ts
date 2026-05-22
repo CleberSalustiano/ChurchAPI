@@ -1,4 +1,4 @@
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeCostRepository from "../repositories/fakes/FakeCostRepository"
 import CreateNewCostService from "./CreateNewCostService";
 

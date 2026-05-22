@@ -1,5 +1,5 @@
 import { Router } from "express";
-import churchRouter from "../../../../modules/churchs/infra/http/routes/church.routes";
+import churchRouter from "../../../../modules/churches/infra/http/routes/church.routes";
 import costRouter from "../../../../modules/cost/infra/http/routes/cost.routes";
 import cultRouter from "../../../../modules/cult/infra/http/routes/cult.routes";
 import managerRouter from "../../../../modules/manager/infra/http/routes/manager.routes";

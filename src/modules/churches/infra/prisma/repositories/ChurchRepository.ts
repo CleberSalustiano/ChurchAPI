@@ -24,7 +24,7 @@ export default class ChurchRepository implements IChurchRepository {
   }
 
   async findAll(): Promise<IChurch[] | undefined> {
-    const churchs = await prismaClient.church.findMany({
+    const churches = await prismaClient.church.findMany({
       where: {
         status: {
           not: "DELETED",
@@ -33,7 +33,7 @@ export default class ChurchRepository implements IChurchRepository {
       include: { location: true },
     });
 
-    return churchs;
+    return churches;
   }
 
   async findByLocation(id_location: number): Promise<IChurch | undefined> {

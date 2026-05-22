@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeManagerRepository from "../repositories/fakes/FakeManagerRepository";
 import UpdateManagerService from "./UpdateManagerService";

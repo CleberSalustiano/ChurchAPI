@@ -1,5 +1,5 @@
 import { IOfferRepository } from "../../../shared/modules/offer/repositories/IOfferRepository";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
 import { ISpecialOfferRepository } from "../../specialOffer/repositories/ISpecialOfferRepository";
 import CreateNewSpecialOfferService from "../../specialOffer/services/CreateNewSpecialOfferService";

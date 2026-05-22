@@ -4,7 +4,7 @@ import { IUpdateChurchDTO } from "../../dtos/IUpdateChurchDTO";
 import { IChurchRepository } from "../IChurchRepository";
 
 export default class FakeChurchRepository implements IChurchRepository {
-	private churchs: IChurch[] = [];
+	private churches: IChurch[] = [];
 
 	public async create({
 		date,
@@ -17,29 +17,29 @@ export default class FakeChurchRepository implements IChurchRepository {
       deactivatedAt: null,
       deletedAt: null,
 			id_location,
-			id: this.churchs.length,
+			id: this.churches.length,
       parentChurchId: parent_church_id ?? null,
       status: "ACTIVE",
       type: type ?? "BRANCH",
 		};
 
-		this.churchs.push(church);
+		this.churches.push(church);
 
 		return church;
 	}
 
 	public async findAll(): Promise<IChurch[] | undefined> {
-		return this.churchs;
+		return this.churches;
 	}
 
 	public async findById(id_church: number): Promise<IChurch | undefined> {
-		const church = this.churchs.find((church) => church.id === id_church);
+		const church = this.churches.find((church) => church.id === id_church);
 
 		return church;
 	}
 
 	public async delete(id_church: number): Promise<boolean> {
-		const churchIndex = this.churchs.findIndex(
+		const churchIndex = this.churches.findIndex(
 			(church) => church.id === id_church
 		);
 
@@ -47,52 +47,52 @@ export default class FakeChurchRepository implements IChurchRepository {
 			return false;
 		}
 
-    const church = this.churchs[churchIndex];
+    const church = this.churches[churchIndex];
     church.status = "DELETED";
     church.deletedAt = new Date();
     church.deactivatedAt = church.deactivatedAt ?? new Date();
 
-		this.churchs.splice(churchIndex, 1, church);
+		this.churches.splice(churchIndex, 1, church);
 
 		return true;
 	}
 
   public async deactivate(id_church: number): Promise<IChurch | undefined> {
-    const churchIndex = this.churchs.findIndex((church) => church.id === id_church);
+    const churchIndex = this.churches.findIndex((church) => church.id === id_church);
 
     if (churchIndex === -1) return undefined;
 
-    const church = this.churchs[churchIndex];
+    const church = this.churches[churchIndex];
     church.status = "INACTIVE";
     church.deactivatedAt = new Date();
 
-    this.churchs.splice(churchIndex, 1, church);
+    this.churches.splice(churchIndex, 1, church);
 
     return church;
   }
 
   public async reactivate(id_church: number): Promise<IChurch | undefined> {
-    const churchIndex = this.churchs.findIndex((church) => church.id === id_church);
+    const churchIndex = this.churches.findIndex((church) => church.id === id_church);
 
     if (churchIndex === -1) return undefined;
 
-    const church = this.churchs[churchIndex];
+    const church = this.churches[churchIndex];
     church.status = "ACTIVE";
     church.deactivatedAt = null;
 
-    this.churchs.splice(churchIndex, 1, church);
+    this.churches.splice(churchIndex, 1, church);
 
     return church;
   }
 
   public async findByLocation(id_location: number): Promise<IChurch | undefined> {
-      const church = this.churchs.find((church) => church.id_location === id_location && church.status !== "DELETED");
+      const church = this.churches.find((church) => church.id_location === id_location && church.status !== "DELETED");
 
       return church;
   }
 
   public async update({date, id_church}: IUpdateChurchDTO): Promise<IChurch | undefined> {
-    const churchIndex = this.churchs.findIndex(
+    const churchIndex = this.churches.findIndex(
 			(church) => church.id === id_church
 		);
 
@@ -100,21 +100,21 @@ export default class FakeChurchRepository implements IChurchRepository {
 			return undefined;
 		}
 
-    const church = this.churchs[churchIndex];
+    const church = this.churches[churchIndex];
     church.creationDate = new Date(date.toString());
 
-		this.churchs.splice(churchIndex, 1, church);
+		this.churches.splice(churchIndex, 1, church);
 
     return church;
   }
   public async findFirstChurch(): Promise<IChurch | undefined> {
-    const church = this.churchs[0];
+    const church = this.churches[0];
 
     return church;
   }
 
   public async findHeadquarter(): Promise<IChurch | undefined> {
-    return this.churchs.find(
+    return this.churches.find(
       (church) => church.type === "HEADQUARTER" && church.status !== "DELETED"
     );
   }
