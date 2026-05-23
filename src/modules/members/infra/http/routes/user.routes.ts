@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSelfUserAccess from "../../../../../shared/infra/http/middlewares/ensureSelfUserAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import UserCredentialsController from "../controllers/UserCredentialsController";
 
@@ -12,6 +14,8 @@ const userCredentialsController = new UserCredentialsController();
  *     tags:
  *       - User
  *     summary: Update a user login
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -35,6 +39,8 @@ const userCredentialsController = new UserCredentialsController();
  *     tags:
  *       - User
  *     summary: Update a user password
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -55,10 +61,14 @@ const userCredentialsController = new UserCredentialsController();
  */
 userRouter.patch(
   "/:id/login",
+  ensureAuthenticated,
+  ensureSelfUserAccess,
   asyncHandler(userCredentialsController.updateLogin.bind(userCredentialsController))
 );
 userRouter.patch(
   "/:id/password",
+  ensureAuthenticated,
+  ensureSelfUserAccess,
   asyncHandler(
     userCredentialsController.updatePassword.bind(userCredentialsController)
   )

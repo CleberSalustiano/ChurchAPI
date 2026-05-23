@@ -8,6 +8,7 @@ export interface IMemberRepository {
   findByCPF(cpf: bigint): Promise<IMember | undefined>
   update(data: IUpdateMemberDTO): Promise<IMember | undefined>
   findById(id_member: number): Promise<IMember | undefined>
+  findByUserId(id_user: number): Promise<IMember | undefined>
   findAllbyChurch(id_church: number) : Promise<IMember[] | undefined>
   delete(id_member: number) : Promise<boolean>
 }

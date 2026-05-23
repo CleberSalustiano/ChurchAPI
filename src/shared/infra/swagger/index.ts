@@ -21,6 +21,7 @@ const options = {
     ],
     tags: [
       { name: "System", description: "Operational endpoints" },
+      { name: "Auth", description: "Authentication and session management" },
       { name: "Church", description: "Church and location management" },
       { name: "Cult", description: "Cult management" },
       { name: "Cost", description: "Cost management" },
@@ -33,6 +34,13 @@ const options = {
       { name: "Tithe", description: "Tithe management" },
     ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
       schemas: {
         ErrorResponse: {
           type: "object",
@@ -41,6 +49,72 @@ const options = {
               type: "string",
               example: "Resource not found",
             },
+          },
+        },
+        SessionRequest: {
+          type: "object",
+          required: ["login", "password"],
+          properties: {
+            login: { type: "string", example: "maria.silva" },
+            password: { type: "string", example: "senha-segura-123" },
+          },
+        },
+        AuthenticatedUser: {
+          type: "object",
+          properties: {
+            id: { type: "number", example: 1 },
+            login: { type: "string", example: "maria.silva" },
+          },
+        },
+        AuthenticatedMember: {
+          type: "object",
+          properties: {
+            id: { type: "number", example: 12 },
+            name: { type: "string", example: "Maria da Silva" },
+            birth_date: {
+              type: "string",
+              format: "date-time",
+              example: "1990-05-20T00:00:00.000Z",
+            },
+            batism_date: {
+              type: "string",
+              format: "date-time",
+              example: "2008-04-10T00:00:00.000Z",
+            },
+            ecclesiasticalRole: { type: "string", example: "Member" },
+            cpf: { type: "string", example: "12345678901" },
+            rg: { type: "number", example: 123456789 },
+            email: { type: "string", format: "email", example: "maria@email.com" },
+            foto: { type: "string", nullable: true, example: null },
+            id_church: { type: "number", example: 1 },
+          },
+        },
+        SessionResponse: {
+          type: "object",
+          properties: {
+            token: { type: "string", example: "jwt.token.value" },
+            user: { $ref: "#/components/schemas/AuthenticatedUser" },
+            member: {
+              type: "object",
+              properties: {
+                id: { type: "number", example: 12 },
+                name: { type: "string", example: "Maria da Silva" },
+                email: {
+                  type: "string",
+                  format: "email",
+                  example: "maria@email.com",
+                },
+                ecclesiasticalRole: { type: "string", example: "Member" },
+                id_church: { type: "number", example: 1 },
+              },
+            },
+          },
+        },
+        MeResponse: {
+          type: "object",
+          properties: {
+            user: { $ref: "#/components/schemas/AuthenticatedUser" },
+            member: { $ref: "#/components/schemas/AuthenticatedMember" },
           },
         },
         LocationInput: {

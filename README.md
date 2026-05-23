@@ -50,6 +50,8 @@ docker-compose run --rm api npx prisma migrate deploy
 - API: `http://localhost:3333`
 - Healthcheck: `http://localhost:3333/health`
 - Swagger: `http://localhost:3333/api-docs/`
+- Login: `POST http://localhost:3333/session`
+- Perfil autenticado: `GET http://localhost:3333/me`
 
 ### CORS para frontend local
 
@@ -62,3 +64,5 @@ docker-compose run --rm api npx prisma migrate deploy
 - O banco principal do projeto agora e `PostgreSQL`.
 - As migrations antigas de `SQLite` foram preservadas em `prisma/migrations_sqlite_legacy`.
 - A trilha atual de migrations da aplicacao fica em `prisma/migrations`.
+- A autenticacao inicial usa `JWT_SECRET` e `JWT_EXPIRES_IN`.
+- Nesta etapa, apenas as rotas de credenciais do proprio usuario foram protegidas diretamente por autenticacao.

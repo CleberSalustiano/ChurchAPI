@@ -1,4 +1,5 @@
 import { Router } from "express";
+import sessionRouter from "../../../../modules/auth/infra/http/routes/session.routes";
 import churchRouter from "../../../../modules/churches/infra/http/routes/church.routes";
 import costRouter from "../../../../modules/cost/infra/http/routes/cost.routes";
 import cultRouter from "../../../../modules/cult/infra/http/routes/cult.routes";
@@ -14,6 +15,7 @@ import systemRouter from "./system.routes";
 const routes = Router();
 
 routes.use(systemRouter);
+routes.use(sessionRouter);
 routes.use("/member", memberRouter);
 routes.use("/user", userRouter);
 routes.use("/church", churchRouter);

@@ -10,6 +10,8 @@ import DeleteChurchService from "../../modules/churches/services/DeleteChurchSer
 import DeactivateChurchService from "../../modules/churches/services/DeactivateChurchService";
 import ReactivateChurchService from "../../modules/churches/services/ReactivateChurchService";
 import UpdateChurchService from "../../modules/churches/services/UpdateChurchService";
+import AuthenticateUserService from "../../modules/auth/services/AuthenticateUserService";
+import GetAuthenticatedProfileService from "../../modules/auth/services/GetAuthenticatedProfileService";
 import CreateNewMemberService from "../../modules/members/services/CreateNewMemberService";
 import DeleteMemberService from "../../modules/members/services/DeleteMemberService";
 import UpdateMemberService from "../../modules/members/services/UpdateMemberService";
@@ -77,6 +79,14 @@ export function makeCreateMemberService() {
     userRepository,
     churchRepository
   );
+}
+
+export function makeAuthenticateUserService() {
+  return new AuthenticateUserService(userRepository, memberRepository);
+}
+
+export function makeGetAuthenticatedProfileService() {
+  return new GetAuthenticatedProfileService(userRepository, memberRepository);
 }
 
 export function makeUpdateMemberService() {

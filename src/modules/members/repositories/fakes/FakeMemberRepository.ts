@@ -85,6 +85,12 @@ export default class FakeMemberRepository implements IMemberRepository {
     return member;
   }
 
+  async findByUserId(id_user: number): Promise<IMember | undefined> {
+    const member = this.members.find((member) => member.id_user === id_user);
+
+    return member;
+  }
+
   async findAllbyChurch(id_church: number): Promise<IMember[] | undefined> {
     const members = this.members.filter(
       (member) => member.id_church === id_church
