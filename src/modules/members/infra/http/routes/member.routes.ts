@@ -26,7 +26,7 @@ const memberInChurchController = new MemberInChurchController();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/MemberRequest'
+ *             $ref: '#/components/schemas/MemberCreateRequest'
  *     responses:
  *       200:
  *         description: Member created
@@ -65,7 +65,7 @@ const memberInChurchController = new MemberInChurchController();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/MemberRequest'
+ *             $ref: '#/components/schemas/MemberUpdateRequest'
  *     responses:
  *       200:
  *         description: Member updated

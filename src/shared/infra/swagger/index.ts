@@ -81,7 +81,7 @@ const options = {
             },
           ],
         },
-        MemberRequest: {
+        MemberCreateRequest: {
           type: "object",
           required: [
             "id_church",
@@ -118,6 +118,41 @@ const options = {
             login: { type: "string", example: "maria.silva" },
             email: { type: "string", format: "email", example: "maria@email.com" },
             password: { type: "string", example: "senha-inicial" },
+          },
+        },
+        MemberUpdateRequest: {
+          type: "object",
+          required: [
+            "id_church",
+            "name",
+            "birth_date",
+            "batism_date",
+            "ecclesiasticalRole",
+            "cpf",
+            "rg",
+            "email",
+          ],
+          properties: {
+            id_church: { type: "number", example: 1 },
+            name: { type: "string", example: "Maria da Silva" },
+            birth_date: {
+              type: "string",
+              format: "date",
+              example: "1990-05-20",
+            },
+            batism_date: {
+              type: "string",
+              format: "date",
+              example: "2008-04-10",
+            },
+            ecclesiasticalRole: { type: "string", example: "Member" },
+            cpf: {
+              type: "string",
+              example: "12345678901",
+              description: "CPF represented as string for JSON compatibility.",
+            },
+            rg: { type: "number", example: 123456789 },
+            email: { type: "string", format: "email", example: "maria@email.com" },
           },
         },
         ManagerRequest: {

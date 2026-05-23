@@ -23,7 +23,6 @@ describe("Test end-to-end for services", () => {
 
     const updateMember = new UpdateMemberService(
       memberRepository,
-      userRepository,
       churchRepository
     );
 
@@ -64,8 +63,6 @@ describe("Test end-to-end for services", () => {
       cpf: BigInt(12332112222),
       rg: 123123,
       email: "reidelas@email.com",
-      password: "senha",
-      login: "teste",
       id_church: 0,
       id_member: 1,
     };

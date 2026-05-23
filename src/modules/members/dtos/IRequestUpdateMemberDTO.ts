@@ -6,8 +6,6 @@ export interface IRequestUpdateMemberDTO {
 	cpf: bigint;
 	rg: number;
 	email: string;
-  login: string;
-	password: string;
   id_church: number;
   id_member: number;
 }

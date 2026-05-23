@@ -28,9 +28,7 @@ interface IRequestUpdate {
   ecclesiasticalRole: string;
   cpf: bigint;
   rg: number;
-  login: string;
   email: string;
-  password: string;
   id_member: number;
 }
 
@@ -84,9 +82,7 @@ export default class MemberController {
       cpf,
       email,
       name,
-      password,
       rg,
-      login,
       ecclesiasticalRole,
       id_church,
     }: IRequestUpdate = request.body;
@@ -101,9 +97,7 @@ export default class MemberController {
       cpf,
       email,
       name,
-      password,
       rg,
-      login,
       ecclesiasticalRole,
       id_church,
       id_member: +id,

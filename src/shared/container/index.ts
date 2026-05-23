@@ -13,6 +13,8 @@ import UpdateChurchService from "../../modules/churches/services/UpdateChurchSer
 import CreateNewMemberService from "../../modules/members/services/CreateNewMemberService";
 import DeleteMemberService from "../../modules/members/services/DeleteMemberService";
 import UpdateMemberService from "../../modules/members/services/UpdateMemberService";
+import UpdateUserLoginService from "../../modules/members/services/UpdateUserLoginService";
+import UpdateUserPasswordService from "../../modules/members/services/UpdateUserPasswordService";
 import CreateNewManagerService from "../../modules/manager/services/CreateNewManageService";
 import DeleteManagerService from "../../modules/manager/services/DeleteManagerService";
 import UpdateManagerService from "../../modules/manager/services/UpdateManagerService";
@@ -78,15 +80,19 @@ export function makeCreateMemberService() {
 }
 
 export function makeUpdateMemberService() {
-  return new UpdateMemberService(
-    memberRepository,
-    userRepository,
-    churchRepository
-  );
+  return new UpdateMemberService(memberRepository, churchRepository);
 }
 
 export function makeDeleteMemberService() {
   return new DeleteMemberService(memberRepository, userRepository);
+}
+
+export function makeUpdateUserLoginService() {
+  return new UpdateUserLoginService(userRepository);
+}
+
+export function makeUpdateUserPasswordService() {
+  return new UpdateUserPasswordService(userRepository);
 }
 
 export function makeCreateManagerService() {

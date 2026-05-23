@@ -1,6 +1,7 @@
 import { IUser } from "../../../../entities/IUser";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
-import { IUpdateUserDTO } from "../../dtos/IUpdateUserDTO";
+import { IUpdateUserLoginDTO } from "../../dtos/IUpdateUserLoginDTO";
+import { IUpdateUserPasswordDTO } from "../../dtos/IUpdateUserPasswordDTO";
 import { IUserRepository } from "../IUserRepository";
 
 export default class FakeUserRepository implements IUserRepository {
@@ -37,16 +38,30 @@ export default class FakeUserRepository implements IUserRepository {
     return true;
   }
 
-  public async update({
+  public async updateLogin({
     id_user,
     login,
-    password,
-  }: IUpdateUserDTO): Promise<IUser | undefined> {
+  }: IUpdateUserLoginDTO): Promise<IUser | undefined> {
     const userIndex = this.users.findIndex((user) => (user.id === id_user));
 
     if(userIndex === -1) return undefined;
     const user = this.users[userIndex];
     user.login = login;
+
+    this.users.splice(userIndex, 1, user);
+
+    return user;
+  }
+
+  public async updatePassword({
+    id_user,
+    password,
+  }: IUpdateUserPasswordDTO): Promise<IUser | undefined> {
+    const userIndex = this.users.findIndex((user) => user.id === id_user);
+
+    if (userIndex === -1) return undefined;
+
+    const user = this.users[userIndex];
     user.password = password;
 
     this.users.splice(userIndex, 1, user);
