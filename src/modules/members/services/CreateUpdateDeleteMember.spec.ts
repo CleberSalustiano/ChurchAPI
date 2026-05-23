@@ -41,7 +41,7 @@ describe("Test end-to-end for services", () => {
       email: "reidelas@email.com",
       id_church: 0,
       login: "teste",
-      password: "123123",
+      password: "12312345",
     };
 
     await createNewMember.execute(dataMember);

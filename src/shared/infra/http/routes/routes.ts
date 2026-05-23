@@ -4,6 +4,7 @@ import costRouter from "../../../../modules/cost/infra/http/routes/cost.routes";
 import cultRouter from "../../../../modules/cult/infra/http/routes/cult.routes";
 import managerRouter from "../../../../modules/manager/infra/http/routes/manager.routes";
 import memberRouter from "../../../../modules/members/infra/http/routes/member.routes";
+import userRouter from "../../../../modules/members/infra/http/routes/user.routes";
 import specialOfferRouter from "../../../../modules/specialOffer/infra/http/routes/specialOffer.routes";
 import titheRouter from "../../../../modules/tithe/infra/http/routes/tithe.routes";
 import treasurerRouter from "../../../../modules/treasurer/infra/http/routes/treasurer.routes";
@@ -14,6 +15,7 @@ const routes = Router();
 
 routes.use(systemRouter);
 routes.use("/member", memberRouter);
+routes.use("/user", userRouter);
 routes.use("/church", churchRouter);
 routes.use("/cult", cultRouter);
 routes.use("/cost", costRouter);

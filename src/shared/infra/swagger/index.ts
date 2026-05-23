@@ -25,6 +25,7 @@ const options = {
       { name: "Cult", description: "Cult management" },
       { name: "Cost", description: "Cost management" },
       { name: "Member", description: "Member management" },
+      { name: "User", description: "User credential management" },
       { name: "Manager", description: "Church manager management" },
       { name: "Treasurer", description: "Treasurer management" },
       { name: "Offer", description: "Base offer management" },
@@ -153,6 +154,24 @@ const options = {
             },
             rg: { type: "number", example: 123456789 },
             email: { type: "string", format: "email", example: "maria@email.com" },
+          },
+        },
+        UserLoginUpdateRequest: {
+          type: "object",
+          required: ["login"],
+          properties: {
+            login: { type: "string", example: "maria.silva" },
+          },
+        },
+        UserPasswordUpdateRequest: {
+          type: "object",
+          required: ["password"],
+          properties: {
+            password: {
+              type: "string",
+              minLength: 8,
+              example: "senha-segura-123",
+            },
           },
         },
         ManagerRequest: {

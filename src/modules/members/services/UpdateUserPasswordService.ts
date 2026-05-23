@@ -1,5 +1,5 @@
-import AppError from "../../../shared/errors/AppError";
 import NoExistError from "../../../shared/errors/NoExistError";
+import { hashPassword } from "../../../shared/security/password";
 import { IUserRepository } from "../repositories/IUserRepository";
 
 export default class UpdateUserPasswordService {
@@ -12,10 +12,11 @@ export default class UpdateUserPasswordService {
 
     if (!user) throw new NoExistError("user");
 
-    if (password.trim().length < 8) {
-      throw new AppError("Password must have at least 8 characters", 400);
-    }
+    const hashedPassword = await hashPassword(password);
 
-    return this.userRepository.updatePassword({ id_user, password });
+    return this.userRepository.updatePassword({
+      id_user,
+      password: hashedPassword,
+    });
   }
 }

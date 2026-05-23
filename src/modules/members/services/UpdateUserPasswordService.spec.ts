@@ -1,5 +1,6 @@
 import AppError from "../../../shared/errors/AppError";
 import NoExistError from "../../../shared/errors/NoExistError";
+import { verifyPassword } from "../../../shared/security/password";
 import FakeUserRepository from "../repositories/fakes/FakeUserRepository";
 import UpdateUserPasswordService from "./UpdateUserPasswordService";
 
@@ -12,7 +13,8 @@ describe("Update user password", () => {
 
     const user = await service.execute(0, "87654321");
 
-    expect(user?.password).toBe("87654321");
+    expect(user?.password).not.toBe("87654321");
+    await expect(verifyPassword("87654321", user!.password)).resolves.toBe(true);
   });
 
   it("should not update password for a user that does not exist", async () => {

@@ -1,6 +1,7 @@
 import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
+import { hashPassword } from "../../../shared/security/password";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
 import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
@@ -52,7 +53,12 @@ export default class CreateNewMemberService {
 
     if (existUser) throw new Error("Already exist this user!");
 
-    const user = await this.userRepository.create({ login, password });
+    const hashedPassword = await hashPassword(password);
+
+    const user = await this.userRepository.create({
+      login,
+      password: hashedPassword,
+    });
 
     if (!user) throw new Error("This user doesn't created, database error.");
 
