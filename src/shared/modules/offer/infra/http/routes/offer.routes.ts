@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../infra/http/utils/asyncHandler";
 import OfferController from "../controller/OfferController";
 
@@ -64,9 +66,29 @@ const offerController = new OfferController();
  *       204:
  *         description: Offer deleted
  */
-offerRouter.get("/", asyncHandler(offerController.index.bind(offerController)));
-offerRouter.post("/", asyncHandler(offerController.create.bind(offerController)));
-offerRouter.put("/:id", asyncHandler(offerController.update.bind(offerController)));
-offerRouter.delete("/:id", asyncHandler(offerController.delete.bind(offerController)));
+offerRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(offerController.index.bind(offerController))
+);
+offerRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(offerController.create.bind(offerController))
+);
+offerRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(offerController.update.bind(offerController))
+);
+offerRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(offerController.delete.bind(offerController))
+);
 
 export default offerRouter;

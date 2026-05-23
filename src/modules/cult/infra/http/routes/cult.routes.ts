@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import CultController from "../controllers/CultController";
 
@@ -63,9 +65,29 @@ const cultController = new CultController();
  *       204:
  *         description: Cult deleted
  */
-cultRouter.get("/", asyncHandler(cultController.index.bind(cultController)));
-cultRouter.post("/", asyncHandler(cultController.create.bind(cultController)));
-cultRouter.put("/:id", asyncHandler(cultController.update.bind(cultController)));
-cultRouter.delete("/:id", asyncHandler(cultController.delete.bind(cultController)));
+cultRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(cultController.index.bind(cultController))
+);
+cultRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(cultController.create.bind(cultController))
+);
+cultRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(cultController.update.bind(cultController))
+);
+cultRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(cultController.delete.bind(cultController))
+);
 
 export default cultRouter;

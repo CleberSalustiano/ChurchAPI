@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import ManagerController from "../controllers/ManagerController";
 import ManagerInChurchController from "../controllers/ManagerInChurchController";
@@ -87,10 +89,35 @@ const managerInChurchController = new ManagerInChurchController();
  *       401:
  *         description: Validation or business error
  */
-managerRouter.post("/", asyncHandler(managerController.create.bind(managerController)));
-managerRouter.put("/:id", asyncHandler(managerController.update.bind(managerController)));
-managerRouter.get("/", asyncHandler(managerController.index.bind(managerController)));
-managerRouter.get("/:id", asyncHandler(managerInChurchController.index.bind(managerInChurchController)));
-managerRouter.delete("/:id", asyncHandler(managerController.delete.bind(managerController)));
+managerRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(managerController.create.bind(managerController))
+);
+managerRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(managerController.update.bind(managerController))
+);
+managerRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(managerController.index.bind(managerController))
+);
+managerRouter.get(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(managerInChurchController.index.bind(managerInChurchController))
+);
+managerRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(managerController.delete.bind(managerController))
+);
 
 export default managerRouter;

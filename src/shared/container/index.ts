@@ -12,6 +12,7 @@ import ReactivateChurchService from "../../modules/churches/services/ReactivateC
 import UpdateChurchService from "../../modules/churches/services/UpdateChurchService";
 import AuthenticateUserService from "../../modules/auth/services/AuthenticateUserService";
 import GetAuthenticatedProfileService from "../../modules/auth/services/GetAuthenticatedProfileService";
+import ResolveSystemAccessService from "../../modules/auth/services/ResolveSystemAccessService";
 import CreateNewMemberService from "../../modules/members/services/CreateNewMemberService";
 import DeleteMemberService from "../../modules/members/services/DeleteMemberService";
 import UpdateMemberService from "../../modules/members/services/UpdateMemberService";
@@ -87,6 +88,14 @@ export function makeAuthenticateUserService() {
 
 export function makeGetAuthenticatedProfileService() {
   return new GetAuthenticatedProfileService(userRepository, memberRepository);
+}
+
+export function makeResolveSystemAccessService() {
+  return new ResolveSystemAccessService(
+    memberRepository,
+    managerRepository,
+    treasurerRepository
+  );
 }
 
 export function makeUpdateMemberService() {

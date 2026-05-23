@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import SpecialOfferController from "../controllers/SpecialOfferController";
 
@@ -31,7 +33,17 @@ const specialOfferController = new SpecialOfferController();
  *       401:
  *         description: Validation or business error
  */
-specialOfferRouter.post("/", asyncHandler(specialOfferController.create.bind(specialOfferController)));
-specialOfferRouter.get("/", asyncHandler(specialOfferController.index.bind(specialOfferController)));
+specialOfferRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(specialOfferController.create.bind(specialOfferController))
+);
+specialOfferRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(specialOfferController.index.bind(specialOfferController))
+);
 
 export default specialOfferRouter;

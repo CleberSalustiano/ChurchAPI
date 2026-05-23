@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import TitheController from "../controllers/TitheController";
 
@@ -63,9 +65,29 @@ const titheController = new TitheController();
  *       204:
  *         description: Tithe deleted
  */
-titheRouter.get("/", asyncHandler(titheController.index.bind(titheController)));
-titheRouter.post("/", asyncHandler(titheController.create.bind(titheController)));
-titheRouter.put("/:id", asyncHandler(titheController.update.bind(titheController)));
-titheRouter.delete("/:id", asyncHandler(titheController.delete.bind(titheController)));
+titheRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(titheController.index.bind(titheController))
+);
+titheRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(titheController.create.bind(titheController))
+);
+titheRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(titheController.update.bind(titheController))
+);
+titheRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(titheController.delete.bind(titheController))
+);
 
 export default titheRouter;

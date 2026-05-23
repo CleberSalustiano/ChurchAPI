@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import ChurchController from "../controllers/ChurchController";
 
@@ -108,17 +110,41 @@ const churchController = new ChurchController();
  *       400:
  *         description: Validation or business error
  */
-churchRouter.post("/", asyncHandler(churchController.create.bind(churchController)));
-churchRouter.get("/", asyncHandler(churchController.index.bind(churchController)));
-churchRouter.delete("/:id_church", asyncHandler(churchController.delete.bind(churchController)));
+churchRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(churchController.create.bind(churchController))
+);
+churchRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(churchController.index.bind(churchController))
+);
+churchRouter.delete(
+  "/:id_church",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(churchController.delete.bind(churchController))
+);
 churchRouter.patch(
   "/:id_church/deactivate",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
   asyncHandler(churchController.deactivate.bind(churchController))
 );
 churchRouter.patch(
   "/:id_church/reactivate",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
   asyncHandler(churchController.reactivate.bind(churchController))
 );
-churchRouter.put("/:id_church", asyncHandler(churchController.update.bind(churchController)));
+churchRouter.put(
+  "/:id_church",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(churchController.update.bind(churchController))
+);
 
 export default churchRouter;

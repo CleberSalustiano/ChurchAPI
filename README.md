@@ -66,3 +66,5 @@ docker-compose run --rm api npx prisma migrate deploy
 - A trilha atual de migrations da aplicacao fica em `prisma/migrations`.
 - A autenticacao inicial usa `JWT_SECRET` e `JWT_EXPIRES_IN`.
 - Nesta etapa, apenas as rotas de credenciais do proprio usuario foram protegidas diretamente por autenticacao.
+- As rotas administrativas principais agora exigem autenticacao e um nivel de acesso derivado das designacoes ativas.
+- Regra inicial de autorizacao: `manager` pode visualizar dados administrativos e `treasurer` pode visualizar e editar.

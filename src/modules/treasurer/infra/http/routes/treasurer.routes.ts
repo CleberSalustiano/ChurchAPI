@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import TreasurerController from "../controllers/TreasurerController";
 
@@ -78,9 +80,29 @@ const treasurerController = new TreasurerController();
  *       401:
  *         description: Validation or business error
  */
-treasurerRouter.post("/:id", asyncHandler(treasurerController.create.bind(treasurerController)));
-treasurerRouter.get("/", asyncHandler(treasurerController.index.bind(treasurerController)));
-treasurerRouter.put("/:id", asyncHandler(treasurerController.update.bind(treasurerController)));
-treasurerRouter.delete("/:id", asyncHandler(treasurerController.delete.bind(treasurerController)));
+treasurerRouter.post(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(treasurerController.create.bind(treasurerController))
+);
+treasurerRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(treasurerController.index.bind(treasurerController))
+);
+treasurerRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(treasurerController.update.bind(treasurerController))
+);
+treasurerRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(treasurerController.delete.bind(treasurerController))
+);
 
 export default treasurerRouter;

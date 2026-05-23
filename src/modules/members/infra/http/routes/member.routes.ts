@@ -1,4 +1,6 @@
 import { Router } from "express";
+import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import MemberController from "../controllers/MemberController";
 import MemberInChurchController from "../controllers/MemberInChurchController";
@@ -87,10 +89,35 @@ const memberInChurchController = new MemberInChurchController();
  *       401:
  *         description: Validation or business error
  */
-memberRouter.get("/", asyncHandler(memberController.index.bind(memberController)));
-memberRouter.post("/", asyncHandler(memberController.create.bind(memberController)));
-memberRouter.put("/:id", asyncHandler(memberController.update.bind(memberController)));
-memberRouter.get("/:id", asyncHandler(memberInChurchController.index.bind(memberInChurchController)));
-memberRouter.delete("/:id", asyncHandler(memberController.delete.bind(memberController)));
+memberRouter.get(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(memberController.index.bind(memberController))
+);
+memberRouter.post(
+  "/",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(memberController.create.bind(memberController))
+);
+memberRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(memberController.update.bind(memberController))
+);
+memberRouter.get(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("viewer"),
+  asyncHandler(memberInChurchController.index.bind(memberInChurchController))
+);
+memberRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  asyncHandler(memberController.delete.bind(memberController))
+);
 
 export default memberRouter;
