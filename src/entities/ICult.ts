@@ -5,7 +5,7 @@ export interface ICult {
 	id: number;
 	date: Date;
 	theme: string;
-	id_offer?: number;
+	id_offer?: number | null;
   offer?: IOffer;
 	id_church: number;
   church?: IChurch;

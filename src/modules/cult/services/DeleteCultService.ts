@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { ICultRepository } from "../repositories/ICultRepository";
 
 export default class DeleteCultService {

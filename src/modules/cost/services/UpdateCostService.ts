@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IUpdateCostDTO } from "../dtos/IUpdateCostDTO";
 import { ICostRepository } from "../repositories/ICostRepository";
 

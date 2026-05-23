@@ -19,11 +19,10 @@ describe("Update new Treasurer", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -32,11 +31,10 @@ describe("Update new Treasurer", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312212312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 1,
     });
 
     treasurerRepository.create(0);
@@ -64,11 +62,10 @@ describe("Update new Treasurer", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 0,
     });
 
     memberRepository.create({
@@ -77,11 +74,10 @@ describe("Update new Treasurer", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312212312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 1,
     });
 
     expect(
@@ -103,11 +99,10 @@ describe("Update new Treasurer", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 0,
     });
     treasurerRepository.create(0);
 

@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeManagerRepository from "../repositories/fakes/FakeManagerRepository";
 import UpdateManagerService from "./UpdateManagerService";
@@ -26,7 +26,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
 
@@ -38,7 +38,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
     managerRepository.create({id_church: 0, id_member: 0})
@@ -71,7 +71,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
     managerRepository.create({id_church: 0, id_member: 0})
@@ -99,7 +99,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
 
@@ -111,7 +111,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
     managerRepository.create({id_church: 0, id_member: 0})
@@ -140,7 +140,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
 
@@ -152,7 +152,7 @@ describe("Update a manager", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
 

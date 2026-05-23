@@ -1,7 +1,7 @@
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IUpdateCultDTO } from "../dtos/IUpdateCultDTO";
 import { ICultRepository } from "../repositories/ICultRepository";
 

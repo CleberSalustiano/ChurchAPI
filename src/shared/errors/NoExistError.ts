@@ -1,6 +1,7 @@
-export default class NoExistError extends Error {
+import AppError from "./AppError";
+
+export default class NoExistError extends AppError {
   constructor(name: string) {
-    super();
-    this.message = `This ${name} doesn't exist`;
+    super(`This ${name} doesn't exist`, 404);
   }
 }

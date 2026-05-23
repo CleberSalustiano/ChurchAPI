@@ -73,7 +73,7 @@ export default class ManagerRepository implements IManagerRepository {
 
   public async findByMember(id_member: number): Promise<IManager | undefined> {
     const manager = await prismaClient.manager.findFirst({
-      where: { id_member },
+      where: { id_member, endDate: null },
     });
 
     if (!manager) return undefined;

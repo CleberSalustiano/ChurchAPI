@@ -1,8 +1,9 @@
 import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
+import { hashPassword } from "../../../shared/security/password";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import { IMemberRepository } from "../repositories/IMemberRepository";
 import { IUserRepository } from "../repositories/IUserRepository";
@@ -28,7 +29,7 @@ export default class CreateNewMemberService {
     password,
     rg,
     login,
-    titleChurch,
+    ecclesiasticalRole,
   }: IRequestCreateMemberDTO) {
     const existMemberCPF = await this.memberRepository.findByCPF(cpf);
     if (existMemberCPF) throw new AlreadyExistError("member with this CPF");
@@ -52,7 +53,12 @@ export default class CreateNewMemberService {
 
     if (existUser) throw new Error("Already exist this user!");
 
-    const user = await this.userRepository.create({ login, password });
+    const hashedPassword = await hashPassword(password);
+
+    const user = await this.userRepository.create({
+      login,
+      password: hashedPassword,
+    });
 
     if (!user) throw new Error("This user doesn't created, database error.");
 
@@ -65,7 +71,7 @@ export default class CreateNewMemberService {
       id_user: user.id,
       name,
       rg,
-      titleChurch,
+      ecclesiasticalRole,
     });
 
     return member;

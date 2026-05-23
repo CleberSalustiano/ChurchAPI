@@ -1,5 +1,5 @@
 import { IManager } from "../../../../entities/IManager";
-import { IUpdateChurchDTO } from "../../../churchs/dtos/IUpdateChurchDTO";
+import { IUpdateChurchDTO } from "../../../churches/dtos/IUpdateChurchDTO";
 import { ICreateManagerDTO } from "../../dtos/ICreateManagerDTO";
 import { IUpdateManagerDTO } from "../../dtos/IUploadManagerDTO";
 import { IManagerRepository } from "../IManagerRepository";

@@ -1,7 +1,7 @@
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import FakeOfferRepository from "../../../shared/modules/offer/repositories/fakes/FakeOfferRepository";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeTreasurerRepository from "../../treasurer/repositories/fakes/FakeTreasurerRepository";
 import FakeSpecialOfferRepository from "../repositories/fakes/FakeSpecialOfferRepository";
@@ -31,7 +31,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Carlos",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 
@@ -43,7 +43,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Jordan",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 
@@ -87,7 +87,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Carlos",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 
@@ -99,7 +99,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Jordan",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 
@@ -142,7 +142,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Carlos",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 
@@ -185,7 +185,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Carlos",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 
@@ -197,7 +197,7 @@ describe("Create a new Special Offer", () => {
       id_church: 0,
       name: "Jordan",
       rg: 123233,
-      titleChurch: "Title",
+      ecclesiasticalRole: "Title",
       id_user: 0
     });
 

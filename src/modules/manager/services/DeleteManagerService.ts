@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import { IChurchRepository } from "../../churchs/repositories/IChurchRepository";
+import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
 import { IManagerRepository } from "../repositories/IManagerRepository";
 

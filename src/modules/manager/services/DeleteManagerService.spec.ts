@@ -1,4 +1,4 @@
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeMemberRepository from "../../members/repositories/fakes/FakeMemberRepository";
 import FakeManagerRepository from "../repositories/fakes/FakeManagerRepository";
 import DeleteManagerService from "./DeleteManagerService";
@@ -23,7 +23,7 @@ describe("Delete a manager (desactive)", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     });
 

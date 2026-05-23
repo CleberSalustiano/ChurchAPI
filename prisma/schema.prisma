@@ -6,8 +6,19 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:../database/sqlite/dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ChurchType {
+  HEADQUARTER
+  BRANCH
+}
+
+enum ChurchStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
 }
 
 model User {
@@ -22,7 +33,7 @@ model Member {
   name         String
   birth_date   DateTime
   batism_date  DateTime
-  titleChurch  String
+  ecclesiasticalRole  String
   cpf          BigInt         @unique
   rg           Int
   email        String
@@ -83,33 +94,40 @@ model SpecialOffer {
   member    Member   @relation(fields: [id_member], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
   church    Church   @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
-  Tethe     Tethe[]
+  tithes    Tithe[]
 
   @@map("special_offers")
 }
 
-model Tethe {
+model Tithe {
   id               Int          @id @default(autoincrement())
   month            Int
   year             Int
   id_special_offer Int
   specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@map("tethes")
+  @@map("tithes")
 }
 
 model Church {
-  id           Int            @id @default(autoincrement())
-  creationDate DateTime
-  Cult         Cult[]
-  Cost         Cost[]
-  id_location  Int
-  location     Location       @relation(fields: [id_location], references: [id])
-  SpecialOffer SpecialOffer[]
-  Member       Member[]
-  Manager      Manager[]
+  id             Int            @id @default(autoincrement())
+  creationDate   DateTime
+  type           ChurchType     @default(BRANCH)
+  status         ChurchStatus   @default(ACTIVE)
+  deactivatedAt  DateTime?
+  deletedAt      DateTime?
+  parentChurchId Int?
+  parentChurch   Church?        @relation("ChurchHierarchy", fields: [parentChurchId], references: [id])
+  branches       Church[]       @relation("ChurchHierarchy")
+  Cult           Cult[]
+  Cost           Cost[]
+  id_location    Int
+  location       Location       @relation(fields: [id_location], references: [id])
+  SpecialOffer   SpecialOffer[]
+  Member         Member[]
+  Manager        Manager[]
 
-  @@map("churchs")
+  @@map("churches")
 }
 
 model Cult {

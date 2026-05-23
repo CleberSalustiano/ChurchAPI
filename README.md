@@ -17,3 +17,54 @@ O cadastro do membro é feito pelo setor de cadastro na igreja sede, esse faz um
 - controle de congregações
 
 ## Routes:
+
+## Ambiente local
+
+### Requisitos
+
+- Docker
+- Docker Compose
+
+### Subir a stack
+
+1. Criar o arquivo de ambiente:
+
+```bash
+cp .env.example .env
+```
+
+2. Subir banco e API:
+
+```bash
+docker-compose up -d --build
+```
+
+3. Aplicar as migrations:
+
+```bash
+docker-compose run --rm api npx prisma migrate deploy
+```
+
+### Endpoints de apoio
+
+- API: `http://localhost:3333`
+- Healthcheck: `http://localhost:3333/health`
+- Swagger: `http://localhost:3333/api-docs/`
+- Login: `POST http://localhost:3333/session`
+- Perfil autenticado: `GET http://localhost:3333/me`
+
+### CORS para frontend local
+
+- A API aceita configuracao de origens via `CORS_ORIGINS`.
+- O exemplo padrao libera `http://localhost:3000` e `http://localhost:5173`.
+- Para liberar outras origens, ajuste a variavel separando por virgula.
+
+### Observacoes
+
+- O banco principal do projeto agora e `PostgreSQL`.
+- As migrations antigas de `SQLite` foram preservadas em `prisma/migrations_sqlite_legacy`.
+- A trilha atual de migrations da aplicacao fica em `prisma/migrations`.
+- A autenticacao inicial usa `JWT_SECRET` e `JWT_EXPIRES_IN`.
+- Nesta etapa, apenas as rotas de credenciais do proprio usuario foram protegidas diretamente por autenticacao.
+- As rotas administrativas principais agora exigem autenticacao e um nivel de acesso derivado das designacoes ativas.
+- Regra inicial de autorizacao: `manager` pode visualizar dados administrativos e `treasurer` pode visualizar e editar.

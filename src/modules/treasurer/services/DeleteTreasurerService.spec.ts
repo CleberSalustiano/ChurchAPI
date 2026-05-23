@@ -14,11 +14,10 @@ describe("Delete Treasurer (desactive)", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 0,
     });
 
     const treasurer = await treasurerRepository.create(0);
@@ -41,11 +40,10 @@ describe("Delete Treasurer (desactive)", () => {
       birth_date: "1999-11-12",
       cpf: BigInt(12312312312),
       email: "email@email.com",
-      login: "email",
       name: "Luvas Piruvicas",
-      password: "6969",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
+      id_user: 0,
     });
 
     const deleteTreasurer = new DeleteTreasurerService(treasurerRepository);

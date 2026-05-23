@@ -1,5 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import { ICreateMemberDTO } from "../dtos/ICreateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
 import FakeUserRepository from "../repositories/fakes/FakeUserRepository";
@@ -24,7 +24,7 @@ describe("Delete a member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0,
     };
 
@@ -60,7 +60,7 @@ describe("Delete a member", () => {
       email: "email@email.com",
       name: "Luvas Piruvicas",
       rg: 123123,
-      titleChurch: "Member",
+      ecclesiasticalRole: "Member",
       id_user: 0
     };
 

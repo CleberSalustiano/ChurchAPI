@@ -1,6 +1,6 @@
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import FakeCultRepository from "../repositories/fakes/FakeCultRepository";
 import UpdateCultService from "./UpdateCultService";
 

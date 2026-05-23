@@ -1,4 +1,4 @@
-import FakeChurchRepository from "../../churchs/repositories/fakes/FakeChurchRepository";
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import { IRequestUpdateMemberDTO } from "../dtos/IRequestUpdateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
@@ -23,7 +23,6 @@ describe("Test end-to-end for services", () => {
 
     const updateMember = new UpdateMemberService(
       memberRepository,
-      userRepository,
       churchRepository
     );
 
@@ -36,19 +35,21 @@ describe("Test end-to-end for services", () => {
       name: "Batata",
       birth_date: "1999-11-12",
       batism_date: "1999-12-12",
-      titleChurch: "member",
+      ecclesiasticalRole: "member",
       cpf: BigInt(12332112200),
       rg: 123123,
       email: "reidelas@email.com",
       id_church: 0,
       login: "teste",
-      password: "123123",
+      password: "12312345",
     };
 
     await createNewMember.execute(dataMember);
     dataMember.cpf = BigInt(12332112210);
+    dataMember.login = "teste-2";
     await createNewMember.execute(dataMember);
     dataMember.cpf = BigInt(12332112211);
+    dataMember.login = "teste-3";
     const member = await createNewMember.execute(dataMember);
 
     expect(member).toBeTruthy();
@@ -58,12 +59,10 @@ describe("Test end-to-end for services", () => {
       name: "Batata",
       birth_date: "1999-11-12",
       batism_date: "1999-12-12",
-      titleChurch: "manager",
+      ecclesiasticalRole: "manager",
       cpf: BigInt(12332112222),
       rg: 123123,
       email: "reidelas@email.com",
-      password: "senha",
-      login: "teste",
       id_church: 0,
       id_member: 1,
     };
@@ -71,12 +70,12 @@ describe("Test end-to-end for services", () => {
     const memberUpdate = await updateMember.execute(dataMemberUpdate);
 
     expect(memberUpdate).toBeTruthy();
-    expect(memberUpdate?.titleChurch).toBe("manager");
+    expect(memberUpdate?.ecclesiasticalRole).toBe("manager");
 
     const memberDeleted = await deleteMember.execute(0);
 
     expect(memberDeleted).toBeTruthy();
-    expect(memberDeleted?.titleChurch).toBe("member");
+    expect(memberDeleted?.ecclesiasticalRole).toBe("member");
 
     const members = await memberRepository.findAll();
 

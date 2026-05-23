@@ -1,7 +1,8 @@
 import { IUser } from "../../../../../entities/IUser";
 import prismaClient from "../../../../../shared/infra/database/prismaClient";
 import { ICreateUserDTO } from "../../../dtos/ICreateUserDTO";
-import { IUpdateUserDTO } from "../../../dtos/IUpdateUserDTO";
+import { IUpdateUserLoginDTO } from "../../../dtos/IUpdateUserLoginDTO";
+import { IUpdateUserPasswordDTO } from "../../../dtos/IUpdateUserPasswordDTO";
 import { IUserRepository } from "../../../repositories/IUserRepository";
 
 export class UserRepository implements IUserRepository {
@@ -19,14 +20,23 @@ export class UserRepository implements IUserRepository {
     });
     return user;
   }
-  async update({
+  async updateLogin({
     id_user,
     login,
-    password,
-  }: IUpdateUserDTO): Promise<IUser | undefined> {
+  }: IUpdateUserLoginDTO): Promise<IUser | undefined> {
     const user = await prismaClient.user.update({
       where: { id: id_user },
-      data: { login, password },
+      data: { login },
+    });
+    return user;
+  }
+  async updatePassword({
+    id_user,
+    password,
+  }: IUpdateUserPasswordDTO): Promise<IUser | undefined> {
+    const user = await prismaClient.user.update({
+      where: { id: id_user },
+      data: { password },
     });
     return user;
   }

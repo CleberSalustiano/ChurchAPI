@@ -3,7 +3,7 @@ export interface IUpdateMemberDTO {
   name: string;
   birth_date: String;
   batism_date: String;
-  titleChurch: string;
+  ecclesiasticalRole: string;
   cpf?: bigint;
   rg: number;
   email: string;
