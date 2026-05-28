@@ -47,6 +47,17 @@ export default class MemberRepository implements IMemberRepository {
     return undefined;
   }
 
+  public async findByEmail(email: string): Promise<IMember | undefined> {
+    const member = await prismaClient.member.findFirst({
+      where: { email },
+      include: { user: true },
+    });
+
+    if (member) return member;
+
+    return undefined;
+  }
+
   public async findById(id_member: number): Promise<IMember | undefined> {
     const member = await prismaClient.member.findFirst({
       where: { id: id_member },

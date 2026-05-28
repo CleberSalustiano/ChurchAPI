@@ -117,6 +117,32 @@ const options = {
             member: { $ref: "#/components/schemas/AuthenticatedMember" },
           },
         },
+        ForgotPasswordRequest: {
+          type: "object",
+          required: ["email"],
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              example: "maria@email.com",
+            },
+          },
+        },
+        ResetPasswordRequest: {
+          type: "object",
+          required: ["token", "password"],
+          properties: {
+            token: {
+              type: "string",
+              example: "password-reset-token",
+            },
+            password: {
+              type: "string",
+              minLength: 8,
+              example: "new-secure-password-123",
+            },
+          },
+        },
         LocationInput: {
           type: "object",
           required: ["street", "district", "city", "state", "country", "cep"],

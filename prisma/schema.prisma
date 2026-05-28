@@ -22,10 +22,11 @@ enum ChurchStatus {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  login    String   @unique
-  password String
-  Member   Member[]
+  id                  Int                  @id @default(autoincrement())
+  login               String               @unique
+  password            String
+  Member              Member[]
+  PasswordResetToken  PasswordResetToken[]
 }
 
 model Member {
@@ -173,4 +174,16 @@ model CultOffer {
   cult     Cult  @relation(fields: [id_cult], references: [id])
   id_offer Int
   offer    Offer @relation(fields: [id_offer], references: [id])
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("password_reset_tokens")
 }

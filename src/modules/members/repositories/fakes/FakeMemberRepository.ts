@@ -46,6 +46,10 @@ export default class FakeMemberRepository implements IMemberRepository {
     return member;
   }
 
+  public async findByEmail(email: string): Promise<IMember | undefined> {
+    return this.members.find((member) => member.email === email);
+  }
+
   public async update({
     batism_date,
     birth_date,

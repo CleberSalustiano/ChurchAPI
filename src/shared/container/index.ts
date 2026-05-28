@@ -12,7 +12,10 @@ import ReactivateChurchService from "../../modules/churches/services/ReactivateC
 import UpdateChurchService from "../../modules/churches/services/UpdateChurchService";
 import AuthenticateUserService from "../../modules/auth/services/AuthenticateUserService";
 import GetAuthenticatedProfileService from "../../modules/auth/services/GetAuthenticatedProfileService";
+import PasswordResetTokenRepository from "../../modules/auth/infra/prisma/repositories/PasswordResetTokenRepository";
 import ResolveSystemAccessService from "../../modules/auth/services/ResolveSystemAccessService";
+import RequestPasswordResetService from "../../modules/auth/services/RequestPasswordResetService";
+import ResetPasswordService from "../../modules/auth/services/ResetPasswordService";
 import CreateNewMemberService from "../../modules/members/services/CreateNewMemberService";
 import DeleteMemberService from "../../modules/members/services/DeleteMemberService";
 import UpdateMemberService from "../../modules/members/services/UpdateMemberService";
@@ -53,6 +56,7 @@ export const treasurerRepository = new TreasurerRepository();
 export const offerRepository = new OfferRepository();
 export const specialOfferRepository = new SpecialOfferRepository();
 export const titheRepository = new TitheRepository();
+export const passwordResetTokenRepository = new PasswordResetTokenRepository();
 
 export function makeCreateChurchService() {
   return new CreateNewChurchService(churchRepository, locationRepository);
@@ -84,6 +88,17 @@ export function makeCreateMemberService() {
 
 export function makeAuthenticateUserService() {
   return new AuthenticateUserService(userRepository, memberRepository);
+}
+
+export function makeRequestPasswordResetService() {
+  return new RequestPasswordResetService(
+    memberRepository,
+    passwordResetTokenRepository
+  );
+}
+
+export function makeResetPasswordService() {
+  return new ResetPasswordService(passwordResetTokenRepository, userRepository);
 }
 
 export function makeGetAuthenticatedProfileService() {

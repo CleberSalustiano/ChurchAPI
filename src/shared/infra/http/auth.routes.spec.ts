@@ -5,6 +5,8 @@ import AppError from "../../errors/AppError";
 
 const mockAuthenticateExecute = jest.fn();
 const mockGetAuthenticatedProfileExecute = jest.fn();
+const mockRequestPasswordResetExecute = jest.fn();
+const mockResetPasswordExecute = jest.fn();
 const mockUpdateUserLoginExecute = jest.fn();
 const mockUpdateUserPasswordExecute = jest.fn();
 
@@ -14,6 +16,12 @@ jest.mock("../../container", () => ({
   })),
   makeGetAuthenticatedProfileService: jest.fn(() => ({
     execute: mockGetAuthenticatedProfileExecute,
+  })),
+  makeRequestPasswordResetService: jest.fn(() => ({
+    execute: mockRequestPasswordResetExecute,
+  })),
+  makeResetPasswordService: jest.fn(() => ({
+    execute: mockResetPasswordExecute,
   })),
   makeUpdateUserLoginService: jest.fn(() => ({
     execute: mockUpdateUserLoginExecute,
@@ -82,6 +90,57 @@ describe("Authenticated routes", () => {
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ error: "JWT token is missing" });
+  });
+
+  it("should request a password reset token", async () => {
+    mockRequestPasswordResetExecute.mockResolvedValue({
+      message: "If the email exists, a password reset token has been generated",
+      resetToken: "password-reset-token",
+    });
+
+    const response = await request(app).post("/password/forgot").send({
+      email: "member@email.com",
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body.resetToken).toBe("password-reset-token");
+    expect(mockRequestPasswordResetExecute).toHaveBeenCalledWith(
+      "member@email.com"
+    );
+  });
+
+  it("should reset a password with a valid token", async () => {
+    mockResetPasswordExecute.mockResolvedValue(undefined);
+
+    const response = await request(app).post("/password/reset").send({
+      token: "password-reset-token",
+      password: "new-password-123",
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "Password has been reset successfully",
+    });
+    expect(mockResetPasswordExecute).toHaveBeenCalledWith(
+      "password-reset-token",
+      "new-password-123"
+    );
+  });
+
+  it("should return 400 when the password reset token is invalid", async () => {
+    mockResetPasswordExecute.mockRejectedValue(
+      new AppError("Invalid password reset token", 400)
+    );
+
+    const response = await request(app).post("/password/reset").send({
+      token: "invalid-token",
+      password: "new-password-123",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Invalid password reset token",
+    });
   });
 
   it("should return the authenticated profile when the token is valid", async () => {

@@ -6,6 +6,7 @@ export interface IMemberRepository {
   create(data: ICreateMemberDTO): Promise<IMember | undefined>
   findAll(): Promise<IMember[] | undefined>
   findByCPF(cpf: bigint): Promise<IMember | undefined>
+  findByEmail(email: string): Promise<IMember | undefined>
   update(data: IUpdateMemberDTO): Promise<IMember | undefined>
   findById(id_member: number): Promise<IMember | undefined>
   findByUserId(id_user: number): Promise<IMember | undefined>
