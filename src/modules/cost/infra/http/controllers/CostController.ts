@@ -6,6 +6,15 @@ import {
   makeUpdateCostService,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestCostCreate {
   value: number;
   date: string;
@@ -35,8 +44,12 @@ export default class CostController {
     return response.json({ cost });
   }
 
-  async index(request: Request, response: Response) {
-    const costs = await costRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const costs =
+      access?.scope === "CHURCH"
+        ? await costRepository.findAllByChurch(access.churchId)
+        : await costRepository.findAll();
 
     return response.json({ costs });
   }

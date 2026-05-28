@@ -7,6 +7,15 @@ import {
   memberRepository,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestCreate {
   id_church: number;
   name: string;
@@ -67,8 +76,12 @@ export default class MemberController {
     return response.json({ member });
   }
 
-  async index(request: Request, response: Response) {
-    const membersNoJson = await memberRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const membersNoJson =
+      access?.scope === "CHURCH"
+        ? await memberRepository.findAllbyChurch(access.churchId)
+        : await memberRepository.findAll();
 
     const members = membersJsonCorrection(membersNoJson);
 

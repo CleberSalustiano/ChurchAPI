@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { SystemAccessScope } from "../../../../modules/auth/services/ResolveSystemAccessService";
 import { makeResolveSystemAccessService } from "../../../container";
 import AppError from "../../../errors/AppError";
 
@@ -9,6 +10,11 @@ export default function ensureSystemAccess(required: RequiredSystemAccess) {
     request: Request & {
       user?: {
         id: number;
+        access?: {
+          scope: SystemAccessScope;
+          churchId: number;
+          level: string;
+        };
       };
     },
     _response: Response,
@@ -18,13 +24,24 @@ export default function ensureSystemAccess(required: RequiredSystemAccess) {
       throw new AppError("JWT token is missing", 401);
     }
 
+    const userId = request.user.id;
+
     const resolveSystemAccess = makeResolveSystemAccessService();
     resolveSystemAccess
-      .execute(request.user.id)
+      .execute(userId)
       .then((access) => {
         if (!access) {
           throw new AppError("User has no system access profile", 403);
         }
+
+        request.user = {
+          id: userId,
+          access: {
+            scope: access.scope,
+            churchId: access.churchId,
+            level: access.level,
+          },
+        };
 
         if (required === "viewer" && access.permissions.canViewManagementData) {
           return next();

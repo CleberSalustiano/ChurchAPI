@@ -9,6 +9,15 @@ import {
 } from "../../../../../shared/container";
 import { ChurchType } from "../../../../../entities/IChurch";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestChurchLocationParams {
   date: string;
   street: string;
@@ -42,7 +51,15 @@ export default class ChurchController {
     return response.json({ church });
   }
 
-  async index(request: Request, response: Response) {
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+
+    if (access?.scope === "CHURCH") {
+      const church = await churchRepository.findById(access.churchId);
+
+      return response.json({ churches: church ? [church] : [] });
+    }
+
     const churches = await churchRepository.findAll();
 
     return response.json({ churches });

@@ -20,6 +20,12 @@ export default class CostRepository implements ICostRepository {
     return prismaClient.cost.findMany();
   }
 
+  async findAllByChurch(id_church: number): Promise<ICost[] | undefined> {
+    return prismaClient.cost.findMany({
+      where: { id_church },
+    });
+  }
+
   async findById(id_cost: number): Promise<ICost | undefined> {
     const cost = await prismaClient.cost.findUnique({
       where: { id: id_cost },

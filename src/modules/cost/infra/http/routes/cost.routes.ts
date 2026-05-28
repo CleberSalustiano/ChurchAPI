@@ -1,4 +1,5 @@
 import { Router } from "express";
+import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
@@ -75,6 +76,7 @@ costRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(costController.create.bind(costController))
 );
 costRouter.put(

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
@@ -93,12 +94,14 @@ managerRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(managerController.create.bind(managerController))
 );
 managerRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(managerController.update.bind(managerController))
 );
 managerRouter.get(
@@ -111,6 +114,7 @@ managerRouter.get(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("viewer"),
+  ensureChurchScope({ source: "params", field: "id" }),
   asyncHandler(managerInChurchController.index.bind(managerInChurchController))
 );
 managerRouter.delete(

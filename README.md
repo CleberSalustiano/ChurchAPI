@@ -68,3 +68,4 @@ docker-compose run --rm api npx prisma migrate deploy
 - Nesta etapa, apenas as rotas de credenciais do proprio usuario foram protegidas diretamente por autenticacao.
 - As rotas administrativas principais agora exigem autenticacao e um nivel de acesso derivado das designacoes ativas.
 - Regra inicial de autorizacao: `manager` pode visualizar dados administrativos e `treasurer` pode visualizar e editar.
+- Regra inicial de escopo: usuarios da `HEADQUARTER` recebem escopo `GLOBAL`; usuarios de `BRANCH` recebem escopo restrito a propria igreja quando a rota ja informa `id_church` diretamente.

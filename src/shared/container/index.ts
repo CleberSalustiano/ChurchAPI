@@ -92,6 +92,7 @@ export function makeGetAuthenticatedProfileService() {
 
 export function makeResolveSystemAccessService() {
   return new ResolveSystemAccessService(
+    churchRepository,
     memberRepository,
     managerRepository,
     treasurerRepository

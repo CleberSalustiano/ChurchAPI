@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureGlobalSystemAccess from "../../../../../shared/infra/http/middlewares/ensureGlobalSystemAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import ChurchController from "../controllers/ChurchController";
@@ -114,6 +115,7 @@ churchRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureGlobalSystemAccess,
   asyncHandler(churchController.create.bind(churchController))
 );
 churchRouter.get(
@@ -126,24 +128,28 @@ churchRouter.delete(
   "/:id_church",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureGlobalSystemAccess,
   asyncHandler(churchController.delete.bind(churchController))
 );
 churchRouter.patch(
   "/:id_church/deactivate",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureGlobalSystemAccess,
   asyncHandler(churchController.deactivate.bind(churchController))
 );
 churchRouter.patch(
   "/:id_church/reactivate",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureGlobalSystemAccess,
   asyncHandler(churchController.reactivate.bind(churchController))
 );
 churchRouter.put(
   "/:id_church",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureGlobalSystemAccess,
   asyncHandler(churchController.update.bind(churchController))
 );
 

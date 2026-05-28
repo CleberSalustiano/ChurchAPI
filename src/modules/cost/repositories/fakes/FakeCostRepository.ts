@@ -35,6 +35,10 @@ export default class FakeCostRepository implements ICostRepository {
     return this.costs;
   }
 
+  async findAllByChurch(id_church: number): Promise<ICost[] | undefined> {
+    return this.costs.filter((cost) => cost.id_church === id_church);
+  }
+
   async update({
     date,
     description,

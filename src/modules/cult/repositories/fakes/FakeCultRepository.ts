@@ -27,6 +27,10 @@ export default class FakeCultRepository implements ICultRepository {
     return this.cults;
   }
 
+  public async findAllByChurch(id_church: number): Promise<ICult[] | undefined> {
+    return this.cults.filter((cult) => cult.id_church === id_church);
+  }
+
   public async findById(id_cult: number): Promise<ICult | undefined> {
     const cult = this.cults.find(cult => cult.id === id_cult);
 

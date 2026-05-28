@@ -19,6 +19,12 @@ export default class CultRepository implements ICultRepository {
     return prismaClient.cult.findMany();
   }
 
+  async findAllByChurch(id_church: number): Promise<ICult[] | undefined> {
+    return prismaClient.cult.findMany({
+      where: { id_church },
+    });
+  }
+
   async findById(id_cult: number): Promise<ICult | undefined> {
     const cult = await prismaClient.cult.findUnique({
       where: { id: id_cult },
