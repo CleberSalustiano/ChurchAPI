@@ -22,30 +22,32 @@ enum ChurchStatus {
 }
 
 model User {
-  id                  Int                  @id @default(autoincrement())
-  login               String               @unique
-  password            String
-  Member              Member[]
-  PasswordResetToken  PasswordResetToken[]
+  id                 Int                  @id @default(autoincrement())
+  login              String               @unique
+  password           String
+  deletedAt          DateTime?
+  Member             Member[]
+  PasswordResetToken PasswordResetToken[]
 }
 
 model Member {
-  id           Int            @id @default(autoincrement())
-  name         String
-  birth_date   DateTime
-  batism_date  DateTime
-  ecclesiasticalRole  String
-  cpf          BigInt         @unique
-  rg           Int
-  email        String
-  foto         String?
-  Manager      Manager[]
-  Treasurer    Treasurer[]
-  SpecialOffer SpecialOffer[]
-  id_church    Int
-  church       Church         @relation(fields: [id_church], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  id_user      Int            @unique
-  user         User           @relation(fields: [id_user], references: [id])
+  id                 Int            @id @default(autoincrement())
+  name               String
+  birth_date         DateTime
+  batism_date        DateTime
+  ecclesiasticalRole String
+  cpf                BigInt         @unique
+  rg                 Int
+  email              String
+  foto               String?
+  deletedAt          DateTime?
+  Manager            Manager[]
+  Treasurer          Treasurer[]
+  SpecialOffer       SpecialOffer[]
+  id_church          Int
+  church             Church         @relation(fields: [id_church], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id_user            Int            @unique
+  user               User           @relation(fields: [id_user], references: [id])
 
   @@map("members")
 }

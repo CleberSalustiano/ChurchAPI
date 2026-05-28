@@ -2,6 +2,8 @@ import { sign, SignOptions } from "jsonwebtoken";
 import authConfig from "../../config/auth";
 
 var mockResolveSystemAccessExecute = jest.fn();
+var mockUserFindById = jest.fn();
+var mockMemberFindByUserId = jest.fn();
 var mockMemberFindById = jest.fn();
 var mockManagerFindById = jest.fn();
 var mockCostFindById = jest.fn();
@@ -15,7 +17,11 @@ jest.mock("../../container", () => ({
   makeResolveSystemAccessService: jest.fn(() => ({
     execute: (...args: unknown[]) => mockResolveSystemAccessExecute(...args),
   })),
+  userRepository: {
+    findById: (...args: unknown[]) => mockUserFindById(...args),
+  },
   memberRepository: {
+    findByUserId: (...args: unknown[]) => mockMemberFindByUserId(...args),
     findById: (...args: unknown[]) => mockMemberFindById(...args),
   },
   managerRepository: {
@@ -51,9 +57,30 @@ function makeToken(userId: number) {
   } as SignOptions);
 }
 
+function mockActiveAuthenticatedContext(userId = 1, churchId = 1) {
+  mockUserFindById.mockResolvedValue({
+    id: userId,
+    login: "member-login",
+    password: "hashed-password",
+  });
+  mockMemberFindByUserId.mockResolvedValue({
+    id: userId,
+    id_user: userId,
+    id_church: churchId,
+    church: {
+      id: churchId,
+      creationDate: new Date("2020-01-01"),
+      type: "BRANCH",
+      status: "ACTIVE",
+      id_location: 1,
+    },
+  });
+}
+
 describe("Authorization routes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockActiveAuthenticatedContext();
   });
 
   it("should require authentication to list churches", async () => {

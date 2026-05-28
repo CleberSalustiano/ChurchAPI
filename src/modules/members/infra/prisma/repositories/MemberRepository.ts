@@ -34,13 +34,17 @@ export default class MemberRepository implements IMemberRepository {
   }
 
   public async findAll(): Promise<IMember[] | undefined> {
-    const members = await prismaClient.member.findMany();
+    const members = await prismaClient.member.findMany({
+      where: { deletedAt: null },
+    });
 
     return members;
   }
 
   public async findByCPF(cpf: bigint): Promise<IMember | undefined> {
-    const member = await prismaClient.member.findFirst({ where: { cpf } });
+    const member = await prismaClient.member.findFirst({
+      where: { cpf, deletedAt: null },
+    });
 
     if (member) return member;
 
@@ -49,7 +53,13 @@ export default class MemberRepository implements IMemberRepository {
 
   public async findByEmail(email: string): Promise<IMember | undefined> {
     const member = await prismaClient.member.findFirst({
-      where: { email },
+      where: {
+        email,
+        deletedAt: null,
+        user: {
+          deletedAt: null,
+        },
+      },
       include: { user: true },
     });
 
@@ -60,7 +70,7 @@ export default class MemberRepository implements IMemberRepository {
 
   public async findById(id_member: number): Promise<IMember | undefined> {
     const member = await prismaClient.member.findFirst({
-      where: { id: id_member },
+      where: { id: id_member, deletedAt: null },
     });
 
     if (member) return member;
@@ -70,7 +80,13 @@ export default class MemberRepository implements IMemberRepository {
 
   public async findByUserId(id_user: number): Promise<IMember | undefined> {
     const member = await prismaClient.member.findFirst({
-      where: { id_user },
+      where: {
+        id_user,
+        deletedAt: null,
+        user: {
+          deletedAt: null,
+        },
+      },
       include: { church: true },
     });
 
@@ -90,6 +106,10 @@ export default class MemberRepository implements IMemberRepository {
     ecclesiasticalRole,
     cpf,
   }: IUpdateMemberDTO): Promise<IMember | undefined> {
+    const existingMember = await this.findById(id_member);
+
+    if (!existingMember) return undefined;
+
     const member = await prismaClient.member.update({
       where: { id: id_member },
       data: {
@@ -112,15 +132,20 @@ export default class MemberRepository implements IMemberRepository {
     id_church: number
   ): Promise<IMember[] | undefined> {
     const members = await prismaClient.member.findMany({
-      where: { id_church: id_church },
+      where: { id_church: id_church, deletedAt: null },
     });
 
     return members;
   }
 
   public async delete(id_member: number): Promise<boolean> {
-    const member = await prismaClient.member.delete({
+    const existingMember = await this.findById(id_member);
+
+    if (!existingMember) return false;
+
+    const member = await prismaClient.member.update({
       where: { id: id_member },
+      data: { deletedAt: new Date() },
     });
 
     if (!member) return false;

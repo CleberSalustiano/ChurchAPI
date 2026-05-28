@@ -20,7 +20,15 @@ export default class FakeMemberRepository implements IMemberRepository {
     const member: IMember = {
       batism_date: new Date(batism_date.toString()),
       birth_date: new Date(birth_date.toString()),
+      church: {
+        id: id_church,
+        creationDate: new Date("2020-01-01"),
+        type: "BRANCH",
+        status: "ACTIVE",
+        id_location: id_church,
+      },
       cpf,
+      deletedAt: null,
       email,
       id: this.members.length,
       name,
@@ -37,17 +45,21 @@ export default class FakeMemberRepository implements IMemberRepository {
   }
 
   public async findAll(): Promise<IMember[] | undefined> {
-    return this.members;
+    return this.members.filter((member) => !member.deletedAt);
   }
 
   public async findByCPF(cpf: bigint): Promise<IMember | undefined> {
-    const member = this.members.find((member) => member.cpf === cpf);
+    const member = this.members.find(
+      (member) => member.cpf === cpf && !member.deletedAt
+    );
 
     return member;
   }
 
   public async findByEmail(email: string): Promise<IMember | undefined> {
-    return this.members.find((member) => member.email === email);
+    return this.members.find(
+      (member) => member.email === email && !member.deletedAt
+    );
   }
 
   public async update({
@@ -62,7 +74,7 @@ export default class FakeMemberRepository implements IMemberRepository {
     cpf,
   }: IUpdateMemberDTO): Promise<IMember | undefined> {
     const memberIndex = this.members.findIndex(
-      (member) => member.id === id_member
+      (member) => member.id === id_member && !member.deletedAt
     );
 
     if (memberIndex === -1) return undefined;
@@ -72,6 +84,13 @@ export default class FakeMemberRepository implements IMemberRepository {
     member.birth_date = new Date(birth_date.toString());
     member.email = email;
     member.id_church = id_church;
+    member.church = {
+      id: id_church,
+      creationDate: member.church?.creationDate || new Date("2020-01-01"),
+      type: member.church?.type || "BRANCH",
+      status: member.church?.status || "ACTIVE",
+      id_location: member.church?.id_location || id_church,
+    };
     member.name = name;
     member.rg = rg;
     member.ecclesiasticalRole = ecclesiasticalRole;
@@ -84,20 +103,24 @@ export default class FakeMemberRepository implements IMemberRepository {
   }
 
   async findById(id_member: number): Promise<IMember | undefined> {
-    const member = this.members.find((member) => member.id === id_member);
+    const member = this.members.find(
+      (member) => member.id === id_member && !member.deletedAt
+    );
 
     return member;
   }
 
   async findByUserId(id_user: number): Promise<IMember | undefined> {
-    const member = this.members.find((member) => member.id_user === id_user);
+    const member = this.members.find(
+      (member) => member.id_user === id_user && !member.deletedAt
+    );
 
     return member;
   }
 
   async findAllbyChurch(id_church: number): Promise<IMember[] | undefined> {
     const members = this.members.filter(
-      (member) => member.id_church === id_church
+      (member) => member.id_church === id_church && !member.deletedAt
     );
 
     return members;
@@ -105,14 +128,16 @@ export default class FakeMemberRepository implements IMemberRepository {
 
   async delete(id_member: number): Promise<boolean> {
     const memberIndex = this.members.findIndex(
-      (member) => member.id === id_member
+      (member) => member.id === id_member && !member.deletedAt
     );
 
     if (memberIndex === -1) {
       return false;
     }
 
-    const member = this.members.splice(memberIndex, 1);
+    const member = this.members[memberIndex];
+    member.deletedAt = new Date();
+    this.members.splice(memberIndex, 1, member);
 
     if (member) return true;
 

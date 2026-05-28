@@ -39,9 +39,13 @@ describe("Delete a member", () => {
     );
 
     const member = await deleteMember.execute(1);
+    const deletedMember = await memberRepository.findById(1);
+    const deletedUser = await userRepository.findById(1);
 
     expect(member).toBeTruthy();
     expect(member?.name).toBe("Aoba novo");
+    expect(deletedMember).toBeUndefined();
+    expect(deletedUser).toBeUndefined();
   });
 
   it("should not be able to delete a member that doesn't exist", async () => {

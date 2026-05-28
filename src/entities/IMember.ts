@@ -11,6 +11,7 @@ export interface IMember {
   rg: number;
   email: string;
   foto: string | null;
+  deletedAt?: Date | null;
   id_church: number;
   church?: IChurch;
   id_user: number;

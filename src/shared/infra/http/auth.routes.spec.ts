@@ -9,6 +9,8 @@ const mockRequestPasswordResetExecute = jest.fn();
 const mockResetPasswordExecute = jest.fn();
 const mockUpdateUserLoginExecute = jest.fn();
 const mockUpdateUserPasswordExecute = jest.fn();
+const mockUserFindById = jest.fn();
+const mockMemberFindByUserId = jest.fn();
 
 jest.mock("../../container", () => ({
   makeAuthenticateUserService: jest.fn(() => ({
@@ -29,6 +31,12 @@ jest.mock("../../container", () => ({
   makeUpdateUserPasswordService: jest.fn(() => ({
     execute: mockUpdateUserPasswordExecute,
   })),
+  userRepository: {
+    findById: (...args: unknown[]) => mockUserFindById(...args),
+  },
+  memberRepository: {
+    findByUserId: (...args: unknown[]) => mockMemberFindByUserId(...args),
+  },
 }));
 
 import app from "./app";
@@ -40,9 +48,32 @@ function makeToken(userId: number) {
   } as SignOptions);
 }
 
+function mockActiveAuthenticatedContext(userId = 1, churchId = 1) {
+  mockUserFindById.mockResolvedValue({
+    id: userId,
+    login: "member-login",
+    password: "hashed-password",
+  });
+  mockMemberFindByUserId.mockResolvedValue({
+    id: userId,
+    name: "Member Name",
+    email: "member@email.com",
+    id_user: userId,
+    id_church: churchId,
+    church: {
+      id: churchId,
+      creationDate: new Date("2020-01-01"),
+      type: "BRANCH",
+      status: "ACTIVE",
+      id_location: 1,
+    },
+  });
+}
+
 describe("Authenticated routes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockActiveAuthenticatedContext();
   });
 
   it("should create a session with valid credentials", async () => {
@@ -167,6 +198,31 @@ describe("Authenticated routes", () => {
     expect(response.status).toBe(200);
     expect(response.body.user).toEqual({ id: 1, login: "member-login" });
     expect(mockGetAuthenticatedProfileExecute).toHaveBeenCalledWith(1);
+  });
+
+  it("should block authenticated routes when the church is inactive", async () => {
+    mockMemberFindByUserId.mockResolvedValue({
+      id: 1,
+      name: "Member Name",
+      email: "member@email.com",
+      id_user: 1,
+      id_church: 1,
+      church: {
+        id: 1,
+        creationDate: new Date("2020-01-01"),
+        type: "BRANCH",
+        status: "INACTIVE",
+        id_location: 1,
+      },
+    });
+
+    const response = await request(app)
+      .get("/me")
+      .set("Authorization", `Bearer ${makeToken(1)}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ error: "This church is not active" });
+    expect(mockGetAuthenticatedProfileExecute).not.toHaveBeenCalled();
   });
 
   it("should not allow a user to update another user's login", async () => {
