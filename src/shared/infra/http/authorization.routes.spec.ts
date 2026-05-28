@@ -1,12 +1,28 @@
 import { sign, SignOptions } from "jsonwebtoken";
 import authConfig from "../../config/auth";
 
-const mockResolveSystemAccessExecute = jest.fn();
+var mockResolveSystemAccessExecute = jest.fn();
+var mockMemberFindById = jest.fn();
+var mockManagerFindById = jest.fn();
+var mockCostFindById = jest.fn();
+var mockCultFindById = jest.fn();
 
 jest.mock("../../container", () => ({
   makeResolveSystemAccessService: jest.fn(() => ({
-    execute: mockResolveSystemAccessExecute,
+    execute: (...args: unknown[]) => mockResolveSystemAccessExecute(...args),
   })),
+  memberRepository: {
+    findById: (...args: unknown[]) => mockMemberFindById(...args),
+  },
+  managerRepository: {
+    findById: (...args: unknown[]) => mockManagerFindById(...args),
+  },
+  costRepository: {
+    findById: (...args: unknown[]) => mockCostFindById(...args),
+  },
+  cultRepository: {
+    findById: (...args: unknown[]) => mockCultFindById(...args),
+  },
 }));
 
 import request from "supertest";
@@ -129,6 +145,32 @@ describe("Authorization routes", () => {
 
     const response = await request(app)
       .get("/member/2")
+      .set("Authorization", `Bearer ${makeToken(1)}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from deleting a member from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockMemberFindById.mockResolvedValue({
+      id: 99,
+      id_church: 2,
+    });
+
+    const response = await request(app)
+      .delete("/member/99")
       .set("Authorization", `Bearer ${makeToken(1)}`);
 
     expect(response.status).toBe(403);

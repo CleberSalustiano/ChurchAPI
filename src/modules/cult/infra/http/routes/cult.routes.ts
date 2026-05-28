@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureScopedResourceAccess from "../../../../../shared/infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import CultController from "../controllers/CultController";
@@ -83,6 +84,7 @@ cultRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("cult"),
   ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(cultController.update.bind(cultController))
 );
@@ -90,6 +92,7 @@ cultRouter.delete(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("cult"),
   asyncHandler(cultController.delete.bind(cultController))
 );
 
