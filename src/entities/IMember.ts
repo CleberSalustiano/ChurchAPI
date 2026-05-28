@@ -7,7 +7,7 @@ export interface IMember {
   birth_date: Date;
   batism_date: Date;
   ecclesiasticalRole: string;
-  cpf: bigint | number;
+  cpf: bigint | number | string;
   rg: number;
   email: string;
   foto: string | null;

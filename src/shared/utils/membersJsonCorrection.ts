@@ -2,12 +2,10 @@ import { IMember } from "../../entities/IMember";
 
 const membersJsonCorrection = (members: IMember[] | undefined) => {
   if (members) {
-    const membersJSON = members.map((member) => {
-      // @ts-ignore
-      member.cpf = +member.cpf.toString();
-      return member;
-    });
-    return membersJSON;
+    return members.map((member) => ({
+      ...member,
+      cpf: member.cpf.toString(),
+    }));
   }
 }
 

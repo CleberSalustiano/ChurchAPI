@@ -58,7 +58,7 @@ export default class MemberController {
 
     const createNewMember = makeCreateMemberService();
 
-    let member = await createNewMember.execute({
+    const member = await createNewMember.execute({
       batism_date,
       birth_date,
       cpf,
@@ -71,9 +71,14 @@ export default class MemberController {
       id_church,
     });
 
-    if (member) member.cpf = +member.cpf.toString();
+    const memberResponse = member
+      ? {
+          ...member,
+          cpf: member.cpf.toString(),
+        }
+      : undefined;
 
-    return response.json({ member });
+    return response.json({ member: memberResponse });
   }
 
   async index(request: ScopedRequest, response: Response) {
@@ -104,7 +109,7 @@ export default class MemberController {
 
     const updateNewMember = makeUpdateMemberService();
 
-    let member = await updateNewMember.execute({
+    const member = await updateNewMember.execute({
       batism_date,
       birth_date,
       cpf,
@@ -116,9 +121,14 @@ export default class MemberController {
       id_member: +id,
     });
 
-    if (member) member.cpf = +member.cpf.toString();
+    const memberResponse = member
+      ? {
+          ...member,
+          cpf: member.cpf.toString(),
+        }
+      : undefined;
 
-    return response.json({ member });
+    return response.json({ member: memberResponse });
   }
 
   async delete(request: Request, response: Response) {

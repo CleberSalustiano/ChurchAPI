@@ -23,12 +23,18 @@ export default class TreasurerController {
 
     const treasurer = await createNewTreasurer.execute(+id);
 
-    if (treasurer?.member) {
-      // @ts-ignore
-      treasurer.member.cpf = treasurer.member.cpf.toString();
-    }
+    const treasurerResponse =
+      treasurer?.member
+        ? {
+            ...treasurer,
+            member: {
+              ...treasurer.member,
+              cpf: treasurer.member.cpf.toString(),
+            },
+          }
+        : treasurer;
 
-    return response.json({ treasurer });
+    return response.json({ treasurer: treasurerResponse });
   }
 
   async index(request: ScopedRequest, response: Response) {

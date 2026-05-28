@@ -283,11 +283,11 @@ describe("Business routes", () => {
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.member.cpf).toBe(12345678901);
+    expect(response.body.member.cpf).toBe("12345678901");
     expect(response.body.member.id_church).toBe(3);
   });
 
-  it("should list scoped members with cpf serialized as number", async () => {
+  it("should list scoped members with cpf serialized as string", async () => {
     mockAuthenticatedUser({
       churchId: 3,
       churchType: "BRANCH",
@@ -318,7 +318,7 @@ describe("Business routes", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.members).toHaveLength(1);
-    expect(response.body.members[0].cpf).toBe(12345678901);
+    expect(response.body.members[0].cpf).toBe("12345678901");
     expect(mockMemberFindAll).not.toHaveBeenCalled();
   });
 
