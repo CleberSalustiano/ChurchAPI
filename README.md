@@ -67,8 +67,11 @@ docker-compose run --rm api npx prisma migrate deploy
 - As migrations antigas de `SQLite` foram preservadas em `prisma/migrations_sqlite_legacy`.
 - A trilha atual de migrations da aplicacao fica em `prisma/migrations`.
 - A autenticacao inicial usa `JWT_SECRET` e `JWT_EXPIRES_IN`.
+- Nesta versao da API, a sessao permanece simples com JWT e expiracao configuravel, sem refresh token.
 - Nesta etapa, apenas as rotas de credenciais do proprio usuario foram protegidas diretamente por autenticacao.
 - As rotas administrativas principais agora exigem autenticacao e um nivel de acesso derivado das designacoes ativas.
 - Regra inicial de autorizacao: `manager` pode visualizar dados administrativos e `treasurer` pode visualizar e editar.
 - Regra inicial de escopo: usuarios da `HEADQUARTER` recebem escopo `GLOBAL`; usuarios de `BRANCH` recebem escopo restrito a propria igreja quando a rota ja informa `id_church` diretamente.
-- O fluxo de reset de senha ja existe na API por token; o envio real por email pode ser conectado depois.
+- O fluxo de reset de senha agora pode enviar email real via SMTP quando `SMTP_HOST` estiver configurado.
+- O token de reset nao e exposto na resposta por padrao. Para desenvolvimento local, isso pode ser habilitado com `EXPOSE_RESET_TOKEN_IN_RESPONSE=true`.
+- O link enviado por email usa `PASSWORD_RESET_URL_BASE` como base para redirecionamento do frontend futuro.

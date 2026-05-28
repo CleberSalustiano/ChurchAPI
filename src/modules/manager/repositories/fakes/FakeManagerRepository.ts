@@ -27,8 +27,7 @@ export default class FakeManagerRepository implements IManagerRepository {
     id_church: number
   ): Promise<IManager[] | undefined> {
     const managers = this.managers.filter(
-      (manager) =>
-        manager.id_church === id_church && manager.endDate === undefined
+      (manager) => manager.id_church === id_church && !manager.endDate
     );
 
     return managers;
@@ -36,7 +35,7 @@ export default class FakeManagerRepository implements IManagerRepository {
 
   public async findById(id_manager: number): Promise<IManager | undefined> {
     const manager = this.managers.find(
-      (manager) => manager.id === id_manager && manager.endDate === undefined
+      (manager) => manager.id === id_manager && !manager.endDate
     );
 
     return manager;
@@ -76,16 +75,14 @@ export default class FakeManagerRepository implements IManagerRepository {
   }
 
   public async findAllActive(): Promise<IManager[] | undefined> {
-    const managers = this.managers.filter(
-      (manager) => manager.endDate === undefined
-    );
+    const managers = this.managers.filter((manager) => !manager.endDate);
 
     return managers;
   }
 
   public async findByMember(id_member: number): Promise<IManager | undefined> {
     const manager = this.managers.find(
-      (manager) => (manager.id_member === id_member && manager.endDate === undefined)
+      (manager) => manager.id_member === id_member && !manager.endDate
     );
 
     return manager;

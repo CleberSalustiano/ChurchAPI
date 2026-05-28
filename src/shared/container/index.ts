@@ -44,6 +44,9 @@ import CreateNewOfferService from "../modules/offer/services/CreateNewOfferServi
 import DeleteOfferService from "../modules/offer/services/DeleteOfferService";
 import UpdateOfferService from "../modules/offer/services/UpdateOfferService";
 import TitheRepository from "../../modules/tithe/infra/prisma/repositories/TitheRepository";
+import mailConfig from "../config/mail";
+import ConsoleMailProvider from "../mail/ConsoleMailProvider";
+import SmtpMailProvider from "../mail/SmtpMailProvider";
 
 export const churchRepository = new ChurchRepository();
 export const locationRepository = new LocationRepository();
@@ -57,6 +60,9 @@ export const offerRepository = new OfferRepository();
 export const specialOfferRepository = new SpecialOfferRepository();
 export const titheRepository = new TitheRepository();
 export const passwordResetTokenRepository = new PasswordResetTokenRepository();
+export const mailProvider = mailConfig.smtp.host
+  ? new SmtpMailProvider()
+  : new ConsoleMailProvider();
 
 export function makeCreateChurchService() {
   return new CreateNewChurchService(churchRepository, locationRepository);
@@ -93,7 +99,8 @@ export function makeAuthenticateUserService() {
 export function makeRequestPasswordResetService() {
   return new RequestPasswordResetService(
     memberRepository,
-    passwordResetTokenRepository
+    passwordResetTokenRepository,
+    mailProvider
   );
 }
 

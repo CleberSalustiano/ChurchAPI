@@ -198,4 +198,49 @@ describe("Create a new manager for a church", () => {
       id_member: 0,
     })).rejects.toThrowError(AlreadyExistError)
   })
+
+  it("should allow a new manager when a previous assignment was ended", async () => {
+    const fakeChurchRepository = new FakeChurchRepository();
+    const fakeMemberRepository = new FakeMemberRepository();
+    const fakeManagerRepository = new FakeManagerRepository();
+
+    const createNewManager = new CreateNewManagerService(
+      fakeMemberRepository,
+      fakeChurchRepository,
+      fakeManagerRepository
+    );
+
+    fakeChurchRepository.create({
+      date: "1991-12-12",
+      id_location: 1,
+    });
+
+    for (let index = 0; index < 4; index += 1) {
+      fakeMemberRepository.create({
+        id_church: 0,
+        batism_date: "1999-12-12",
+        birth_date: "1999-11-12",
+        cpf: BigInt(12312312312 + index),
+        email: `email${index}@email.com`,
+        name: `Member ${index}`,
+        rg: 123123 + index,
+        ecclesiasticalRole: "Member",
+        id_user: index,
+      });
+    }
+
+    await createNewManager.execute({ id_church: 0, id_member: 0 });
+    await createNewManager.execute({ id_church: 0, id_member: 1 });
+    await createNewManager.execute({ id_church: 0, id_member: 2 });
+
+    await fakeManagerRepository.endManager(1);
+
+    const manager = await createNewManager.execute({
+      id_church: 0,
+      id_member: 3,
+    });
+
+    expect(manager).toBeTruthy();
+    expect(manager?.id_member).toBe(3);
+  });
 });
