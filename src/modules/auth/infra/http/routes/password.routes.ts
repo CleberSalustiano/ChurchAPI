@@ -12,6 +12,7 @@ const passwordController = new PasswordController();
  *     tags:
  *       - Auth
  *     summary: Request a password reset token
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -27,6 +28,7 @@ const passwordController = new PasswordController();
  *     tags:
  *       - Auth
  *     summary: Reset a password with a token
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:

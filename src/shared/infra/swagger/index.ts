@@ -19,6 +19,11 @@ const options = {
         description: "Current environment",
       },
     ],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     tags: [
       { name: "System", description: "Operational endpoints" },
       { name: "Auth", description: "Authentication and session management" },
@@ -402,6 +407,6 @@ const options = {
   ],
 };
 
-const specs = swaggerJsdoc(options);
+export const specs = swaggerJsdoc(options);
 
 module.exports = { specs };

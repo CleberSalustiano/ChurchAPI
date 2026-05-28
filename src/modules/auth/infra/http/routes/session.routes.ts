@@ -13,6 +13,7 @@ const sessionController = new SessionController();
  *     tags:
  *       - Auth
  *     summary: Authenticate a user
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -30,8 +31,6 @@ const sessionController = new SessionController();
  *     tags:
  *       - Auth
  *     summary: Get authenticated user profile
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Authenticated user profile
