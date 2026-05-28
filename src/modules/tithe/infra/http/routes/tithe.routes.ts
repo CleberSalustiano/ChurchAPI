@@ -77,6 +77,8 @@ titheRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
   ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(titheController.create.bind(titheController))
 );
@@ -84,6 +86,9 @@ titheRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("tithe", "id", "params"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
   ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(titheController.update.bind(titheController))
 );

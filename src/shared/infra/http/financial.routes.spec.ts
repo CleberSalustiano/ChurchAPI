@@ -5,6 +5,7 @@ import authConfig from "../../config/auth";
 const mockResolveSystemAccessExecute = jest.fn();
 const mockUserFindById = jest.fn();
 const mockMemberFindByUserId = jest.fn();
+const mockMemberFindById = jest.fn();
 const mockCostFindAllByChurch = jest.fn();
 const mockCostFindById = jest.fn();
 const mockCultFindAllByChurch = jest.fn();
@@ -61,6 +62,7 @@ jest.mock("../../container", () => ({
   },
   memberRepository: {
     findByUserId: (...args: unknown[]) => mockMemberFindByUserId(...args),
+    findById: (...args: unknown[]) => mockMemberFindById(...args),
   },
   costRepository: {
     findAllByChurch: (...args: unknown[]) => mockCostFindAllByChurch(...args),
@@ -126,6 +128,10 @@ function mockAuthenticatedUser({
       status: "ACTIVE",
       id_location: 1,
     },
+  });
+  mockMemberFindById.mockResolvedValue({
+    id: 10,
+    id_church: churchId,
   });
 
   mockResolveSystemAccessExecute.mockResolvedValue({
@@ -362,9 +368,7 @@ describe("Financial routes", () => {
       });
 
     expect(createResponse.status).toBe(200);
-    expect(createResponse.body.newSpecialOfferService.reason).toBe(
-      "Building project"
-    );
+    expect(createResponse.body.specialOffer.reason).toBe("Building project");
   });
 
   it("should list, create and delete tithes inside the authenticated church scope", async () => {

@@ -86,7 +86,7 @@ const memberInChurchController = new MemberInChurchController();
  *         schema:
  *           type: integer
  *     responses:
- *       201:
+ *       204:
  *         description: Member deleted
  *       401:
  *         description: Validation or business error

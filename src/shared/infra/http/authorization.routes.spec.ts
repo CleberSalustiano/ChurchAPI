@@ -254,4 +254,146 @@ describe("Authorization routes", () => {
       error: "You do not have permission to manage data outside your church scope",
     });
   });
+
+  it("should forbid branch editors from creating a manager assignment for a member from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockMemberFindById.mockResolvedValue({
+      id: 55,
+      id_church: 2,
+    });
+
+    const response = await request(app)
+      .post("/manager")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_member: 55,
+        id_church: 1,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from updating a treasurer from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockTreasurerFindById.mockResolvedValue({
+      id: 77,
+      member: {
+        id: 90,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .put("/treasurer/77")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_member: 1,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from creating a special offer for a treasurer from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockMemberFindById.mockResolvedValue({
+      id: 1,
+      id_church: 1,
+    });
+    mockTreasurerFindById.mockResolvedValue({
+      id: 66,
+      member: {
+        id: 91,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .post("/specialOffer")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_church: 1,
+        id_member: 1,
+        id_treasurer: 66,
+        value: 200,
+        reason: "Mission trip",
+        date: "2024-02-10",
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from updating a tithe from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockTitheFindById.mockResolvedValue({
+      id: 88,
+      specialOffer: {
+        id: 44,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .put("/tithe/88")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_church: 1,
+        id_member: 1,
+        id_treasurer: 1,
+        value: 100,
+        reason: "Monthly tithe",
+        date: "2024-03-10",
+        month: 3,
+        year: 2024,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
 });

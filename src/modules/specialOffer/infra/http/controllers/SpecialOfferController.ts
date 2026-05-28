@@ -35,11 +35,11 @@ export default class SpecialOfferController {
 
     const createNewSpecialOfferService = makeCreateSpecialOfferService();
 
-    const newSpecialOfferService = await createNewSpecialOfferService.execute(
+    const specialOffer = await createNewSpecialOfferService.execute(
       { date, id_church, id_member, reason, id_treasurer, value }
     );
 
-    return response.send({ newSpecialOfferService });
+    return response.json({ specialOffer });
   }
 
   async index(request: ScopedRequest, response: Response) {

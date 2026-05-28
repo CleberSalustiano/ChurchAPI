@@ -76,7 +76,7 @@ const treasurerController = new TreasurerController();
  *           type: integer
  *         description: Treasurer id
  *     responses:
- *       201:
+ *       204:
  *         description: Treasurer deactivated
  *       401:
  *         description: Validation or business error
@@ -98,6 +98,7 @@ treasurerRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("treasurer", "id", "params"),
   ensureScopedResourceAccess("member", "id_member", "body"),
   asyncHandler(treasurerController.update.bind(treasurerController))
 );

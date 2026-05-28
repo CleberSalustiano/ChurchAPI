@@ -72,7 +72,7 @@ const churchController = new ChurchController();
  *         schema:
  *           type: integer
  *     responses:
- *       201:
+ *       204:
  *         description: Church logically deleted
  *       400:
  *         description: Validation or business error

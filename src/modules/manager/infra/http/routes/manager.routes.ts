@@ -86,7 +86,7 @@ const managerInChurchController = new ManagerInChurchController();
  *         schema:
  *           type: integer
  *     responses:
- *       201:
+ *       204:
  *         description: Manager deactivated
  *       401:
  *         description: Validation or business error
@@ -95,6 +95,7 @@ managerRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
   ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(managerController.create.bind(managerController))
 );
@@ -103,6 +104,7 @@ managerRouter.put(
   ensureAuthenticated,
   ensureSystemAccess("editor"),
   ensureScopedResourceAccess("manager"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
   ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(managerController.update.bind(managerController))
 );
