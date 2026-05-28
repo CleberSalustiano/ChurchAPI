@@ -17,6 +17,7 @@ export default class FakeSpecialOfferRepository
   }: ICreateSpecialOfferDTO): Promise<ISpecialOffer | undefined> {
     const specialOffer: ISpecialOffer = {
       date: new Date(date.toString()),
+      deletedAt: null,
       id: this.specialOffers.length,
       id_church,
       id_member,
@@ -29,14 +30,15 @@ export default class FakeSpecialOfferRepository
   }
 
   public async findAll(): Promise<ISpecialOffer[] | undefined> {
-    return this.specialOffers;
+    return this.specialOffers.filter((specialOffer) => !specialOffer.deletedAt);
   }
 
   public async findAllByChurch(
     id_church: number
   ): Promise<ISpecialOffer[] | undefined> {
     return this.specialOffers.filter(
-      (specialOffer) => specialOffer.id_church === id_church
+      (specialOffer) =>
+        specialOffer.id_church === id_church && !specialOffer.deletedAt
     );
   }
 
@@ -44,7 +46,8 @@ export default class FakeSpecialOfferRepository
     id_special_offer: number
   ): Promise<ISpecialOffer | null> {
     const specialOffer = this.specialOffers.find(
-      (specialOffer) => specialOffer.id === id_special_offer
+      (specialOffer) =>
+        specialOffer.id === id_special_offer && !specialOffer.deletedAt
     );
 
     if (!specialOffer) return null;
@@ -60,7 +63,8 @@ export default class FakeSpecialOfferRepository
     reason,
   }: IUpdateSpecialOfferDTO): Promise<ISpecialOffer | undefined> {
     const specialOfferIndex = this.specialOffers.findIndex(
-      (specialOffer) => specialOffer.id === id_special_offer
+      (specialOffer) =>
+        specialOffer.id === id_special_offer && !specialOffer.deletedAt
     );
 
     if (specialOfferIndex === -1) return undefined;
@@ -79,12 +83,15 @@ export default class FakeSpecialOfferRepository
 
   public async delete(id_special_offer: number): Promise<boolean> {
     const specialOfferIndex = this.specialOffers.findIndex(
-      (specialOffer) => specialOffer.id === id_special_offer
+      (specialOffer) =>
+        specialOffer.id === id_special_offer && !specialOffer.deletedAt
     );
 
     if (specialOfferIndex === -1) return false;
 
-    this.specialOffers.splice(specialOfferIndex, 1);
+    const specialOffer = this.specialOffers[specialOfferIndex];
+    specialOffer.deletedAt = new Date();
+    this.specialOffers.splice(specialOfferIndex, 1, specialOffer);
 
     return true;
   }

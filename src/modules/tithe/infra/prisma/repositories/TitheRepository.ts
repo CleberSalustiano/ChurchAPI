@@ -11,7 +11,7 @@ export default class TitheRepository implements ITitheRepository {
     year,
   }: ICreateTitheDTO): Promise<ITithe | undefined> {
     const tithe = await prismaClient.tithe.create({
-      data: { id_special_offer, month, year },
+      data: { id_special_offer, month, year, deletedAt: null },
       include: {
         specialOffer: {
           include: {
@@ -28,6 +28,7 @@ export default class TitheRepository implements ITitheRepository {
 
   public async findAll(): Promise<ITithe[] | undefined> {
     const tithes = await prismaClient.tithe.findMany({
+      where: { deletedAt: null },
       include: {
         specialOffer: {
           include: {
@@ -45,6 +46,7 @@ export default class TitheRepository implements ITitheRepository {
   public async findAllByChurch(id_church: number): Promise<ITithe[] | undefined> {
     const tithes = await prismaClient.tithe.findMany({
       where: {
+        deletedAt: null,
         specialOffer: {
           id_church,
         },
@@ -65,7 +67,7 @@ export default class TitheRepository implements ITitheRepository {
 
   public async findById(id_tithe: number): Promise<ITithe | undefined> {
     const tithe = await prismaClient.tithe.findFirst({
-      where: { id: id_tithe },
+      where: { id: id_tithe, deletedAt: null },
       include: {
         specialOffer: {
           include: {
@@ -87,6 +89,10 @@ export default class TitheRepository implements ITitheRepository {
     month,
     year,
   }: IUpdateTitheDTO): Promise<ITithe | undefined> {
+    const existingTithe = await this.findById(id_tithe);
+
+    if (!existingTithe) return undefined;
+
     const tithe = await prismaClient.tithe.update({
       where: { id: id_tithe },
       data: { month, year },
@@ -105,8 +111,9 @@ export default class TitheRepository implements ITitheRepository {
   }
 
   public async delete(id_tithe: number): Promise<boolean> {
-    const tithe = await prismaClient.tithe.delete({
+    const tithe = await prismaClient.tithe.update({
       where: { id: id_tithe },
+      data: { deletedAt: new Date() },
     });
 
     return !!tithe;

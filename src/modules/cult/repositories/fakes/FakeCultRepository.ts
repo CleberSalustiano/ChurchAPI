@@ -14,6 +14,7 @@ export default class FakeCultRepository implements ICultRepository {
     const cult: ICult = {
       id: this.cults.length,
       date: new Date(date.toString()),
+      deletedAt: null,
       id_church,
       theme,
     };
@@ -24,31 +25,41 @@ export default class FakeCultRepository implements ICultRepository {
   }
 
   public async findAll(): Promise<ICult[] | undefined> {
-    return this.cults;
+    return this.cults.filter((cult) => !cult.deletedAt);
   }
 
   public async findAllByChurch(id_church: number): Promise<ICult[] | undefined> {
-    return this.cults.filter((cult) => cult.id_church === id_church);
+    return this.cults.filter(
+      (cult) => cult.id_church === id_church && !cult.deletedAt
+    );
   }
 
   public async findById(id_cult: number): Promise<ICult | undefined> {
-    const cult = this.cults.find(cult => cult.id === id_cult);
+    const cult = this.cults.find(
+      (cult) => cult.id === id_cult && !cult.deletedAt
+    );
 
     return cult;
   }
 
   public async delete(id_cult: number): Promise<boolean> {
-    const cultIndex = this.cults.findIndex(cult => cult.id === id_cult);
+    const cultIndex = this.cults.findIndex(
+      (cult) => cult.id === id_cult && !cult.deletedAt
+    );
 
-    const cult = this.cults.splice(cultIndex, 1);
+    if (cultIndex === -1) return false;
 
-    if (!cult) return false;
+    const cult = this.cults[cultIndex];
+    cult.deletedAt = new Date();
+    this.cults.splice(cultIndex, 1, cult);
 
     return true;
   }
 
   public async update({date, id_church, id_cult, theme}: IUpdateCultDTO): Promise<ICult | undefined> {
-    const cultIndex = this.cults.findIndex(cult => cult.id === id_cult);
+    const cultIndex = this.cults.findIndex(
+      (cult) => cult.id === id_cult && !cult.deletedAt
+    );
     
     if (cultIndex === -1) return undefined
 

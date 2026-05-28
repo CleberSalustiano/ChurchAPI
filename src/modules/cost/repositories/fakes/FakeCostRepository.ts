@@ -14,6 +14,7 @@ export default class FakeCostRepository implements ICostRepository {
   }: ICreateCostDTO): Promise<ICost | undefined> {
     const cost: ICost = {
       date: new Date(date.toString()),
+      deletedAt: null,
       description: description.toString(),
       id_church,
       value,
@@ -26,17 +27,19 @@ export default class FakeCostRepository implements ICostRepository {
   }
 
   async findById(id_cost: number): Promise<ICost | undefined> {
-    const cost = this.costs.find((cost) => cost.id === id_cost);
+    const cost = this.costs.find((cost) => cost.id === id_cost && !cost.deletedAt);
 
     return cost;
   }
 
   async findAll(): Promise<ICost[] | undefined> {
-    return this.costs;
+    return this.costs.filter((cost) => !cost.deletedAt);
   }
 
   async findAllByChurch(id_church: number): Promise<ICost[] | undefined> {
-    return this.costs.filter((cost) => cost.id_church === id_church);
+    return this.costs.filter(
+      (cost) => cost.id_church === id_church && !cost.deletedAt
+    );
   }
 
   async update({
@@ -45,8 +48,11 @@ export default class FakeCostRepository implements ICostRepository {
     id_cost,
     value,
   }: IUpdateCostDTO): Promise<ICost | undefined> {
-    const costIndex = this.costs.findIndex((cost) => cost.id === id_cost);
+    const costIndex = this.costs.findIndex(
+      (cost) => cost.id === id_cost && !cost.deletedAt
+    );
 
+    if (costIndex === -1) return undefined;
     const cost = this.costs[costIndex];
     cost.date = new Date(date.toString());
     cost.description = description.toString();
@@ -58,11 +64,15 @@ export default class FakeCostRepository implements ICostRepository {
   }
 
   async delete(id_cost: number): Promise<boolean> {
-    const costIndex = this.costs.findIndex((cost) => cost.id === id_cost);
+    const costIndex = this.costs.findIndex(
+      (cost) => cost.id === id_cost && !cost.deletedAt
+    );
 
     if (costIndex === -1) return false;
 
-    this.costs.splice(costIndex, 1);
+    const cost = this.costs[costIndex];
+    cost.deletedAt = new Date();
+    this.costs.splice(costIndex, 1, cost);
 
     return true;
   }

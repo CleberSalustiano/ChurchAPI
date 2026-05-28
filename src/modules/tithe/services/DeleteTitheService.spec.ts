@@ -26,7 +26,13 @@ describe("Delete tithe", () => {
     titheRepository.create({ id_special_offer: 0, month: 5, year: 2014 });
 
     const isTitheDeleted = await deleteTithe.execute(0);
+    const hiddenTithe = await titheRepository.findById(0);
+    const hiddenSpecialOffer = await specialOfferRepository.findById(0);
+    const hiddenOffer = await offerRepository.findById(0);
 
     expect(isTitheDeleted).toBe(true);
+    expect(hiddenTithe).toBeUndefined();
+    expect(hiddenSpecialOffer).toBeNull();
+    expect(hiddenOffer).toBeUndefined();
   });
 });

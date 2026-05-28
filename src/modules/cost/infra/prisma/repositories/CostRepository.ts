@@ -11,18 +11,21 @@ export default class CostRepository implements ICostRepository {
         value: dataCost.value,
         date: new Date(dataCost.date.toString()),
         description: dataCost.description.toString(),
+        deletedAt: null,
         id_church: dataCost.id_church,
       },
     });
   }
 
   async findAll(): Promise<ICost[] | undefined> {
-    return prismaClient.cost.findMany();
+    return prismaClient.cost.findMany({
+      where: { deletedAt: null },
+    });
   }
 
   async findAllByChurch(id_church: number): Promise<ICost[] | undefined> {
     return prismaClient.cost.findMany({
-      where: { id_church },
+      where: { id_church, deletedAt: null },
     });
   }
 
@@ -31,10 +34,14 @@ export default class CostRepository implements ICostRepository {
       where: { id: id_cost },
     });
 
-    return cost ?? undefined;
+    return cost && !cost.deletedAt ? cost : undefined;
   }
 
   async update(dataCost: IUpdateCostDTO): Promise<ICost | undefined> {
+    const existingCost = await this.findById(dataCost.id_cost);
+
+    if (!existingCost) return undefined;
+
     return prismaClient.cost.update({
       where: { id: dataCost.id_cost },
       data: {
@@ -46,8 +53,9 @@ export default class CostRepository implements ICostRepository {
   }
 
   async delete(id_cost: number): Promise<boolean> {
-    const cost = await prismaClient.cost.delete({
+    const cost = await prismaClient.cost.update({
       where: { id: id_cost },
+      data: { deletedAt: new Date() },
     });
 
     return !!cost;
