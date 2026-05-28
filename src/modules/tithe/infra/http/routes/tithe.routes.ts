@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureScopedResourceAccess from "../../../../../shared/infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import TitheController from "../controllers/TitheController";
@@ -90,6 +91,7 @@ titheRouter.delete(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("tithe", "id", "params"),
   asyncHandler(titheController.delete.bind(titheController))
 );
 

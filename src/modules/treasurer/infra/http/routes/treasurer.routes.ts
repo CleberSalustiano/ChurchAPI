@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureScopedResourceAccess from "../../../../../shared/infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import TreasurerController from "../controllers/TreasurerController";
@@ -84,6 +85,7 @@ treasurerRouter.post(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("member", "id", "params"),
   asyncHandler(treasurerController.create.bind(treasurerController))
 );
 treasurerRouter.get(
@@ -96,12 +98,14 @@ treasurerRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
   asyncHandler(treasurerController.update.bind(treasurerController))
 );
 treasurerRouter.delete(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("treasurer", "id", "params"),
   asyncHandler(treasurerController.delete.bind(treasurerController))
 );
 

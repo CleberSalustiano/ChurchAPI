@@ -6,6 +6,15 @@ import {
   treasurerRepository,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 export default class TreasurerController {
   async create(request: Request, response: Response) {
     const { id } = request.params;
@@ -22,8 +31,12 @@ export default class TreasurerController {
     return response.json({ treasurer });
   }
 
-  async index(request: Request, response: Response) {
-    const treasurers = await treasurerRepository.findAllActive();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const treasurers =
+      access?.scope === "CHURCH"
+        ? await treasurerRepository.findAllActiveByChurch(access.churchId)
+        : await treasurerRepository.findAllActive();
 
     return response.json({ treasurers });
   }

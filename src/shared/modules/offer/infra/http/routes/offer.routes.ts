@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ensureAuthenticated from "../../../../../infra/http/middlewares/ensureAuthenticated";
+import ensureScopedResourceAccess from "../../../../../infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../infra/http/utils/asyncHandler";
 import OfferController from "../controller/OfferController";
@@ -76,18 +77,22 @@ offerRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
   asyncHandler(offerController.create.bind(offerController))
 );
 offerRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("offer", "id", "params"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
   asyncHandler(offerController.update.bind(offerController))
 );
 offerRouter.delete(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("offer", "id", "params"),
   asyncHandler(offerController.delete.bind(offerController))
 );
 

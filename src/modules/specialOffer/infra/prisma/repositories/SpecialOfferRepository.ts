@@ -32,6 +32,15 @@ export default class SpecialOfferRepository implements ISpecialOfferRepository {
 
     return specialOffers;
   }
+  public async findAllByChurch(
+    id_church: number
+  ): Promise<ISpecialOffer[] | undefined> {
+    const specialOffers = await prismaClient.specialOffer.findMany({
+      where: { id_church },
+    });
+
+    return specialOffers;
+  }
   public async update({
     date,
     id_church,

@@ -42,6 +42,27 @@ export default class TitheRepository implements ITitheRepository {
     return tithes;
   }
 
+  public async findAllByChurch(id_church: number): Promise<ITithe[] | undefined> {
+    const tithes = await prismaClient.tithe.findMany({
+      where: {
+        specialOffer: {
+          id_church,
+        },
+      },
+      include: {
+        specialOffer: {
+          include: {
+            church: true,
+            member: true,
+            offer: true,
+          },
+        },
+      },
+    });
+
+    return tithes;
+  }
+
   public async findById(id_tithe: number): Promise<ITithe | undefined> {
     const tithe = await prismaClient.tithe.findFirst({
       where: { id: id_tithe },

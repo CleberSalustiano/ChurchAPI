@@ -27,6 +27,10 @@ export default class FakeTitheRepository implements ITitheRepository {
     return this.tithes;
   }
 
+  public async findAllByChurch(_id_church: number): Promise<ITithe[] | undefined> {
+    return this.tithes;
+  }
+
   public async findById(id_tithe: number): Promise<ITithe | undefined> {
     const tithe = this.tithes.find((item) => item.id === id_tithe);
 

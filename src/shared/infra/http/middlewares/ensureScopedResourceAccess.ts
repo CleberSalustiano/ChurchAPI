@@ -4,11 +4,24 @@ import {
   cultRepository,
   managerRepository,
   memberRepository,
+  offerRepository,
+  specialOfferRepository,
+  titheRepository,
+  treasurerRepository,
 } from "../../../container";
 import AppError from "../../../errors/AppError";
 import { SystemAccessScope } from "../../../../modules/auth/services/ResolveSystemAccessService";
 
-type ResourceName = "member" | "manager" | "cost" | "cult";
+type Source = "params" | "body";
+type ResourceName =
+  | "member"
+  | "manager"
+  | "cost"
+  | "cult"
+  | "treasurer"
+  | "offer"
+  | "specialOffer"
+  | "tithe";
 
 type RequestWithSystemAccess = Request & {
   user?: {
@@ -38,12 +51,29 @@ function getChurchIdFromResource(resource: ResourceName, id: number) {
       return cultRepository.findById(id).then((cult) =>
         cult ? cult.id_church : undefined
       );
+    case "treasurer":
+      return treasurerRepository.findById(id).then((treasurer) =>
+        treasurer?.member ? treasurer.member.id_church : undefined
+      );
+    case "offer":
+      return offerRepository.findById(id).then((offer) =>
+        offer?.treasurer?.member ? offer.treasurer.member.id_church : undefined
+      );
+    case "specialOffer":
+      return specialOfferRepository.findById(id).then((specialOffer) =>
+        specialOffer ? specialOffer.id_church : undefined
+      );
+    case "tithe":
+      return titheRepository.findById(id).then((tithe) =>
+        tithe?.specialOffer ? tithe.specialOffer.id_church : undefined
+      );
   }
 }
 
 export default function ensureScopedResourceAccess(
   resource: ResourceName,
-  idParam = "id"
+  idField = "id",
+  source: Source = "params"
 ) {
   return function scopedResourceMiddleware(
     request: RequestWithSystemAccess,
@@ -58,7 +88,9 @@ export default function ensureScopedResourceAccess(
       return next();
     }
 
-    const resourceId = Number(request.params[idParam]);
+    const rawId =
+      source === "params" ? request.params[idField] : request.body?.[idField];
+    const resourceId = Number(rawId);
 
     if (Number.isNaN(resourceId)) {
       throw new AppError("Scoped resource id is invalid", 400);

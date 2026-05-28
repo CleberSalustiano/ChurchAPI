@@ -21,6 +21,10 @@ export default class FakeOfferRepository implements IOfferRepository {
     return this.offers;
   }
 
+  public async findAllByChurch(_id_church: number): Promise<IOffer[] | undefined> {
+    return this.offers;
+  }
+
   public async findById(id_offer: number): Promise<IOffer | undefined> {
     const offer = this.offers.find((offer) => offer.id === id_offer);
 

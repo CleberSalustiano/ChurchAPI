@@ -23,9 +23,30 @@ export default class OfferRepository implements IOfferRepository {
     return offers;
   }
 
+  public async findAllByChurch(id_church: number): Promise<IOffer[] | undefined> {
+    const offers = await prismaClient.offer.findMany({
+      where: {
+        treasurer: {
+          member: {
+            id_church,
+          },
+        },
+      },
+    });
+
+    return offers;
+  }
+
   public async findById(id_offer: number): Promise<IOffer | undefined> {
     const offer = await prismaClient.offer.findFirst({
       where: { id: id_offer },
+      include: {
+        treasurer: {
+          include: {
+            member: true,
+          },
+        },
+      },
     });
 
     if (offer) return offer;

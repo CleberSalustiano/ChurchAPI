@@ -30,6 +30,12 @@ export default class FakeTreasurerRepository implements ITreasurerRepository {
     return this.treasurers;
   }
 
+  public async findAllActiveByChurch(
+    _id_church: number
+  ): Promise<ITreasurer[] | undefined> {
+    return this.treasurers;
+  }
+
   async update(data: IUpdateTreasurerDTO): Promise<ITreasurer | undefined> {
     const treasurerIndex = this.treasurers.findIndex(
       (treasurer) => treasurer.id === data.id_treasurer

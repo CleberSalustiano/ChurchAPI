@@ -32,6 +32,14 @@ export default class FakeSpecialOfferRepository
     return this.specialOffers;
   }
 
+  public async findAllByChurch(
+    id_church: number
+  ): Promise<ISpecialOffer[] | undefined> {
+    return this.specialOffers.filter(
+      (specialOffer) => specialOffer.id_church === id_church
+    );
+  }
+
   public async findById(
     id_special_offer: number
   ): Promise<ISpecialOffer | null> {

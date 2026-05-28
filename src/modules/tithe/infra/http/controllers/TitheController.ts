@@ -6,6 +6,15 @@ import {
   titheRepository,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestCreateTithe {
   id_church: number;
   id_member: number;
@@ -37,8 +46,12 @@ export default class TitheController {
     return response.json({ tithe });
   }
 
-  async index(request: Request, response: Response) {
-    const tithes = await titheRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const tithes =
+      access?.scope === "CHURCH"
+        ? await titheRepository.findAllByChurch(access.churchId)
+        : await titheRepository.findAll();
 
     return response.json({ tithes });
   }

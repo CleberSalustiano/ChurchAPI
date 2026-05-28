@@ -16,6 +16,7 @@ export default class TreasurerRepository implements ITreasurerRepository {
   public async findById(id_treasurer: number): Promise<ITreasurer | undefined> {
     const treasurer = await prismaClient.treasurer.findFirst({
       where: { id: id_treasurer, endDate: null },
+      include: { member: true },
     });
 
     if (!treasurer) return undefined;
@@ -26,6 +27,21 @@ export default class TreasurerRepository implements ITreasurerRepository {
   public async findAllActive(): Promise<ITreasurer[] | undefined> {
     const treasurers = await prismaClient.treasurer.findMany({
       where: { endDate: null },
+    });
+
+    return treasurers;
+  }
+
+  public async findAllActiveByChurch(
+    id_church: number
+  ): Promise<ITreasurer[] | undefined> {
+    const treasurers = await prismaClient.treasurer.findMany({
+      where: {
+        endDate: null,
+        member: {
+          id_church,
+        },
+      },
     });
 
     return treasurers;

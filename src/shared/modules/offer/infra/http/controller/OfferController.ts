@@ -6,9 +6,22 @@ import {
   offerRepository,
 } from "../../../../../container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 export default class OfferController {
-  async index(request: Request, response: Response) {
-    const offers = await offerRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const offers =
+      access?.scope === "CHURCH"
+        ? await offerRepository.findAllByChurch(access.churchId)
+        : await offerRepository.findAll();
 
     return response.json({ offers });
   }

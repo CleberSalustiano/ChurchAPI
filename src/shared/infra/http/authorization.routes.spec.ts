@@ -6,6 +6,10 @@ var mockMemberFindById = jest.fn();
 var mockManagerFindById = jest.fn();
 var mockCostFindById = jest.fn();
 var mockCultFindById = jest.fn();
+var mockTreasurerFindById = jest.fn();
+var mockOfferFindById = jest.fn();
+var mockTitheFindById = jest.fn();
+var mockSpecialOfferFindById = jest.fn();
 
 jest.mock("../../container", () => ({
   makeResolveSystemAccessService: jest.fn(() => ({
@@ -22,6 +26,18 @@ jest.mock("../../container", () => ({
   },
   cultRepository: {
     findById: (...args: unknown[]) => mockCultFindById(...args),
+  },
+  treasurerRepository: {
+    findById: (...args: unknown[]) => mockTreasurerFindById(...args),
+  },
+  offerRepository: {
+    findById: (...args: unknown[]) => mockOfferFindById(...args),
+  },
+  titheRepository: {
+    findById: (...args: unknown[]) => mockTitheFindById(...args),
+  },
+  specialOfferRepository: {
+    findById: (...args: unknown[]) => mockSpecialOfferFindById(...args),
   },
 }));
 
@@ -172,6 +188,39 @@ describe("Authorization routes", () => {
     const response = await request(app)
       .delete("/member/99")
       .set("Authorization", `Bearer ${makeToken(1)}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from creating an offer for a treasurer from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockTreasurerFindById.mockResolvedValue({
+      id: 10,
+      member: {
+        id: 33,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .post("/offer")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_treasurer: 10,
+        value: 150,
+      });
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
