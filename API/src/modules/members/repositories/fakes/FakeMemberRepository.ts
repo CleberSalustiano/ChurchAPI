@@ -1,5 +1,6 @@
 import { IMember } from "../../../../entities/IMember";
 import { ICreateMemberDTO } from "../../dtos/ICreateMemberDTO";
+import { IUpdateOwnMemberProfileDTO } from "../../dtos/IUpdateOwnMemberProfileDTO";
 import { IUpdateMemberDTO } from "../../dtos/IUpdateMemberDTO";
 import { IMemberRepository } from "../IMemberRepository";
 
@@ -96,6 +97,30 @@ export default class FakeMemberRepository implements IMemberRepository {
     member.ecclesiasticalRole = ecclesiasticalRole;
 
     if (cpf) member.cpf = cpf;
+
+    this.members.splice(memberIndex, 1, member);
+
+    return member;
+  }
+
+  public async updateOwnProfile({
+    birth_date,
+    email,
+    id_member,
+    name,
+    rg,
+  }: IUpdateOwnMemberProfileDTO): Promise<IMember | undefined> {
+    const memberIndex = this.members.findIndex(
+      (member) => member.id === id_member && !member.deletedAt
+    );
+
+    if (memberIndex === -1) return undefined;
+
+    const member = this.members[memberIndex];
+    member.birth_date = new Date(birth_date.toString());
+    member.email = email;
+    member.name = name;
+    member.rg = rg;
 
     this.members.splice(memberIndex, 1, member);
 

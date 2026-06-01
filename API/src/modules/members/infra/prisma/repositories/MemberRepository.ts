@@ -1,6 +1,7 @@
 import { IMember } from "../../../../../entities/IMember";
 import prismaClient from "../../../../../shared/infra/database/prismaClient";
 import { ICreateMemberDTO } from "../../../dtos/ICreateMemberDTO";
+import { IUpdateOwnMemberProfileDTO } from "../../../dtos/IUpdateOwnMemberProfileDTO";
 import { IUpdateMemberDTO } from "../../../dtos/IUpdateMemberDTO";
 import { IMemberRepository } from "../../../repositories/IMemberRepository";
 
@@ -87,7 +88,13 @@ export default class MemberRepository implements IMemberRepository {
           deletedAt: null,
         },
       },
-      include: { church: true },
+      include: {
+        church: {
+          include: {
+            location: true,
+          },
+        },
+      },
     });
 
     if (member) return member;
@@ -126,6 +133,29 @@ export default class MemberRepository implements IMemberRepository {
     });
 
     return member;
+  }
+
+  public async updateOwnProfile({
+    birth_date,
+    email,
+    id_member,
+    name,
+    rg,
+  }: IUpdateOwnMemberProfileDTO): Promise<IMember | undefined> {
+    const existingMember = await this.findById(id_member);
+
+    if (!existingMember) return undefined;
+
+    return prismaClient.member.update({
+      where: { id: id_member },
+      data: {
+        birth_date: new Date(birth_date.toString()),
+        email,
+        name,
+        rg,
+      },
+      include: { church: { include: { location: true } } },
+    });
   }
 
   public async findAllbyChurch(

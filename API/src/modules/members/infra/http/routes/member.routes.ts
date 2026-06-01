@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureSelfMemberAccess from "../../../../../shared/infra/http/middlewares/ensureSelfMemberAccess";
 import ensureScopedResourceAccess from "../../../../../shared/infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
@@ -90,6 +91,21 @@ const memberInChurchController = new MemberInChurchController();
  *         description: Member deleted
  *       401:
  *         description: Validation or business error
+ *   patch:
+ *     tags:
+ *       - Member
+ *     summary: Update the authenticated member own profile
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Member profile updated
  */
 memberRouter.get(
   "/",
@@ -125,6 +141,12 @@ memberRouter.delete(
   ensureSystemAccess("editor"),
   ensureScopedResourceAccess("member"),
   asyncHandler(memberController.delete.bind(memberController))
+);
+memberRouter.patch(
+  "/:id/profile",
+  ensureAuthenticated,
+  ensureSelfMemberAccess,
+  asyncHandler(memberController.updateOwnProfile.bind(memberController))
 );
 
 export default memberRouter;

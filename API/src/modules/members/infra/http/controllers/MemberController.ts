@@ -3,6 +3,7 @@ import membersJsonCorrection from "../../../../../shared/utils/membersJsonCorrec
 import {
   makeCreateMemberService,
   makeDeleteMemberService,
+  makeUpdateOwnMemberProfileService,
   makeUpdateMemberService,
   memberRepository,
 } from "../../../../../shared/container";
@@ -39,6 +40,13 @@ interface IRequestUpdate {
   rg: number;
   email: string;
   id_member: number;
+}
+
+interface IRequestOwnProfileUpdate {
+  name: string;
+  email: string;
+  birth_date: string;
+  rg: number;
 }
 
 export default class MemberController {
@@ -139,5 +147,28 @@ export default class MemberController {
     await deleteMember.execute(+id);
 
     return response.status(204).send();
+  }
+
+  async updateOwnProfile(request: Request, response: Response) {
+    const { birth_date, email, name, rg }: IRequestOwnProfileUpdate = request.body;
+    const { id } = request.params;
+
+    const updateOwnMemberProfile = makeUpdateOwnMemberProfileService();
+    const member = await updateOwnMemberProfile.execute({
+      birth_date,
+      email,
+      id_member: +id,
+      name,
+      rg,
+    });
+
+    const memberResponse = member
+      ? {
+          ...member,
+          cpf: member.cpf.toString(),
+        }
+      : undefined;
+
+    return response.json({ member: memberResponse });
   }
 }

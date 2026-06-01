@@ -12,5 +12,6 @@ export default function memberPublicData(member: IMember) {
     email: member.email,
     foto: member.foto,
     id_church: member.id_church,
+    church: member.church,
   };
 }
