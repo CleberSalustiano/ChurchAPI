@@ -12,7 +12,10 @@ import ReactivateChurchService from "../../modules/churches/services/ReactivateC
 import UpdateChurchService from "../../modules/churches/services/UpdateChurchService";
 import AuthenticateUserService from "../../modules/auth/services/AuthenticateUserService";
 import GetAuthenticatedProfileService from "../../modules/auth/services/GetAuthenticatedProfileService";
+import PasswordResetTokenRepository from "../../modules/auth/infra/prisma/repositories/PasswordResetTokenRepository";
 import ResolveSystemAccessService from "../../modules/auth/services/ResolveSystemAccessService";
+import RequestPasswordResetService from "../../modules/auth/services/RequestPasswordResetService";
+import ResetPasswordService from "../../modules/auth/services/ResetPasswordService";
 import CreateNewMemberService from "../../modules/members/services/CreateNewMemberService";
 import DeleteMemberService from "../../modules/members/services/DeleteMemberService";
 import UpdateMemberService from "../../modules/members/services/UpdateMemberService";
@@ -41,6 +44,9 @@ import CreateNewOfferService from "../modules/offer/services/CreateNewOfferServi
 import DeleteOfferService from "../modules/offer/services/DeleteOfferService";
 import UpdateOfferService from "../modules/offer/services/UpdateOfferService";
 import TitheRepository from "../../modules/tithe/infra/prisma/repositories/TitheRepository";
+import mailConfig from "../config/mail";
+import ConsoleMailProvider from "../mail/ConsoleMailProvider";
+import SmtpMailProvider from "../mail/SmtpMailProvider";
 
 export const churchRepository = new ChurchRepository();
 export const locationRepository = new LocationRepository();
@@ -53,6 +59,10 @@ export const treasurerRepository = new TreasurerRepository();
 export const offerRepository = new OfferRepository();
 export const specialOfferRepository = new SpecialOfferRepository();
 export const titheRepository = new TitheRepository();
+export const passwordResetTokenRepository = new PasswordResetTokenRepository();
+export const mailProvider = mailConfig.smtp.host
+  ? new SmtpMailProvider()
+  : new ConsoleMailProvider();
 
 export function makeCreateChurchService() {
   return new CreateNewChurchService(churchRepository, locationRepository);
@@ -86,12 +96,25 @@ export function makeAuthenticateUserService() {
   return new AuthenticateUserService(userRepository, memberRepository);
 }
 
+export function makeRequestPasswordResetService() {
+  return new RequestPasswordResetService(
+    memberRepository,
+    passwordResetTokenRepository,
+    mailProvider
+  );
+}
+
+export function makeResetPasswordService() {
+  return new ResetPasswordService(passwordResetTokenRepository, userRepository);
+}
+
 export function makeGetAuthenticatedProfileService() {
   return new GetAuthenticatedProfileService(userRepository, memberRepository);
 }
 
 export function makeResolveSystemAccessService() {
   return new ResolveSystemAccessService(
+    churchRepository,
     memberRepository,
     managerRepository,
     treasurerRepository

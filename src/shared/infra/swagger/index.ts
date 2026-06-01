@@ -19,6 +19,11 @@ const options = {
         description: "Current environment",
       },
     ],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     tags: [
       { name: "System", description: "Operational endpoints" },
       { name: "Auth", description: "Authentication and session management" },
@@ -115,6 +120,32 @@ const options = {
           properties: {
             user: { $ref: "#/components/schemas/AuthenticatedUser" },
             member: { $ref: "#/components/schemas/AuthenticatedMember" },
+          },
+        },
+        ForgotPasswordRequest: {
+          type: "object",
+          required: ["email"],
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              example: "maria@email.com",
+            },
+          },
+        },
+        ResetPasswordRequest: {
+          type: "object",
+          required: ["token", "password"],
+          properties: {
+            token: {
+              type: "string",
+              example: "password-reset-token",
+            },
+            password: {
+              type: "string",
+              minLength: 8,
+              example: "new-secure-password-123",
+            },
           },
         },
         LocationInput: {
@@ -376,6 +407,6 @@ const options = {
   ],
 };
 
-const specs = swaggerJsdoc(options);
+export const specs = swaggerJsdoc(options);
 
 module.exports = { specs };

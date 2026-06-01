@@ -1,12 +1,50 @@
 import { sign, SignOptions } from "jsonwebtoken";
 import authConfig from "../../config/auth";
 
-const mockResolveSystemAccessExecute = jest.fn();
+var mockResolveSystemAccessExecute = jest.fn();
+var mockUserFindById = jest.fn();
+var mockMemberFindByUserId = jest.fn();
+var mockMemberFindById = jest.fn();
+var mockManagerFindById = jest.fn();
+var mockCostFindById = jest.fn();
+var mockCultFindById = jest.fn();
+var mockTreasurerFindById = jest.fn();
+var mockOfferFindById = jest.fn();
+var mockTitheFindById = jest.fn();
+var mockSpecialOfferFindById = jest.fn();
 
 jest.mock("../../container", () => ({
   makeResolveSystemAccessService: jest.fn(() => ({
-    execute: mockResolveSystemAccessExecute,
+    execute: (...args: unknown[]) => mockResolveSystemAccessExecute(...args),
   })),
+  userRepository: {
+    findById: (...args: unknown[]) => mockUserFindById(...args),
+  },
+  memberRepository: {
+    findByUserId: (...args: unknown[]) => mockMemberFindByUserId(...args),
+    findById: (...args: unknown[]) => mockMemberFindById(...args),
+  },
+  managerRepository: {
+    findById: (...args: unknown[]) => mockManagerFindById(...args),
+  },
+  costRepository: {
+    findById: (...args: unknown[]) => mockCostFindById(...args),
+  },
+  cultRepository: {
+    findById: (...args: unknown[]) => mockCultFindById(...args),
+  },
+  treasurerRepository: {
+    findById: (...args: unknown[]) => mockTreasurerFindById(...args),
+  },
+  offerRepository: {
+    findById: (...args: unknown[]) => mockOfferFindById(...args),
+  },
+  titheRepository: {
+    findById: (...args: unknown[]) => mockTitheFindById(...args),
+  },
+  specialOfferRepository: {
+    findById: (...args: unknown[]) => mockSpecialOfferFindById(...args),
+  },
 }));
 
 import request from "supertest";
@@ -19,9 +57,30 @@ function makeToken(userId: number) {
   } as SignOptions);
 }
 
+function mockActiveAuthenticatedContext(userId = 1, churchId = 1) {
+  mockUserFindById.mockResolvedValue({
+    id: userId,
+    login: "member-login",
+    password: "hashed-password",
+  });
+  mockMemberFindByUserId.mockResolvedValue({
+    id: userId,
+    id_user: userId,
+    id_church: churchId,
+    church: {
+      id: churchId,
+      creationDate: new Date("2020-01-01"),
+      type: "BRANCH",
+      status: "ACTIVE",
+      id_location: 1,
+    },
+  });
+}
+
 describe("Authorization routes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockActiveAuthenticatedContext();
   });
 
   it("should require authentication to list churches", async () => {
@@ -34,6 +93,7 @@ describe("Authorization routes", () => {
   it("should forbid members without viewer access from listing churches", async () => {
     mockResolveSystemAccessExecute.mockResolvedValue({
       level: "MEMBER",
+      scope: "CHURCH",
       memberId: 1,
       churchId: 1,
       permissions: {
@@ -55,6 +115,7 @@ describe("Authorization routes", () => {
   it("should forbid viewers from editing churches", async () => {
     mockResolveSystemAccessExecute.mockResolvedValue({
       level: "VIEWER",
+      scope: "CHURCH",
       memberId: 1,
       churchId: 1,
       permissions: {
@@ -79,6 +140,260 @@ describe("Authorization routes", () => {
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
       error: "You do not have permission to access this resource",
+    });
+  });
+
+  it("should forbid branch editors from managing churches globally", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+
+    const response = await request(app)
+      .post("/church")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        date: "2024-01-15",
+        street: "Rua das Flores",
+        district: "Centro",
+        city: "Sao Paulo",
+        state: "SP",
+        country: "Brasil",
+        cep: "01001000",
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch viewers from requesting members from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "VIEWER",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: false,
+      },
+    });
+
+    const response = await request(app)
+      .get("/member/2")
+      .set("Authorization", `Bearer ${makeToken(1)}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from deleting a member from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockMemberFindById.mockResolvedValue({
+      id: 99,
+      id_church: 2,
+    });
+
+    const response = await request(app)
+      .delete("/member/99")
+      .set("Authorization", `Bearer ${makeToken(1)}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from creating an offer for a treasurer from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockTreasurerFindById.mockResolvedValue({
+      id: 10,
+      member: {
+        id: 33,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .post("/offer")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_treasurer: 10,
+        value: 150,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from creating a manager assignment for a member from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockMemberFindById.mockResolvedValue({
+      id: 55,
+      id_church: 2,
+    });
+
+    const response = await request(app)
+      .post("/manager")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_member: 55,
+        id_church: 1,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from updating a treasurer from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockTreasurerFindById.mockResolvedValue({
+      id: 77,
+      member: {
+        id: 90,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .put("/treasurer/77")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_member: 1,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from creating a special offer for a treasurer from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockMemberFindById.mockResolvedValue({
+      id: 1,
+      id_church: 1,
+    });
+    mockTreasurerFindById.mockResolvedValue({
+      id: 66,
+      member: {
+        id: 91,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .post("/specialOffer")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_church: 1,
+        id_member: 1,
+        id_treasurer: 66,
+        value: 200,
+        reason: "Mission trip",
+        date: "2024-02-10",
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
+    });
+  });
+
+  it("should forbid branch editors from updating a tithe from another church", async () => {
+    mockResolveSystemAccessExecute.mockResolvedValue({
+      level: "EDITOR",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: true,
+        canEditManagementData: true,
+      },
+    });
+    mockTitheFindById.mockResolvedValue({
+      id: 88,
+      specialOffer: {
+        id: 44,
+        id_church: 2,
+      },
+    });
+
+    const response = await request(app)
+      .put("/tithe/88")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_church: 1,
+        id_member: 1,
+        id_treasurer: 1,
+        value: 100,
+        reason: "Monthly tithe",
+        date: "2024-03-10",
+        month: 3,
+        year: 2024,
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "You do not have permission to manage data outside your church scope",
     });
   });
 });

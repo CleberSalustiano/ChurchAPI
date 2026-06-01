@@ -7,6 +7,15 @@ import {
   memberRepository,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestCreate {
   id_church: number;
   name: string;
@@ -49,7 +58,7 @@ export default class MemberController {
 
     const createNewMember = makeCreateMemberService();
 
-    let member = await createNewMember.execute({
+    const member = await createNewMember.execute({
       batism_date,
       birth_date,
       cpf,
@@ -62,13 +71,22 @@ export default class MemberController {
       id_church,
     });
 
-    if (member) member.cpf = +member.cpf.toString();
+    const memberResponse = member
+      ? {
+          ...member,
+          cpf: member.cpf.toString(),
+        }
+      : undefined;
 
-    return response.json({ member });
+    return response.json({ member: memberResponse });
   }
 
-  async index(request: Request, response: Response) {
-    const membersNoJson = await memberRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const membersNoJson =
+      access?.scope === "CHURCH"
+        ? await memberRepository.findAllbyChurch(access.churchId)
+        : await memberRepository.findAll();
 
     const members = membersJsonCorrection(membersNoJson);
 
@@ -91,7 +109,7 @@ export default class MemberController {
 
     const updateNewMember = makeUpdateMemberService();
 
-    let member = await updateNewMember.execute({
+    const member = await updateNewMember.execute({
       batism_date,
       birth_date,
       cpf,
@@ -103,9 +121,14 @@ export default class MemberController {
       id_member: +id,
     });
 
-    if (member) member.cpf = +member.cpf.toString();
+    const memberResponse = member
+      ? {
+          ...member,
+          cpf: member.cpf.toString(),
+        }
+      : undefined;
 
-    return response.json({ member });
+    return response.json({ member: memberResponse });
   }
 
   async delete(request: Request, response: Response) {

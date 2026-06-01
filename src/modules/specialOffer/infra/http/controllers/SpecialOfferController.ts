@@ -4,6 +4,15 @@ import {
   specialOfferRepository,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestCreate {
   id_church: number;
   id_member: number;
@@ -26,15 +35,19 @@ export default class SpecialOfferController {
 
     const createNewSpecialOfferService = makeCreateSpecialOfferService();
 
-    const newSpecialOfferService = await createNewSpecialOfferService.execute(
+    const specialOffer = await createNewSpecialOfferService.execute(
       { date, id_church, id_member, reason, id_treasurer, value }
     );
 
-    return response.send({ newSpecialOfferService });
+    return response.json({ specialOffer });
   }
 
-  async index(request: Request, response: Response) {
-    const specialOffers = await specialOfferRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const specialOffers =
+      access?.scope === "CHURCH"
+        ? await specialOfferRepository.findAllByChurch(access.churchId)
+        : await specialOfferRepository.findAll();
 
     return response.json({ specialOffers });
   }

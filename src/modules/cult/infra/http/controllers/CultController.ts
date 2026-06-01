@@ -6,6 +6,15 @@ import {
   makeUpdateCultService,
 } from "../../../../../shared/container";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 interface IRequestCult {
   date: string;
   theme: string;
@@ -22,8 +31,12 @@ export default class CultController {
     return response.json({ cult });
   }
 
-  async index(request: Request, response: Response) {
-    const cults = await cultRepository.findAll();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const cults =
+      access?.scope === "CHURCH"
+        ? await cultRepository.findAllByChurch(access.churchId)
+        : await cultRepository.findAll();
 
     return response.json({ cults });
   }

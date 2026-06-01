@@ -1,5 +1,7 @@
 import { Router } from "express";
+import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureScopedResourceAccess from "../../../../../shared/infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import TitheController from "../controllers/TitheController";
@@ -75,18 +77,26 @@ titheRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(titheController.create.bind(titheController))
 );
 titheRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("tithe", "id", "params"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(titheController.update.bind(titheController))
 );
 titheRouter.delete(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("tithe", "id", "params"),
   asyncHandler(titheController.delete.bind(titheController))
 );
 

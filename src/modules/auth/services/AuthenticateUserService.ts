@@ -48,6 +48,10 @@ export default class AuthenticateUserService {
       throw new AppError("Member profile not found for this user", 404);
     }
 
+    if (!member.church || member.church.status !== "ACTIVE") {
+      throw new AppError("This church is not active", 403);
+    }
+
     const token = sign({}, authConfig.jwt.secret, {
       subject: user.id.toString(),
       expiresIn: authConfig.jwt.expiresIn as SignOptions["expiresIn"],

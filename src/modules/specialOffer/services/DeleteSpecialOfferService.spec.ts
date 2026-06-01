@@ -23,8 +23,12 @@ describe("Delete Special Offer", () => {
     });
 
     const specialOfferDeleted = await deleteSpecialOffer.execute(0);
+    const hiddenSpecialOffer = await specialOfferRepository.findById(0);
+    const hiddenOffer = await offerRepository.findById(0);
 
     expect(specialOfferDeleted).toBeTruthy();
+    expect(hiddenSpecialOffer).toBeNull();
+    expect(hiddenOffer).toBeUndefined();
   });
 
   it("should not be able to delete a special offer that doesn't exist", async () => {

@@ -5,8 +5,12 @@ import AppError from "../../errors/AppError";
 
 const mockAuthenticateExecute = jest.fn();
 const mockGetAuthenticatedProfileExecute = jest.fn();
+const mockRequestPasswordResetExecute = jest.fn();
+const mockResetPasswordExecute = jest.fn();
 const mockUpdateUserLoginExecute = jest.fn();
 const mockUpdateUserPasswordExecute = jest.fn();
+const mockUserFindById = jest.fn();
+const mockMemberFindByUserId = jest.fn();
 
 jest.mock("../../container", () => ({
   makeAuthenticateUserService: jest.fn(() => ({
@@ -15,12 +19,24 @@ jest.mock("../../container", () => ({
   makeGetAuthenticatedProfileService: jest.fn(() => ({
     execute: mockGetAuthenticatedProfileExecute,
   })),
+  makeRequestPasswordResetService: jest.fn(() => ({
+    execute: mockRequestPasswordResetExecute,
+  })),
+  makeResetPasswordService: jest.fn(() => ({
+    execute: mockResetPasswordExecute,
+  })),
   makeUpdateUserLoginService: jest.fn(() => ({
     execute: mockUpdateUserLoginExecute,
   })),
   makeUpdateUserPasswordService: jest.fn(() => ({
     execute: mockUpdateUserPasswordExecute,
   })),
+  userRepository: {
+    findById: (...args: unknown[]) => mockUserFindById(...args),
+  },
+  memberRepository: {
+    findByUserId: (...args: unknown[]) => mockMemberFindByUserId(...args),
+  },
 }));
 
 import app from "./app";
@@ -32,9 +48,32 @@ function makeToken(userId: number) {
   } as SignOptions);
 }
 
+function mockActiveAuthenticatedContext(userId = 1, churchId = 1) {
+  mockUserFindById.mockResolvedValue({
+    id: userId,
+    login: "member-login",
+    password: "hashed-password",
+  });
+  mockMemberFindByUserId.mockResolvedValue({
+    id: userId,
+    name: "Member Name",
+    email: "member@email.com",
+    id_user: userId,
+    id_church: churchId,
+    church: {
+      id: churchId,
+      creationDate: new Date("2020-01-01"),
+      type: "BRANCH",
+      status: "ACTIVE",
+      id_location: 1,
+    },
+  });
+}
+
 describe("Authenticated routes", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockActiveAuthenticatedContext();
   });
 
   it("should create a session with valid credentials", async () => {
@@ -84,6 +123,57 @@ describe("Authenticated routes", () => {
     expect(response.body).toEqual({ error: "JWT token is missing" });
   });
 
+  it("should request a password reset token", async () => {
+    mockRequestPasswordResetExecute.mockResolvedValue({
+      message: "If the email exists, a password reset token has been generated",
+      resetToken: "password-reset-token",
+    });
+
+    const response = await request(app).post("/password/forgot").send({
+      email: "member@email.com",
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body.resetToken).toBe("password-reset-token");
+    expect(mockRequestPasswordResetExecute).toHaveBeenCalledWith(
+      "member@email.com"
+    );
+  });
+
+  it("should reset a password with a valid token", async () => {
+    mockResetPasswordExecute.mockResolvedValue(undefined);
+
+    const response = await request(app).post("/password/reset").send({
+      token: "password-reset-token",
+      password: "new-password-123",
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: "Password has been reset successfully",
+    });
+    expect(mockResetPasswordExecute).toHaveBeenCalledWith(
+      "password-reset-token",
+      "new-password-123"
+    );
+  });
+
+  it("should return 400 when the password reset token is invalid", async () => {
+    mockResetPasswordExecute.mockRejectedValue(
+      new AppError("Invalid password reset token", 400)
+    );
+
+    const response = await request(app).post("/password/reset").send({
+      token: "invalid-token",
+      password: "new-password-123",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      error: "Invalid password reset token",
+    });
+  });
+
   it("should return the authenticated profile when the token is valid", async () => {
     mockGetAuthenticatedProfileExecute.mockResolvedValue({
       user: { id: 1, login: "member-login" },
@@ -108,6 +198,31 @@ describe("Authenticated routes", () => {
     expect(response.status).toBe(200);
     expect(response.body.user).toEqual({ id: 1, login: "member-login" });
     expect(mockGetAuthenticatedProfileExecute).toHaveBeenCalledWith(1);
+  });
+
+  it("should block authenticated routes when the church is inactive", async () => {
+    mockMemberFindByUserId.mockResolvedValue({
+      id: 1,
+      name: "Member Name",
+      email: "member@email.com",
+      id_user: 1,
+      id_church: 1,
+      church: {
+        id: 1,
+        creationDate: new Date("2020-01-01"),
+        type: "BRANCH",
+        status: "INACTIVE",
+        id_location: 1,
+      },
+    });
+
+    const response = await request(app)
+      .get("/me")
+      .set("Authorization", `Bearer ${makeToken(1)}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ error: "This church is not active" });
+    expect(mockGetAuthenticatedProfileExecute).not.toHaveBeenCalled();
   });
 
   it("should not allow a user to update another user's login", async () => {

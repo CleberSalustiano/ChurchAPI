@@ -10,7 +10,12 @@ export default class FakeOfferRepository implements IOfferRepository {
     id_treasurer,
     value,
   }: ICreateOfferDTO): Promise<IOffer | undefined> {
-    const offer: IOffer = { id: this.offers.length, id_treasurer, value };
+    const offer: IOffer = {
+      id: this.offers.length,
+      id_treasurer,
+      value,
+      deletedAt: null,
+    };
 
     this.offers.push(offer);
 
@@ -18,11 +23,17 @@ export default class FakeOfferRepository implements IOfferRepository {
   }
 
   public async findAll(): Promise<IOffer[] | undefined> {
-    return this.offers;
+    return this.offers.filter((offer) => !offer.deletedAt);
+  }
+
+  public async findAllByChurch(_id_church: number): Promise<IOffer[] | undefined> {
+    return this.offers.filter((offer) => !offer.deletedAt);
   }
 
   public async findById(id_offer: number): Promise<IOffer | undefined> {
-    const offer = this.offers.find((offer) => offer.id === id_offer);
+    const offer = this.offers.find(
+      (offer) => offer.id === id_offer && !offer.deletedAt
+    );
 
     return offer;
   }
@@ -32,8 +43,11 @@ export default class FakeOfferRepository implements IOfferRepository {
     id_treasurer,
     value,
   }: IUpdateOfferDTO): Promise<IOffer | undefined> {
-    const offerIndex = this.offers.findIndex((offer) => offer.id === id_offer);
+    const offerIndex = this.offers.findIndex(
+      (offer) => offer.id === id_offer && !offer.deletedAt
+    );
 
+    if (offerIndex === -1) return undefined;
     const offer = this.offers[offerIndex];
     offer.id_treasurer = id_treasurer;
     offer.value = value;
@@ -44,10 +58,14 @@ export default class FakeOfferRepository implements IOfferRepository {
   }
 
   public async delete(id_offer: number): Promise<IOffer | undefined> {
-    const offerIndex = this.offers.findIndex((offer) => offer.id === id_offer);
+    const offerIndex = this.offers.findIndex(
+      (offer) => offer.id === id_offer && !offer.deletedAt
+    );
 
+    if (offerIndex === -1) return undefined;
     const offer = this.offers[offerIndex];
-    this.offers.splice(offerIndex, 1);
+    offer.deletedAt = new Date();
+    this.offers.splice(offerIndex, 1, offer);
 
     return offer;
   }

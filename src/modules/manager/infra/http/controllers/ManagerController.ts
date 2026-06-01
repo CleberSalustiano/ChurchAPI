@@ -7,6 +7,15 @@ import {
 } from "../../../../../shared/container";
 import { ICreateManagerDTO } from "../../../dtos/ICreateManagerDTO";
 
+type ScopedRequest = Request & {
+  user?: {
+    access?: {
+      scope: "GLOBAL" | "CHURCH";
+      churchId: number;
+    };
+  };
+};
+
 export default class ManagerController {
   async create(request: Request, response: Response) {
     const { id_church, id_member }: ICreateManagerDTO = request.body;
@@ -18,8 +27,12 @@ export default class ManagerController {
     return response.json({ manager });
   }
 
-  async index(request: Request, response: Response) {
-    const managers = await managerRepository.findAllActive();
+  async index(request: ScopedRequest, response: Response) {
+    const access = request.user?.access;
+    const managers =
+      access?.scope === "CHURCH"
+        ? await managerRepository.findAllbyChurch(access.churchId)
+        : await managerRepository.findAllActive();
 
     return response.json({ managers });
   }

@@ -7,11 +7,15 @@ import { IUserRepository } from "../../../repositories/IUserRepository";
 
 export class UserRepository implements IUserRepository {
   async findById(id_user: number): Promise<IUser | undefined> {
-    const user = await prismaClient.user.findFirst({ where: { id: id_user } });
+    const user = await prismaClient.user.findFirst({
+      where: { id: id_user, deletedAt: null },
+    });
     return user ? user : undefined;
   }
   async findAll(): Promise<IUser[] | undefined> {
-    const users = await prismaClient.user.findMany();
+    const users = await prismaClient.user.findMany({
+      where: { deletedAt: null },
+    });
     return users;
   }
   async create({ login, password }: ICreateUserDTO): Promise<IUser | undefined> {
@@ -24,6 +28,10 @@ export class UserRepository implements IUserRepository {
     id_user,
     login,
   }: IUpdateUserLoginDTO): Promise<IUser | undefined> {
+    const existingUser = await this.findById(id_user);
+
+    if (!existingUser) return undefined;
+
     const user = await prismaClient.user.update({
       where: { id: id_user },
       data: { login },
@@ -34,6 +42,10 @@ export class UserRepository implements IUserRepository {
     id_user,
     password,
   }: IUpdateUserPasswordDTO): Promise<IUser | undefined> {
+    const existingUser = await this.findById(id_user);
+
+    if (!existingUser) return undefined;
+
     const user = await prismaClient.user.update({
       where: { id: id_user },
       data: { password },
@@ -41,12 +53,21 @@ export class UserRepository implements IUserRepository {
     return user;
   }
   async delete(id_user: number): Promise<boolean> {
-    const user = await prismaClient.user.delete({ where: { id: id_user } });
+    const existingUser = await this.findById(id_user);
+
+    if (!existingUser) return false;
+
+    const user = await prismaClient.user.update({
+      where: { id: id_user },
+      data: { deletedAt: new Date() },
+    });
     return user ? true : false;
   }
 
   async findByLogin(login: string): Promise<IUser | undefined> {
-    const user = await prismaClient.user.findFirst({where: {login}});
+    const user = await prismaClient.user.findFirst({
+      where: { login, deletedAt: null },
+    });
     return user ? user : undefined;
   }
 }

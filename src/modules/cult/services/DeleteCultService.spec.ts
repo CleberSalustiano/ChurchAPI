@@ -6,12 +6,14 @@ describe("Delete cult ",  () => {
   it("should be able to delete a cult", async () => {
     const cultRepository = new FakeCultRepository();
     const deleteCult = new DeleteCultService(cultRepository);
-    const cult = await cultRepository.create({date: "2022-10-09", id_church: 0, theme: "Culto do amigo" })
+    await cultRepository.create({date: "2022-10-09", id_church: 0, theme: "Culto do amigo" })
       
     const cultDeleted = await deleteCult.execute(0);
+    const cult = await cultRepository.findById(0);
 
     expect(cultDeleted).toBeTruthy();
     expect(cultDeleted.id).toBe(0);
+    expect(cult).toBeUndefined();
   })
 
   it("should not be able to delete a cult than doesn't exist", async () => {

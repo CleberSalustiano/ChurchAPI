@@ -10,6 +10,7 @@ const systemRouter = Router();
  *     tags:
  *       - System
  *     summary: Check API health
+ *     security: []
  *     description: Returns a simple status response so containers and external clients can verify the API is running.
  *     responses:
  *       200:

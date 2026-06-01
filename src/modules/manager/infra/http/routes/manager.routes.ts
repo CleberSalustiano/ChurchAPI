@@ -1,5 +1,7 @@
 import { Router } from "express";
+import ensureChurchScope from "../../../../../shared/infra/http/middlewares/ensureChurchScope";
 import ensureAuthenticated from "../../../../../shared/infra/http/middlewares/ensureAuthenticated";
+import ensureScopedResourceAccess from "../../../../../shared/infra/http/middlewares/ensureScopedResourceAccess";
 import ensureSystemAccess from "../../../../../shared/infra/http/middlewares/ensureSystemAccess";
 import asyncHandler from "../../../../../shared/infra/http/utils/asyncHandler";
 import ManagerController from "../controllers/ManagerController";
@@ -84,7 +86,7 @@ const managerInChurchController = new ManagerInChurchController();
  *         schema:
  *           type: integer
  *     responses:
- *       201:
+ *       204:
  *         description: Manager deactivated
  *       401:
  *         description: Validation or business error
@@ -93,12 +95,17 @@ managerRouter.post(
   "/",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(managerController.create.bind(managerController))
 );
 managerRouter.put(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("manager"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
   asyncHandler(managerController.update.bind(managerController))
 );
 managerRouter.get(
@@ -111,12 +118,14 @@ managerRouter.get(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("viewer"),
+  ensureChurchScope({ source: "params", field: "id" }),
   asyncHandler(managerInChurchController.index.bind(managerInChurchController))
 );
 managerRouter.delete(
   "/:id",
   ensureAuthenticated,
   ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("manager"),
   asyncHandler(managerController.delete.bind(managerController))
 );
 

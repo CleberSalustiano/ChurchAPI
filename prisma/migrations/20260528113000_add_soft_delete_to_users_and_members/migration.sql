@@ -1,0 +1,5 @@
+ALTER TABLE "users"
+ADD COLUMN "deletedAt" TIMESTAMP(3);
+
+ALTER TABLE "members"
+ADD COLUMN "deletedAt" TIMESTAMP(3);

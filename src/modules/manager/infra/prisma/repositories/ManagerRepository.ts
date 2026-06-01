@@ -17,7 +17,7 @@ export default class ManagerRepository implements IManagerRepository {
     id_church: number
   ): Promise<IManager[] | undefined> {
     const managers = await prismaClient.manager.findMany({
-      where: { id_church, endDate: undefined },
+      where: { id_church, endDate: null },
     });
 
     return managers;

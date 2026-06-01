@@ -22,29 +22,32 @@ enum ChurchStatus {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  login    String   @unique
-  password String
-  Member   Member[]
+  id                 Int                  @id @default(autoincrement())
+  login              String               @unique
+  password           String
+  deletedAt          DateTime?
+  Member             Member[]
+  PasswordResetToken PasswordResetToken[]
 }
 
 model Member {
-  id           Int            @id @default(autoincrement())
-  name         String
-  birth_date   DateTime
-  batism_date  DateTime
-  ecclesiasticalRole  String
-  cpf          BigInt         @unique
-  rg           Int
-  email        String
-  foto         String?
-  Manager      Manager[]
-  Treasurer    Treasurer[]
-  SpecialOffer SpecialOffer[]
-  id_church    Int
-  church       Church         @relation(fields: [id_church], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  id_user      Int            @unique
-  user         User           @relation(fields: [id_user], references: [id])
+  id                 Int            @id @default(autoincrement())
+  name               String
+  birth_date         DateTime
+  batism_date        DateTime
+  ecclesiasticalRole String
+  cpf                BigInt         @unique
+  rg                 Int
+  email              String
+  foto               String?
+  deletedAt          DateTime?
+  Manager            Manager[]
+  Treasurer          Treasurer[]
+  SpecialOffer       SpecialOffer[]
+  id_church          Int
+  church             Church         @relation(fields: [id_church], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id_user            Int            @unique
+  user               User           @relation(fields: [id_user], references: [id])
 
   @@map("members")
 }
@@ -75,6 +78,7 @@ model Treasurer {
 model Offer {
   id           Int            @id @default(autoincrement())
   value        Int
+  deletedAt    DateTime?
   SpecialOffer SpecialOffer[]
   id_treasurer Int
   treasurer    Treasurer      @relation(fields: [id_treasurer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
@@ -85,15 +89,16 @@ model Offer {
 }
 
 model SpecialOffer {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   reason    String
   date      DateTime
+  deletedAt DateTime?
   id_offer  Int
-  offer     Offer    @relation(fields: [id_offer], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  offer     Offer     @relation(fields: [id_offer], references: [id], onDelete: Cascade, onUpdate: Cascade)
   id_member Int
-  member    Member   @relation(fields: [id_member], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  member    Member    @relation(fields: [id_member], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
-  church    Church   @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  church    Church    @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   tithes    Tithe[]
 
   @@map("special_offers")
@@ -103,6 +108,7 @@ model Tithe {
   id               Int          @id @default(autoincrement())
   month            Int
   year             Int
+  deletedAt        DateTime?
   id_special_offer Int
   specialOffer     SpecialOffer @relation(fields: [id_special_offer], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
@@ -134,6 +140,7 @@ model Cult {
   id        Int         @id @default(autoincrement())
   date      DateTime
   theme     String
+  deletedAt DateTime?
   id_offer  Int?
   offer     Offer?      @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
   id_church Int
@@ -144,12 +151,13 @@ model Cult {
 }
 
 model Cost {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   value       Float
   date        DateTime
   description String
+  deletedAt   DateTime?
   id_church   Int
-  church      Church   @relation(fields: [id_church], references: [id])
+  church      Church    @relation(fields: [id_church], references: [id])
 
   @@map("costs")
 }
@@ -173,4 +181,16 @@ model CultOffer {
   cult     Cult  @relation(fields: [id_cult], references: [id])
   id_offer Int
   offer    Offer @relation(fields: [id_offer], references: [id])
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("password_reset_tokens")
 }
