@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import {
   cultRepository,
+  makeCreateCultOfferService,
   makeCreateCultService,
+  makeCreateRecurringCultSeriesService,
+  makeDeleteCultOfferService,
   makeDeleteCultService,
+  makeUpdateCultOfferService,
   makeUpdateCultService,
+  makeUpdateRecurringCultSeriesService,
 } from "../../../../../shared/container";
 
 type ScopedRequest = Request & {
@@ -19,6 +24,21 @@ interface IRequestCult {
   date: string;
   theme: string;
   id_church: number;
+}
+
+interface IRequestRecurringCult {
+  date: string;
+  theme: string;
+  id_church: number;
+  recurrence: {
+    interval: number;
+    until: string;
+  };
+}
+
+interface IRequestCultOffer {
+  value: number;
+  id_treasurer: number;
 }
 
 export default class CultController {
@@ -41,6 +61,21 @@ export default class CultController {
     return response.json({ cults });
   }
 
+  async createRecurring(request: Request, response: Response) {
+    const { date, id_church, recurrence, theme }: IRequestRecurringCult =
+      request.body;
+
+    const createRecurringCultSeries = makeCreateRecurringCultSeriesService();
+    const cults = await createRecurringCultSeries.execute({
+      date,
+      id_church,
+      recurrence,
+      theme,
+    });
+
+    return response.json({ cults });
+  }
+
   async update(request: Request, response: Response) {
     const { id } = request.params;
     const { date, theme, id_church }: IRequestCult = request.body;
@@ -56,6 +91,21 @@ export default class CultController {
     return response.json({ cult });
   }
 
+  async updateSeries(request: Request, response: Response) {
+    const { id } = request.params;
+    const { id_church, theme }: Pick<IRequestCult, "id_church" | "theme"> =
+      request.body;
+
+    const updateRecurringCultSeries = makeUpdateRecurringCultSeriesService();
+    const cults = await updateRecurringCultSeries.execute({
+      id_cult: +id,
+      id_church,
+      theme,
+    });
+
+    return response.json({ cults });
+  }
+
   async delete(request: Request, response: Response) {
     const { id } = request.params;
 
@@ -63,5 +113,43 @@ export default class CultController {
     await deleteCult.execute(+id);
 
     return response.status(204).send();
+  }
+
+  async createOffer(request: Request, response: Response) {
+    const { id } = request.params;
+    const { id_treasurer, value }: IRequestCultOffer = request.body;
+
+    const createCultOffer = makeCreateCultOfferService();
+    const cultOffer = await createCultOffer.execute({
+      id_cult: +id,
+      id_treasurer,
+      value,
+    });
+
+    return response.json({ cultOffer });
+  }
+
+  async updateOffer(request: Request, response: Response) {
+    const { id, cultOfferId } = request.params;
+    const { id_treasurer, value }: IRequestCultOffer = request.body;
+
+    const updateCultOffer = makeUpdateCultOfferService();
+    const cultOffer = await updateCultOffer.execute({
+      id_cult: +id,
+      id_cult_offer: +cultOfferId,
+      id_treasurer,
+      value,
+    });
+
+    return response.json({ cultOffer });
+  }
+
+  async deleteOffer(request: Request, response: Response) {
+    const { id, cultOfferId } = request.params;
+
+    const deleteCultOffer = makeDeleteCultOfferService();
+    const cultOffer = await deleteCultOffer.execute(+id, +cultOfferId);
+
+    return response.json({ cultOffer });
   }
 }

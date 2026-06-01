@@ -13,24 +13,92 @@ export default class CultRepository implements ICultRepository {
         theme: dataCult.theme,
         id_church: dataCult.id_church,
       },
+      include: {
+        church: {
+          include: {
+            location: true,
+          },
+        },
+        CultOffer: {
+          where: {
+            offer: {
+              deletedAt: null,
+            },
+          },
+          include: {
+            offer: true,
+          },
+        },
+      },
     });
   }
 
   async findAll(): Promise<ICult[] | undefined> {
     return prismaClient.cult.findMany({
       where: { deletedAt: null },
+      include: {
+        church: {
+          include: {
+            location: true,
+          },
+        },
+        CultOffer: {
+          where: {
+            offer: {
+              deletedAt: null,
+            },
+          },
+          include: {
+            offer: true,
+          },
+        },
+      },
     });
   }
 
   async findAllByChurch(id_church: number): Promise<ICult[] | undefined> {
     return prismaClient.cult.findMany({
       where: { id_church, deletedAt: null },
+      include: {
+        church: {
+          include: {
+            location: true,
+          },
+        },
+        CultOffer: {
+          where: {
+            offer: {
+              deletedAt: null,
+            },
+          },
+          include: {
+            offer: true,
+          },
+        },
+      },
     });
   }
 
   async findById(id_cult: number): Promise<ICult | undefined> {
     const cult = await prismaClient.cult.findUnique({
       where: { id: id_cult },
+      include: {
+        church: {
+          include: {
+            location: true,
+          },
+        },
+        CultOffer: {
+          where: {
+            offer: {
+              deletedAt: null,
+            },
+          },
+          include: {
+            offer: true,
+          },
+        },
+      },
     });
 
     return cult && !cult.deletedAt ? cult : undefined;
@@ -56,6 +124,23 @@ export default class CultRepository implements ICultRepository {
         date: new Date(dataCult.date.toString()),
         theme: dataCult.theme,
         id_church: dataCult.id_church,
+      },
+      include: {
+        church: {
+          include: {
+            location: true,
+          },
+        },
+        CultOffer: {
+          where: {
+            offer: {
+              deletedAt: null,
+            },
+          },
+          include: {
+            offer: true,
+          },
+        },
       },
     });
   }

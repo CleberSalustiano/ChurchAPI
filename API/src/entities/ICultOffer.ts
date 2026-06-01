@@ -5,5 +5,6 @@ export interface ICultOffer {
   id: number;
   id_cult: number;
   cult?: ICult;
-  id_offer: IOffer;
+  id_offer: number;
+  offer?: IOffer;
 }

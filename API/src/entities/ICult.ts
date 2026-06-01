@@ -1,4 +1,5 @@
 import { IChurch } from "./IChurch";
+import { ICultOffer } from "./ICultOffer";
 import { IOffer } from "./IOffer";
 
 export interface ICult {
@@ -10,4 +11,8 @@ export interface ICult {
   offer?: IOffer;
 	id_church: number;
   church?: IChurch;
+  recurrenceGroup?: string | null;
+  recurrencePattern?: string | null;
+  recurrenceUntil?: Date | null;
+  CultOffer?: ICultOffer[];
 }

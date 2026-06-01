@@ -137,15 +137,18 @@ model Church {
 }
 
 model Cult {
-  id        Int         @id @default(autoincrement())
-  date      DateTime
-  theme     String
-  deletedAt DateTime?
-  id_offer  Int?
-  offer     Offer?      @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
-  id_church Int
-  church    Church      @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
-  CultOffer CultOffer[]
+  id                Int         @id @default(autoincrement())
+  date              DateTime
+  theme             String
+  deletedAt         DateTime?
+  id_offer          Int?
+  offer             Offer?      @relation(fields: [id_offer], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  id_church         Int
+  church            Church      @relation(fields: [id_church], references: [id], onDelete: SetDefault, onUpdate: SetDefault)
+  recurrenceGroup   String?
+  recurrencePattern String?
+  recurrenceUntil   DateTime?
+  CultOffer         CultOffer[]
 
   @@map("cults")
 }
