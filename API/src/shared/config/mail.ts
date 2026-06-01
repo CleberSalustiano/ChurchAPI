@@ -1,7 +1,7 @@
 const smtpPort = Number(process.env.SMTP_PORT || 587);
 
 const mailConfig = {
-  from: process.env.MAIL_FROM || "no-reply@churchapi.local",
+  from: process.env.MAIL_FROM || "no-reply@churchapp.local",
   exposeResetTokenInResponse:
     process.env.EXPOSE_RESET_TOKEN_IN_RESPONSE === "true",
   passwordResetUrlBase:

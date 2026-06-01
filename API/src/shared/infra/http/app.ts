@@ -1,3 +1,4 @@
+import "../../config/loadEnv";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import AppError from "../../errors/AppError";

@@ -1,8 +1,8 @@
 {
-  "name": "ChurchAPI",
+  "name": "ChurchAPP",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/CleberSalustiano/ChurchAPI.git",
+  "repository": "https://github.com/CleberSalustiano/ChurchAPP.git",
   "author": "CleberSalustiano <kleberdejesus45@hotmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -42,6 +42,8 @@
     "start:ts": "ts-node src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register node_modules/typeorm/cli.js",
     "test": "jest",
+    "test:e2e": "sh ./scripts/test-e2e.sh",
+    "seed:demo": "ts-node --transpile-only ./scripts/seed-demo.ts",
     "generate-swagger": "node ./src/shared/infra/swagger/index.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
