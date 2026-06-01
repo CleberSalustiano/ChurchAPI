@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   makeCreateManagerService,
   makeDeleteManagerService,
+  makeReplaceManagerService,
   makeUpdateManagerService,
   managerRepository,
 } from "../../../../../shared/container";
@@ -61,5 +62,18 @@ export default class ManagerController {
     await deleteManager.execute(+id);
 
     return response.status(204).send();
+  }
+
+  async replace(request: Request, response: Response) {
+    const { id } = request.params;
+    const { id_member } = request.body;
+
+    const replaceManager = makeReplaceManagerService();
+    const result = await replaceManager.execute({
+      id_manager: +id,
+      id_member,
+    });
+
+    return response.json(result);
   }
 }

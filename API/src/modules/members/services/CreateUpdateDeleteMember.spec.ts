@@ -1,4 +1,5 @@
 import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
+import FakeManagerRepository from "../../manager/repositories/fakes/FakeManagerRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import { IRequestUpdateMemberDTO } from "../dtos/IRequestUpdateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
@@ -12,6 +13,7 @@ describe("Test end-to-end for services", () => {
     const memberRepository = new FakeMemberRepository();
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
+    const managerRepository = new FakeManagerRepository();
 
     churchRepository.create({ date: "1999-12-12", id_location: 0 });
 
@@ -23,12 +25,14 @@ describe("Test end-to-end for services", () => {
 
     const updateMember = new UpdateMemberService(
       memberRepository,
-      churchRepository
+      churchRepository,
+      managerRepository
     );
 
     const deleteMember = new DeleteMemberService(
       memberRepository,
-      userRepository
+      userRepository,
+      managerRepository
     );
 
     const dataMember: IRequestCreateMemberDTO = {
@@ -41,7 +45,6 @@ describe("Test end-to-end for services", () => {
       email: "reidelas@email.com",
       id_church: 0,
       login: "teste",
-      password: "12312345",
     };
 
     await createNewMember.execute(dataMember);

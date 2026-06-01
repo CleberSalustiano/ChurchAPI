@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   churchRepository,
   makeCreateChurchService,
+  makeCreateChurchWithInitialManagerService,
   makeDeactivateChurchService,
   makeDeleteChurchService,
   makeReactivateChurchService,
@@ -63,6 +64,13 @@ export default class ChurchController {
     const churches = await churchRepository.findAll();
 
     return response.json({ churches });
+  }
+
+  async createStructured(request: Request, response: Response) {
+    const createChurchWithInitialManager = makeCreateChurchWithInitialManagerService();
+    const result = await createChurchWithInitialManager.execute(request.body);
+
+    return response.json(result);
   }
 
   async delete(request: Request, response: Response) {

@@ -1,4 +1,5 @@
 import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
+import AppError from "../../../shared/errors/AppError";
 import NoExistError from "../../../shared/errors/NoExistError";
 import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
@@ -22,6 +23,12 @@ export default class CreateNewManagerService {
 
     if (!member)
       throw new NoExistError("member")
+
+    if (member.id_church !== dataManager.id_church)
+      throw new AppError(
+        "Member must belong to the same church as the manager assignment",
+        400
+      );
 
     const managerExists = await this.managerRepository.findByMember(dataManager.id_member);
 

@@ -31,6 +31,41 @@ const churchController = new ChurchController();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *
+ * /church/structured:
+ *   post:
+ *     tags:
+ *       - Church
+ *     summary: Create a church with its initial manager and member credentials
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ChurchStructuredCreateRequest'
+ *     responses:
+ *       200:
+ *         description: Church, member and manager created atomically
+ *       400:
+ *         description: Validation or business error
+ *
+ * /church/bootstrap:
+ *   post:
+ *     tags:
+ *       - Church
+ *     summary: Bootstrap the first headquarter with its initial manager
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ChurchStructuredCreateRequest'
+ *     responses:
+ *       200:
+ *         description: First headquarter created successfully
+ *       400:
+ *         description: Validation or business error
  *   get:
  *     tags:
  *       - Church
@@ -117,6 +152,17 @@ churchRouter.post(
   ensureSystemAccess("editor"),
   ensureGlobalSystemAccess,
   asyncHandler(churchController.create.bind(churchController))
+);
+churchRouter.post(
+  "/structured",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  ensureGlobalSystemAccess,
+  asyncHandler(churchController.createStructured.bind(churchController))
+);
+churchRouter.post(
+  "/bootstrap",
+  asyncHandler(churchController.createStructured.bind(churchController))
 );
 churchRouter.get(
   "/",

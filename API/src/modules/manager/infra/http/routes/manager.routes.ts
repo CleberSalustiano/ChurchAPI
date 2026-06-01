@@ -90,6 +90,29 @@ const managerInChurchController = new ManagerInChurchController();
  *         description: Manager deactivated
  *       401:
  *         description: Validation or business error
+ *
+ * /manager/{id}/replace:
+ *   post:
+ *     tags:
+ *       - Manager
+ *     summary: Replace a manager assignment without leaving the church unmanaged
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ManagerReplaceRequest'
+ *     responses:
+ *       200:
+ *         description: Manager replaced and previous assignment closed
+ *       401:
+ *         description: Validation or business error
  */
 managerRouter.post(
   "/",
@@ -127,6 +150,14 @@ managerRouter.delete(
   ensureSystemAccess("editor"),
   ensureScopedResourceAccess("manager"),
   asyncHandler(managerController.delete.bind(managerController))
+);
+managerRouter.post(
+  "/:id/replace",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("manager"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  asyncHandler(managerController.replace.bind(managerController))
 );
 
 export default managerRouter;

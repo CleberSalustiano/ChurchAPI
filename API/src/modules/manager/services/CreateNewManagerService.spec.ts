@@ -243,4 +243,48 @@ describe("Create a new manager for a church", () => {
     expect(manager).toBeTruthy();
     expect(manager?.id_member).toBe(3);
   });
+
+  it("should not be able to assign a member to manage another church", async () => {
+    const fakeChurchRepository = new FakeChurchRepository();
+    const fakeMemberRepository = new FakeMemberRepository();
+    const fakeManagerRepository = new FakeManagerRepository();
+
+    const createNewManager = new CreateNewManagerService(
+      fakeMemberRepository,
+      fakeChurchRepository,
+      fakeManagerRepository
+    );
+
+    fakeChurchRepository.create({
+      date: "1991-12-12",
+      id_location: 1,
+      type: "HEADQUARTER",
+    });
+
+    fakeChurchRepository.create({
+      date: "1991-12-13",
+      id_location: 2,
+      type: "BRANCH",
+      parent_church_id: 0,
+    });
+
+    fakeMemberRepository.create({
+      id_church: 0,
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
+      cpf: BigInt(12312312312),
+      email: "email@email.com",
+      name: "Luvas Piruvicas",
+      rg: 123123,
+      ecclesiasticalRole: "Member",
+      id_user: 0,
+    });
+
+    await expect(
+      createNewManager.execute({
+        id_church: 1,
+        id_member: 0,
+      })
+    ).rejects.toThrowError(Error);
+  });
 });
