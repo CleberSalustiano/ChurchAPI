@@ -1,0 +1,87 @@
+import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
+import FakeManagerRepository from "../../manager/repositories/fakes/FakeManagerRepository";
+import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
+import { IRequestUpdateMemberDTO } from "../dtos/IRequestUpdateMemberDTO";
+import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
+import FakeUserRepository from "../repositories/fakes/FakeUserRepository";
+import CreateNewMemberService from "./CreateNewMemberService";
+import DeleteMemberService from "./DeleteMemberService";
+import UpdateMemberService from "./UpdateMemberService";
+
+describe("Test end-to-end for services", () => {
+  it("should be able to create members, update and delete.", async () => {
+    const memberRepository = new FakeMemberRepository();
+    const churchRepository = new FakeChurchRepository();
+    const userRepository = new FakeUserRepository();
+    const managerRepository = new FakeManagerRepository();
+
+    churchRepository.create({ date: "1999-12-12", id_location: 0 });
+
+    const createNewMember = new CreateNewMemberService(
+      memberRepository,
+      userRepository,
+      churchRepository
+    );
+
+    const updateMember = new UpdateMemberService(
+      memberRepository,
+      churchRepository,
+      managerRepository
+    );
+
+    const deleteMember = new DeleteMemberService(
+      memberRepository,
+      userRepository,
+      managerRepository
+    );
+
+    const dataMember: IRequestCreateMemberDTO = {
+      name: "Batata",
+      birth_date: "1999-11-12",
+      batism_date: "1999-12-12",
+      ecclesiasticalRole: "member",
+      cpf: BigInt(12332112200),
+      rg: 123123,
+      email: "reidelas@email.com",
+      id_church: 0,
+      login: "teste",
+    };
+
+    await createNewMember.execute(dataMember);
+    dataMember.cpf = BigInt(12332112210);
+    dataMember.login = "teste-2";
+    await createNewMember.execute(dataMember);
+    dataMember.cpf = BigInt(12332112211);
+    dataMember.login = "teste-3";
+    const member = await createNewMember.execute(dataMember);
+
+    expect(member).toBeTruthy();
+    expect(member?.id).toBe(2);
+
+    const dataMemberUpdate: IRequestUpdateMemberDTO = {
+      name: "Batata",
+      birth_date: "1999-11-12",
+      batism_date: "1999-12-12",
+      ecclesiasticalRole: "manager",
+      cpf: BigInt(12332112222),
+      rg: 123123,
+      email: "reidelas@email.com",
+      id_church: 0,
+      id_member: 1,
+    };
+
+    const memberUpdate = await updateMember.execute(dataMemberUpdate);
+
+    expect(memberUpdate).toBeTruthy();
+    expect(memberUpdate?.ecclesiasticalRole).toBe("manager");
+
+    const memberDeleted = await deleteMember.execute(0);
+
+    expect(memberDeleted).toBeTruthy();
+    expect(memberDeleted?.ecclesiasticalRole).toBe("member");
+
+    const members = await memberRepository.findAll();
+
+    expect(members?.length).toBe(2);
+  });
+});
