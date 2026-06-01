@@ -61,14 +61,16 @@ export default class ResolveSystemAccessService {
     }
 
     if (manager) {
+      const isGlobalManager = scope === "GLOBAL";
+
       return {
-        level: "VIEWER",
+        level: isGlobalManager ? "EDITOR" : "VIEWER",
         scope,
         memberId: member.id,
         churchId: manager.id_church,
         permissions: {
           canViewManagementData: true,
-          canEditManagementData: false,
+          canEditManagementData: isGlobalManager,
         },
       };
     }

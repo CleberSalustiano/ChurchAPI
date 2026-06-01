@@ -1,5 +1,4 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IUpdateCostDTO } from "../dtos/IUpdateCostDTO";
 import { ICostRepository } from "../repositories/ICostRepository";
 
@@ -17,8 +16,8 @@ export default class UpdateCostService {
 
     const newCost = await this.costRepository.update(dataCost);
 
-    if (!newCost) throw new Error("This cost doesn't created")
+    if (!newCost) throw new Error("This cost wasn't updated");
 
-    return cost;
+    return newCost;
   }
 }

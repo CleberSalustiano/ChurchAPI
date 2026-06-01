@@ -2,9 +2,11 @@ import { sign, SignOptions } from "jsonwebtoken";
 import request from "supertest";
 import authConfig from "../../config/auth";
 import AppError from "../../errors/AppError";
+import { hashPassword } from "../../security/password";
 
 const mockAuthenticateExecute = jest.fn();
 const mockGetAuthenticatedProfileExecute = jest.fn();
+const mockResolveSystemAccessExecute = jest.fn();
 const mockRequestPasswordResetExecute = jest.fn();
 const mockResetPasswordExecute = jest.fn();
 const mockUpdateUserLoginExecute = jest.fn();
@@ -18,6 +20,9 @@ jest.mock("../../container", () => ({
   })),
   makeGetAuthenticatedProfileService: jest.fn(() => ({
     execute: mockGetAuthenticatedProfileExecute,
+  })),
+  makeResolveSystemAccessService: jest.fn(() => ({
+    execute: mockResolveSystemAccessExecute,
   })),
   makeRequestPasswordResetService: jest.fn(() => ({
     execute: mockRequestPasswordResetExecute,
@@ -52,7 +57,7 @@ function mockActiveAuthenticatedContext(userId = 1, churchId = 1) {
   mockUserFindById.mockResolvedValue({
     id: userId,
     login: "member-login",
-    password: "hashed-password",
+    password: "$2a$10$0w3A0W1XAmWvW3vk5Ey50ejKQcfLwP3f8h53lZ8I9nX/UN1wJvG2q",
   });
   mockMemberFindByUserId.mockResolvedValue({
     id: userId,
@@ -68,6 +73,16 @@ function mockActiveAuthenticatedContext(userId = 1, churchId = 1) {
       id_location: 1,
     },
   });
+  mockResolveSystemAccessExecute.mockResolvedValue({
+    level: "MEMBER",
+    scope: "CHURCH",
+    memberId: userId,
+    churchId,
+    permissions: {
+      canViewManagementData: false,
+      canEditManagementData: false,
+    },
+  });
 }
 
 describe("Authenticated routes", () => {
@@ -79,6 +94,7 @@ describe("Authenticated routes", () => {
   it("should create a session with valid credentials", async () => {
     mockAuthenticateExecute.mockResolvedValue({
       token: "jwt.token.value",
+      mustChangePassword: false,
       user: { id: 1, login: "member-login" },
       member: {
         id: 1,
@@ -96,6 +112,20 @@ describe("Authenticated routes", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.user.login).toBe("member-login");
+    expect(response.body.access).toEqual({
+      level: "MEMBER",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: false,
+        canEditManagementData: false,
+      },
+    });
+    expect(response.body.permissions).toEqual({
+      canViewManagementData: false,
+      canEditManagementData: false,
+    });
     expect(mockAuthenticateExecute).toHaveBeenCalledWith(
       "member-login",
       "12345678"
@@ -176,6 +206,7 @@ describe("Authenticated routes", () => {
 
   it("should return the authenticated profile when the token is valid", async () => {
     mockGetAuthenticatedProfileExecute.mockResolvedValue({
+      mustChangePassword: false,
       user: { id: 1, login: "member-login" },
       member: {
         id: 1,
@@ -197,6 +228,21 @@ describe("Authenticated routes", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.user).toEqual({ id: 1, login: "member-login" });
+    expect(response.body.mustChangePassword).toBe(false);
+    expect(response.body.access).toEqual({
+      level: "MEMBER",
+      scope: "CHURCH",
+      memberId: 1,
+      churchId: 1,
+      permissions: {
+        canViewManagementData: false,
+        canEditManagementData: false,
+      },
+    });
+    expect(response.body.permissions).toEqual({
+      canViewManagementData: false,
+      canEditManagementData: false,
+    });
     expect(mockGetAuthenticatedProfileExecute).toHaveBeenCalledWith(1);
   });
 
@@ -277,5 +323,24 @@ describe("Authenticated routes", () => {
       1,
       "new-secure-password"
     );
+  });
+
+  it("should block protected routes other than /me and password update when the user still has a temporary password", async () => {
+    mockUserFindById.mockResolvedValue({
+      id: 1,
+      login: "member-login",
+      password: await hashPassword("1234", { skipPolicy: true }),
+    });
+
+    const response = await request(app)
+      .patch("/user/1/login")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({ login: "new-login" });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({
+      error: "Password change is required before accessing this resource",
+    });
+    expect(mockUpdateUserLoginExecute).not.toHaveBeenCalled();
   });
 });

@@ -5,6 +5,8 @@ import {
   makeUpdateTitheService,
   titheRepository,
 } from "../../../../../shared/container";
+import memberPublicData from "../../../../../shared/utils/memberPublicData";
+import { ITithe } from "../../../../../entities/ITithe";
 
 type ScopedRequest = Request & {
   user?: {
@@ -26,6 +28,20 @@ interface IRequestCreateTithe {
   id_treasurer: number;
 }
 
+function serializeTithe(tithe: ITithe) {
+  return {
+    ...tithe,
+    specialOffer: tithe.specialOffer
+      ? {
+          ...tithe.specialOffer,
+          member: tithe.specialOffer.member
+            ? memberPublicData(tithe.specialOffer.member)
+            : tithe.specialOffer.member,
+        }
+      : tithe.specialOffer,
+  };
+}
+
 export default class TitheController {
   async create(request: Request, response: Response) {
     const { id_church, id_member, reason, date, month, year, value, id_treasurer }: IRequestCreateTithe =
@@ -43,7 +59,7 @@ export default class TitheController {
       id_treasurer,
     });
 
-    return response.json({ tithe });
+    return response.json({ tithe: serializeTithe(tithe) });
   }
 
   async index(request: ScopedRequest, response: Response) {
@@ -53,7 +69,7 @@ export default class TitheController {
         ? await titheRepository.findAllByChurch(access.churchId)
         : await titheRepository.findAll();
 
-    return response.json({ tithes });
+    return response.json({ tithes: tithes?.map(serializeTithe) ?? [] });
   }
 
   async update(request: Request, response: Response) {
@@ -74,7 +90,7 @@ export default class TitheController {
       id_treasurer,
     });
 
-    return response.json({ tithe });
+    return response.json({ tithe: serializeTithe(tithe) });
   }
 
   async delete(request: Request, response: Response) {

@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import {
   makeCreateSpecialOfferService,
+  makeDeleteSpecialOfferService,
+  makeUpdateSpecialOfferService,
   specialOfferRepository,
 } from "../../../../../shared/container";
 
@@ -50,5 +52,39 @@ export default class SpecialOfferController {
         : await specialOfferRepository.findAll();
 
     return response.json({ specialOffers });
+  }
+
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    const {
+      id_church,
+      id_member,
+      id_treasurer,
+      value,
+      reason,
+      date,
+    }: IRequestCreate = request.body;
+
+    const updateSpecialOfferService = makeUpdateSpecialOfferService();
+    const specialOffer = await updateSpecialOfferService.execute({
+      id_special_offer: +id,
+      date,
+      id_church,
+      id_member,
+      id_treasurer,
+      value,
+      reason,
+    });
+
+    return response.json({ specialOffer });
+  }
+
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+
+    const deleteSpecialOfferService = makeDeleteSpecialOfferService();
+    await deleteSpecialOfferService.execute(+id);
+
+    return response.status(204).send();
   }
 }

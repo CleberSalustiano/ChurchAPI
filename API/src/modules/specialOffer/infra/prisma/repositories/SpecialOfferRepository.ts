@@ -63,7 +63,12 @@ export default class SpecialOfferRepository implements ISpecialOfferRepository {
 
     const specialOffer = await prismaClient.specialOffer.update({
       where: { id: id_special_offer },
-      data: { date: date.toString(), id_church, id_member, reason },
+      data: {
+        date: new Date(date.toString()),
+        id_church,
+        id_member,
+        reason,
+      },
     });
 
     return specialOffer;

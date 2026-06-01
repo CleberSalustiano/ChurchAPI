@@ -6,6 +6,7 @@ import ManagerRepository from "../../modules/manager/infra/prisma/repositories/M
 import SpecialOfferRepository from "../../modules/specialOffer/infra/prisma/repositories/SpecialOfferRepository";
 import TreasurerRepository from "../../modules/treasurer/infra/prisma/repositories/TreasurerRepository";
 import CreateNewChurchService from "../../modules/churches/services/CreateNewChurchService";
+import CreateChurchWithInitialManagerService from "../../modules/churches/services/CreateChurchWithInitialManagerService";
 import DeleteChurchService from "../../modules/churches/services/DeleteChurchService";
 import DeactivateChurchService from "../../modules/churches/services/DeactivateChurchService";
 import ReactivateChurchService from "../../modules/churches/services/ReactivateChurchService";
@@ -19,20 +20,29 @@ import ResetPasswordService from "../../modules/auth/services/ResetPasswordServi
 import CreateNewMemberService from "../../modules/members/services/CreateNewMemberService";
 import DeleteMemberService from "../../modules/members/services/DeleteMemberService";
 import UpdateMemberService from "../../modules/members/services/UpdateMemberService";
+import UpdateOwnMemberProfileService from "../../modules/members/services/UpdateOwnMemberProfileService";
 import UpdateUserLoginService from "../../modules/members/services/UpdateUserLoginService";
 import UpdateUserPasswordService from "../../modules/members/services/UpdateUserPasswordService";
 import CreateNewManagerService from "../../modules/manager/services/CreateNewManageService";
 import DeleteManagerService from "../../modules/manager/services/DeleteManagerService";
+import ReplaceManagerService from "../../modules/manager/services/ReplaceManagerService";
 import UpdateManagerService from "../../modules/manager/services/UpdateManagerService";
 import CultRepository from "../../modules/cult/infra/prisma/repositories/CultRepository";
 import CreateNewCultService from "../../modules/cult/services/CreateNewCultService";
+import CreateCultOfferService from "../../modules/cult/services/CreateCultOfferService";
+import CreateRecurringCultSeriesService from "../../modules/cult/services/CreateRecurringCultSeriesService";
 import DeleteCultService from "../../modules/cult/services/DeleteCultService";
+import DeleteCultOfferService from "../../modules/cult/services/DeleteCultOfferService";
 import UpdateCultService from "../../modules/cult/services/UpdateCultService";
+import UpdateCultOfferService from "../../modules/cult/services/UpdateCultOfferService";
+import UpdateRecurringCultSeriesService from "../../modules/cult/services/UpdateRecurringCultSeriesService";
 import CostRepository from "../../modules/cost/infra/prisma/repositories/CostRepository";
 import CreateNewCostService from "../../modules/cost/services/CreateNewCostService";
 import DeleteCostService from "../../modules/cost/services/DeleteCostService";
 import UpdateCostService from "../../modules/cost/services/UpdateCostService";
 import CreateNewSpecialOfferService from "../../modules/specialOffer/services/CreateNewSpecialOfferService";
+import DeleteSpecialOfferService from "../../modules/specialOffer/services/DeleteSpecialOfferService";
+import UpdateSpecialOfferService from "../../modules/specialOffer/services/UpdateSpecialOfferService";
 import CreateNewTitheService from "../../modules/tithe/services/CreateNewTitheService";
 import DeleteTitheService from "../../modules/tithe/services/DeleteTitheService";
 import UpdateTitheService from "../../modules/tithe/services/UpdateTitheService";
@@ -66,6 +76,10 @@ export const mailProvider = mailConfig.smtp.host
 
 export function makeCreateChurchService() {
   return new CreateNewChurchService(churchRepository, locationRepository);
+}
+
+export function makeCreateChurchWithInitialManagerService() {
+  return new CreateChurchWithInitialManagerService();
 }
 
 export function makeDeleteChurchService() {
@@ -122,11 +136,23 @@ export function makeResolveSystemAccessService() {
 }
 
 export function makeUpdateMemberService() {
-  return new UpdateMemberService(memberRepository, churchRepository);
+  return new UpdateMemberService(
+    memberRepository,
+    churchRepository,
+    managerRepository
+  );
+}
+
+export function makeUpdateOwnMemberProfileService() {
+  return new UpdateOwnMemberProfileService(memberRepository);
 }
 
 export function makeDeleteMemberService() {
-  return new DeleteMemberService(memberRepository, userRepository);
+  return new DeleteMemberService(
+    memberRepository,
+    userRepository,
+    managerRepository
+  );
 }
 
 export function makeUpdateUserLoginService() {
@@ -149,12 +175,32 @@ export function makeCreateCultService() {
   return new CreateNewCultService(cultRepository, churchRepository);
 }
 
+export function makeCreateRecurringCultSeriesService() {
+  return new CreateRecurringCultSeriesService();
+}
+
 export function makeUpdateCultService() {
   return new UpdateCultService(cultRepository, churchRepository);
 }
 
+export function makeUpdateRecurringCultSeriesService() {
+  return new UpdateRecurringCultSeriesService();
+}
+
 export function makeDeleteCultService() {
   return new DeleteCultService(cultRepository);
+}
+
+export function makeCreateCultOfferService() {
+  return new CreateCultOfferService();
+}
+
+export function makeUpdateCultOfferService() {
+  return new UpdateCultOfferService();
+}
+
+export function makeDeleteCultOfferService() {
+  return new DeleteCultOfferService();
 }
 
 export function makeCreateCostService() {
@@ -181,6 +227,10 @@ export function makeDeleteManagerService() {
   return new DeleteManagerService(managerRepository);
 }
 
+export function makeReplaceManagerService() {
+  return new ReplaceManagerService();
+}
+
 export function makeCreateTreasurerService() {
   return new CreateNewTreasurerService(memberRepository, treasurerRepository);
 }
@@ -201,6 +251,20 @@ export function makeCreateSpecialOfferService() {
     churchRepository,
     memberRepository
   );
+}
+
+export function makeUpdateSpecialOfferService() {
+  return new UpdateSpecialOfferService(
+    offerRepository,
+    specialOfferRepository,
+    treasurerRepository,
+    churchRepository,
+    memberRepository
+  );
+}
+
+export function makeDeleteSpecialOfferService() {
+  return new DeleteSpecialOfferService(specialOfferRepository, offerRepository);
 }
 
 export function makeCreateOfferService() {

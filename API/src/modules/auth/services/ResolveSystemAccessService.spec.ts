@@ -158,11 +158,12 @@ describe("Resolve system access", () => {
       id_user: 1,
     });
 
-    await treasurerRepository.create(0);
+    await managerRepository.create({ id_member: 0, id_church: 0 });
 
     const access = await service.execute(1);
 
     expect(access?.scope).toBe("GLOBAL");
     expect(access?.level).toBe("EDITOR");
+    expect(access?.permissions.canEditManagementData).toBe(true);
   });
 });

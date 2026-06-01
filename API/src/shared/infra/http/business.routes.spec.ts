@@ -8,14 +8,21 @@ const mockMemberFindByUserId = jest.fn();
 const mockMemberFindById = jest.fn();
 const mockMemberFindAll = jest.fn();
 const mockMemberFindAllByChurch = jest.fn();
+const mockManagerFindById = jest.fn();
+const mockManagerFindAllActive = jest.fn();
+const mockManagerFindAllByChurch = jest.fn();
+const mockManagerFindByMember = jest.fn();
 const mockChurchFindById = jest.fn();
 const mockChurchFindAll = jest.fn();
 const mockCreateChurchExecute = jest.fn();
+const mockCreateStructuredChurchExecute = jest.fn();
 const mockDeactivateChurchExecute = jest.fn();
 const mockReactivateChurchExecute = jest.fn();
 const mockDeleteChurchExecute = jest.fn();
 const mockCreateMemberExecute = jest.fn();
 const mockDeleteMemberExecute = jest.fn();
+const mockDeleteManagerExecute = jest.fn();
+const mockReplaceManagerExecute = jest.fn();
 
 jest.mock("../../container", () => ({
   makeResolveSystemAccessService: jest.fn(() => ({
@@ -23,6 +30,9 @@ jest.mock("../../container", () => ({
   })),
   makeCreateChurchService: jest.fn(() => ({
     execute: (...args: unknown[]) => mockCreateChurchExecute(...args),
+  })),
+  makeCreateChurchWithInitialManagerService: jest.fn(() => ({
+    execute: (...args: unknown[]) => mockCreateStructuredChurchExecute(...args),
   })),
   makeDeactivateChurchService: jest.fn(() => ({
     execute: (...args: unknown[]) => mockDeactivateChurchExecute(...args),
@@ -39,12 +49,24 @@ jest.mock("../../container", () => ({
   makeDeleteMemberService: jest.fn(() => ({
     execute: (...args: unknown[]) => mockDeleteMemberExecute(...args),
   })),
+  makeDeleteManagerService: jest.fn(() => ({
+    execute: (...args: unknown[]) => mockDeleteManagerExecute(...args),
+  })),
+  makeReplaceManagerService: jest.fn(() => ({
+    execute: (...args: unknown[]) => mockReplaceManagerExecute(...args),
+  })),
   userRepository: {
     findById: (...args: unknown[]) => mockUserFindById(...args),
   },
   churchRepository: {
     findById: (...args: unknown[]) => mockChurchFindById(...args),
     findAll: (...args: unknown[]) => mockChurchFindAll(...args),
+  },
+  managerRepository: {
+    findById: (...args: unknown[]) => mockManagerFindById(...args),
+    findAllActive: (...args: unknown[]) => mockManagerFindAllActive(...args),
+    findAllbyChurch: (...args: unknown[]) => mockManagerFindAllByChurch(...args),
+    findByMember: (...args: unknown[]) => mockManagerFindByMember(...args),
   },
   memberRepository: {
     findByUserId: (...args: unknown[]) => mockMemberFindByUserId(...args),
@@ -101,6 +123,18 @@ function mockAuthenticatedUser({
     id: 4,
     id_church: churchId,
   });
+
+  mockManagerFindById.mockResolvedValue({
+    id: 7,
+    id_church: churchId,
+    id_member: 4,
+    startDate: new Date("2024-01-10"),
+    endDate: null,
+  });
+
+  mockManagerFindAllActive.mockResolvedValue([]);
+  mockManagerFindAllByChurch.mockResolvedValue([]);
+  mockManagerFindByMember.mockResolvedValue(undefined);
 
   mockResolveSystemAccessExecute.mockResolvedValue({
     level: accessLevel,
@@ -166,6 +200,74 @@ describe("Business routes", () => {
         street: "Rua das Flores",
       }
     );
+  });
+
+  it("should create a church with its initial manager for a global editor", async () => {
+    mockAuthenticatedUser({
+      churchId: 1,
+      churchType: "HEADQUARTER",
+      accessScope: "GLOBAL",
+      accessLevel: "EDITOR",
+    });
+
+    mockCreateStructuredChurchExecute.mockResolvedValue({
+      church: {
+        id: 2,
+        creationDate: new Date("2024-01-15"),
+        type: "BRANCH",
+        status: "ACTIVE",
+        parentChurchId: 1,
+        id_location: 2,
+      },
+      manager: {
+        id: 8,
+        id_church: 2,
+        id_member: 12,
+        startDate: new Date("2024-01-15"),
+      },
+      member: {
+        id: 12,
+        name: "Joao da Silva",
+        cpf: "12345678901",
+      },
+      user: {
+        id: 4,
+        login: "joao.silva",
+      },
+    });
+
+    const payload = {
+      church: {
+        date: "2024-01-15",
+        street: "Rua das Flores",
+        district: "Centro",
+        city: "Sao Paulo",
+        state: "SP",
+        country: "Brasil",
+        cep: 1001000,
+        type: "BRANCH",
+      },
+      manager: {
+        name: "Joao da Silva",
+        birth_date: "1990-01-10",
+        batism_date: "2005-02-20",
+        ecclesiasticalRole: "Dirigente",
+        cpf: "12345678901",
+        rg: 123456789,
+        login: "joao.silva",
+        email: "joao@email.com",
+        password: "1234",
+      },
+    };
+
+    const response = await request(app)
+      .post("/church/structured")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send(payload);
+
+    expect(response.status).toBe(200);
+    expect(response.body.manager.id_member).toBe(12);
+    expect(mockCreateStructuredChurchExecute).toHaveBeenCalledWith(payload);
   });
 
   it("should deactivate and reactivate a church for a global editor", async () => {
@@ -285,6 +387,44 @@ describe("Business routes", () => {
     expect(response.status).toBe(200);
     expect(response.body.member.cpf).toBe("12345678901");
     expect(response.body.member.id_church).toBe(3);
+  });
+
+  it("should replace a manager assignment without leaving the church unmanaged", async () => {
+    mockAuthenticatedUser({
+      churchId: 3,
+      churchType: "BRANCH",
+      accessScope: "CHURCH",
+      accessLevel: "EDITOR",
+    });
+
+    mockReplaceManagerExecute.mockResolvedValue({
+      previousManager: {
+        id: 7,
+        id_church: 3,
+        id_member: 4,
+        endDate: new Date("2024-04-20"),
+      },
+      manager: {
+        id: 9,
+        id_church: 3,
+        id_member: 6,
+        startDate: new Date("2024-04-20"),
+      },
+    });
+
+    const response = await request(app)
+      .post("/manager/7/replace")
+      .set("Authorization", `Bearer ${makeToken(1)}`)
+      .send({
+        id_member: 6,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.manager.id_member).toBe(6);
+    expect(mockReplaceManagerExecute).toHaveBeenCalledWith({
+      id_manager: 7,
+      id_member: 6,
+    });
   });
 
   it("should list scoped members with cpf serialized as string", async () => {

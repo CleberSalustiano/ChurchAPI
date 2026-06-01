@@ -50,5 +50,22 @@ specialOfferRouter.get(
   ensureSystemAccess("viewer"),
   asyncHandler(specialOfferController.index.bind(specialOfferController))
 );
+specialOfferRouter.put(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("specialOffer", "id", "params"),
+  ensureScopedResourceAccess("member", "id_member", "body"),
+  ensureScopedResourceAccess("treasurer", "id_treasurer", "body"),
+  ensureChurchScope({ source: "body", field: "id_church" }),
+  asyncHandler(specialOfferController.update.bind(specialOfferController))
+);
+specialOfferRouter.delete(
+  "/:id",
+  ensureAuthenticated,
+  ensureSystemAccess("editor"),
+  ensureScopedResourceAccess("specialOffer", "id", "params"),
+  asyncHandler(specialOfferController.delete.bind(specialOfferController))
+);
 
 export default specialOfferRouter;

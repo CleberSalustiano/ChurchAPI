@@ -1,4 +1,4 @@
-ALTER TABLE "users"
+ALTER TABLE "User"
 ADD COLUMN "deletedAt" TIMESTAMP(3);
 
 ALTER TABLE "members"

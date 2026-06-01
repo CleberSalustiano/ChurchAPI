@@ -8,7 +8,7 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "ChurchAPI",
+      title: "ChurchAPP API",
       version: "1.0.0",
       description:
         "API para gestao de igreja, congregacoes, membros e movimentacoes financeiras.",
@@ -71,6 +71,31 @@ const options = {
             login: { type: "string", example: "maria.silva" },
           },
         },
+        SystemPermissions: {
+          type: "object",
+          properties: {
+            canViewManagementData: { type: "boolean", example: true },
+            canEditManagementData: { type: "boolean", example: false },
+          },
+        },
+        SystemAccess: {
+          type: "object",
+          properties: {
+            level: {
+              type: "string",
+              enum: ["MEMBER", "VIEWER", "EDITOR"],
+              example: "VIEWER",
+            },
+            scope: {
+              type: "string",
+              enum: ["GLOBAL", "CHURCH"],
+              example: "CHURCH",
+            },
+            memberId: { type: "number", example: 12 },
+            churchId: { type: "number", example: 1 },
+            permissions: { $ref: "#/components/schemas/SystemPermissions" },
+          },
+        },
         AuthenticatedMember: {
           type: "object",
           properties: {
@@ -98,6 +123,14 @@ const options = {
           type: "object",
           properties: {
             token: { type: "string", example: "jwt.token.value" },
+            mustChangePassword: {
+              type: "boolean",
+              example: false,
+              description:
+                "When true, the user must update the password before using the protected areas of the system.",
+            },
+            access: { $ref: "#/components/schemas/SystemAccess" },
+            permissions: { $ref: "#/components/schemas/SystemPermissions" },
             user: { $ref: "#/components/schemas/AuthenticatedUser" },
             member: {
               type: "object",
@@ -118,6 +151,12 @@ const options = {
         MeResponse: {
           type: "object",
           properties: {
+            mustChangePassword: {
+              type: "boolean",
+              example: false,
+            },
+            access: { $ref: "#/components/schemas/SystemAccess" },
+            permissions: { $ref: "#/components/schemas/SystemPermissions" },
             user: { $ref: "#/components/schemas/AuthenticatedUser" },
             member: { $ref: "#/components/schemas/AuthenticatedMember" },
           },
@@ -143,7 +182,7 @@ const options = {
             },
             password: {
               type: "string",
-              minLength: 8,
+              minLength: 6,
               example: "new-secure-password-123",
             },
           },
@@ -187,6 +226,61 @@ const options = {
             },
           ],
         },
+        ChurchStructuredCreateRequest: {
+          type: "object",
+          required: ["church", "manager"],
+          properties: {
+            church: {
+              $ref: "#/components/schemas/ChurchCreateRequest",
+            },
+            manager: {
+              type: "object",
+              required: [
+                "name",
+                "birth_date",
+                "batism_date",
+                "ecclesiasticalRole",
+                "cpf",
+                "rg",
+                "login",
+                "email",
+              ],
+              properties: {
+                name: { type: "string", example: "Maria da Silva" },
+                birth_date: {
+                  type: "string",
+                  format: "date",
+                  example: "1990-05-20",
+                },
+                batism_date: {
+                  type: "string",
+                  format: "date",
+                  example: "2008-04-10",
+                },
+                ecclesiasticalRole: { type: "string", example: "Dirigente" },
+                cpf: {
+                  type: "string",
+                  example: "12345678901",
+                  description: "CPF represented as string for JSON compatibility.",
+                },
+                rg: { type: "number", example: 123456789 },
+                login: { type: "string", example: "maria.silva" },
+                email: {
+                  type: "string",
+                  format: "email",
+                  example: "maria@email.com",
+                },
+                password: {
+                  type: "string",
+                  nullable: true,
+                  example: "1234",
+                  description:
+                    "Optional temporary password. Accepted values: the member CPF or 1234. When omitted, the CPF becomes the initial password.",
+                },
+              },
+            },
+          },
+        },
         MemberCreateRequest: {
           type: "object",
           required: [
@@ -199,7 +293,6 @@ const options = {
             "rg",
             "login",
             "email",
-            "password",
           ],
           properties: {
             id_church: { type: "number", example: 1 },
@@ -223,7 +316,13 @@ const options = {
             rg: { type: "number", example: 123456789 },
             login: { type: "string", example: "maria.silva" },
             email: { type: "string", format: "email", example: "maria@email.com" },
-            password: { type: "string", example: "senha-inicial" },
+            password: {
+              type: "string",
+              nullable: true,
+              example: "1234",
+              description:
+                "Optional temporary password. Accepted values: the member CPF or 1234. When omitted, the CPF becomes the initial password.",
+            },
           },
         },
         MemberUpdateRequest: {
@@ -274,7 +373,7 @@ const options = {
           properties: {
             password: {
               type: "string",
-              minLength: 8,
+              minLength: 6,
               example: "senha-segura-123",
             },
           },
@@ -285,6 +384,13 @@ const options = {
           properties: {
             id_member: { type: "number", example: 1 },
             id_church: { type: "number", example: 1 },
+          },
+        },
+        ManagerReplaceRequest: {
+          type: "object",
+          required: ["id_member"],
+          properties: {
+            id_member: { type: "number", example: 14 },
           },
         },
         CultRequest: {
