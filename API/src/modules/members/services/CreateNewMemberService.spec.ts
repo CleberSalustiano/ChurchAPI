@@ -1,5 +1,8 @@
 import NoExistError from "../../../shared/errors/NoExistError";
-import { verifyPassword } from "../../../shared/security/password";
+import {
+  MEMBER_DEFAULT_PASSWORD,
+  verifyPassword,
+} from "../../../shared/security/password";
 import FakeChurchRepository from "../../churches/repositories/fakes/FakeChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import FakeMemberRepository from "../repositories/fakes/FakeMemberRepository";
@@ -27,7 +30,6 @@ describe("Create New Member", () => {
       cpf: BigInt(12312312312),
       email: "email@email.com",
       name: "Luvas Piruvicas",
-      password: "69696969",
       rg: 123123,
       login: "teste",
       ecclesiasticalRole: "Member",
@@ -38,8 +40,10 @@ describe("Create New Member", () => {
 
     expect(member).toBeTruthy();
     expect(member?.rg).toBe(123123);
-    expect(user?.password).not.toBe("69696969");
-    await expect(verifyPassword("69696969", user!.password)).resolves.toBe(true);
+    expect(user?.password).not.toBe("12312312312");
+    await expect(verifyPassword("12312312312", user!.password)).resolves.toBe(
+      true
+    );
   });
 
   it("should not be able to create a new member with a church that doesn't exist", async () => {
@@ -62,7 +66,6 @@ describe("Create New Member", () => {
       cpf: BigInt(12312312312),
       email: "email@email.com",
       name: "Luvas Piruvicas",
-      password: "69696969",
       rg: 123123,
       login: "teste",
       ecclesiasticalRole: "Member",
@@ -93,7 +96,6 @@ describe("Create New Member", () => {
       cpf: BigInt(1231232312),
       email: "email@email.com",
       name: "Luvas Piruvicas",
-      password: "69696969",
       rg: 123123,
       login: "teste",
       ecclesiasticalRole: "Member",
@@ -122,7 +124,6 @@ describe("Create New Member", () => {
       cpf: BigInt(12312312312),
       email: "email@email.com",
       name: "Luvas Piruvicas",
-      password: "69696969",
       rg: 123123,
       login: "teste",
       ecclesiasticalRole: "Member",
@@ -162,7 +163,6 @@ describe("Create New Member", () => {
       cpf: BigInt(12312312312),
       email: "email@email.com",
       name: "Luvas Piruvicas",
-      password: "69696969",
       rg: 123123,
       login: "teste",
       ecclesiasticalRole: "Member",
@@ -171,7 +171,7 @@ describe("Create New Member", () => {
     expect(createNewMember.execute(dataMamber)).rejects.toThrowError(Error);
   });
 
-  it("should validate the minimum password policy on member creation", async () => {
+  it("should allow 1234 as an explicit temporary initial password", async () => {
     const memberRepository = new FakeMemberRepository();
     const churchRepository = new FakeChurchRepository();
     const userRepository = new FakeUserRepository();
@@ -191,14 +191,49 @@ describe("Create New Member", () => {
       cpf: BigInt(12312312313),
       email: "email@email.com",
       name: "Luvas Piruvicas",
-      password: "123",
+      password: MEMBER_DEFAULT_PASSWORD,
       rg: 123123,
       login: "teste-min-password",
       ecclesiasticalRole: "Member",
     };
 
+    await createNewMember.execute(dataMamber);
+
+    const user = await userRepository.findByLogin("teste-min-password");
+
+    await expect(
+      verifyPassword(MEMBER_DEFAULT_PASSWORD, user!.password)
+    ).resolves.toBe(true);
+  });
+
+  it("should reject a custom initial password outside the allowed temporary options", async () => {
+    const memberRepository = new FakeMemberRepository();
+    const churchRepository = new FakeChurchRepository();
+    const userRepository = new FakeUserRepository();
+
+    churchRepository.create({ date: "1999-12-12", id_location: 0 });
+
+    const createNewMember = new CreateNewMemberService(
+      memberRepository,
+      userRepository,
+      churchRepository
+    );
+
+    const dataMamber: IRequestCreateMemberDTO = {
+      id_church: 0,
+      batism_date: "1999-12-12",
+      birth_date: "1999-11-12",
+      cpf: BigInt(12312312313),
+      email: "email@email.com",
+      name: "Luvas Piruvicas",
+      password: "SenhaInicial123",
+      rg: 123123,
+      login: "teste-invalid-initial-password",
+      ecclesiasticalRole: "Member",
+    };
+
     await expect(createNewMember.execute(dataMamber)).rejects.toThrowError(
-      "Password must have at least 8 characters"
+      "Initial member password must be the member CPF or 1234"
     );
   });
 });

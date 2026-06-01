@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import authConfig from "../../../config/auth";
+import { hasTemporaryMemberPassword } from "../../../security/password";
 import {
   memberRepository,
   userRepository,
@@ -14,8 +15,27 @@ interface ITokenPayload {
 type RequestWithUser = Request & {
   user?: {
     id: number;
+    memberId?: number;
+    mustChangePassword?: boolean;
   };
 };
+
+function isPasswordChangeAllowedRoute(request: Request) {
+  const routePath = `${request.baseUrl}${request.path}`;
+
+  if (request.method === "GET" && routePath === "/me") {
+    return true;
+  }
+
+  if (
+    request.method === "PATCH" &&
+    /^\/user\/\d+\/password$/.test(routePath)
+  ) {
+    return true;
+  }
+
+  return false;
+}
 
 export default function ensureAuthenticated(
   request: RequestWithUser,
@@ -47,7 +67,7 @@ export default function ensureAuthenticated(
     userRepository.findById(userId),
     memberRepository.findByUserId(userId),
   ])
-    .then(([user, member]) => {
+    .then(async ([user, member]) => {
       if (!user) {
         throw new AppError("Invalid authenticated session", 401);
       }
@@ -60,9 +80,23 @@ export default function ensureAuthenticated(
         throw new AppError("This church is not active", 403);
       }
 
+      const mustChangePassword = await hasTemporaryMemberPassword(
+        user.password,
+        member.cpf
+      );
+
       request.user = {
         id: userId,
+        memberId: member.id,
+        mustChangePassword,
       };
+
+      if (mustChangePassword && !isPasswordChangeAllowedRoute(request)) {
+        throw new AppError(
+          "Password change is required before accessing this resource",
+          403
+        );
+      }
 
       return next();
     })

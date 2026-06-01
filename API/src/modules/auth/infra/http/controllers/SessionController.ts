@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   makeAuthenticateUserService,
   makeGetAuthenticatedProfileService,
+  makeResolveSystemAccessService,
 } from "../../../../../shared/container";
 
 interface IRequestCreateSession {
@@ -15,8 +16,14 @@ export default class SessionController {
 
     const authenticateUser = makeAuthenticateUserService();
     const session = await authenticateUser.execute(login, password);
+    const resolveSystemAccess = makeResolveSystemAccessService();
+    const access = await resolveSystemAccess.execute(session.user.id);
 
-    return response.json(session);
+    return response.json({
+      ...session,
+      access,
+      permissions: access?.permissions,
+    });
   }
 
   async show(request: Request, response: Response) {
@@ -24,7 +31,15 @@ export default class SessionController {
     const profile = await getAuthenticatedProfile.execute(
       (request as Request & { user: { id: number } }).user.id
     );
+    const resolveSystemAccess = makeResolveSystemAccessService();
+    const access = await resolveSystemAccess.execute(
+      (request as Request & { user: { id: number } }).user.id
+    );
 
-    return response.json(profile);
+    return response.json({
+      ...profile,
+      access,
+      permissions: access?.permissions,
+    });
   }
 }

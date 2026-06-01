@@ -11,17 +11,19 @@ describe("Update user password", () => {
 
     await userRepository.create({ login: "member-login", password: "12345678" });
 
-    const user = await service.execute(0, "87654321");
+    const user = await service.execute(0, "NovaSenha1");
 
-    expect(user?.password).not.toBe("87654321");
-    await expect(verifyPassword("87654321", user!.password)).resolves.toBe(true);
+    expect(user?.password).not.toBe("NovaSenha1");
+    await expect(verifyPassword("NovaSenha1", user!.password)).resolves.toBe(
+      true
+    );
   });
 
   it("should not update password for a user that does not exist", async () => {
     const userRepository = new FakeUserRepository();
     const service = new UpdateUserPasswordService(userRepository);
 
-    await expect(service.execute(0, "87654321")).rejects.toThrowError(
+    await expect(service.execute(0, "NovaSenha1")).rejects.toThrowError(
       NoExistError
     );
   });
@@ -32,6 +34,6 @@ describe("Update user password", () => {
 
     await userRepository.create({ login: "member-login", password: "12345678" });
 
-    await expect(service.execute(0, "123")).rejects.toThrowError(AppError);
+    await expect(service.execute(0, "123456")).rejects.toThrowError(AppError);
   });
 });

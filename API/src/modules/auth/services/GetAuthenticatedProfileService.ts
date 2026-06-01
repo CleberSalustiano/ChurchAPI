@@ -1,4 +1,5 @@
 import NoExistError from "../../../shared/errors/NoExistError";
+import { hasTemporaryMemberPassword } from "../../../shared/security/password";
 import memberPublicData from "../../../shared/utils/memberPublicData";
 import userPublicData from "../../../shared/utils/userPublicData";
 import { IMemberRepository } from "../../members/repositories/IMemberRepository";
@@ -22,7 +23,13 @@ export default class GetAuthenticatedProfileService {
 
     if (!member) throw new NoExistError("member");
 
+    const mustChangePassword = await hasTemporaryMemberPassword(
+      user.password,
+      member.cpf
+    );
+
     return {
+      mustChangePassword,
       user: userPublicData(user),
       member: memberPublicData(member),
     };

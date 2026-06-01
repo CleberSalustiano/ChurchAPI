@@ -7,6 +7,6 @@ export interface IRequestCreateMemberDTO {
 	rg: number;
 	email: string;
   login: string;
-	password: string;
+	password?: string;
   id_church: number;
 }

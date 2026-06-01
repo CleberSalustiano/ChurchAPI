@@ -1,8 +1,12 @@
 import AlreadyExistError from "../../../shared/errors/AlreadyExistError";
 import DateError from "../../../shared/errors/DateError";
 import NoExistError from "../../../shared/errors/NoExistError";
-import { hashPassword } from "../../../shared/security/password";
+import {
+  hashPassword,
+  resolveInitialMemberPassword,
+} from "../../../shared/security/password";
 import { confirmIsDate } from "../../../shared/utils/confirmIsDate";
+import { normalizeCpfDigits, normalizeCpfToBigInt } from "../../../shared/utils/normalizeCpf";
 import { IChurchRepository } from "../../churches/repositories/IChurchRepository";
 import { IRequestCreateMemberDTO } from "../dtos/IRequestCreateMemberDTO";
 import { IMemberRepository } from "../repositories/IMemberRepository";
@@ -31,7 +35,10 @@ export default class CreateNewMemberService {
     login,
     ecclesiasticalRole,
   }: IRequestCreateMemberDTO) {
-    const existMemberCPF = await this.memberRepository.findByCPF(cpf);
+    const normalizedCpfDigits = normalizeCpfDigits(cpf);
+    const normalizedCpf = normalizeCpfToBigInt(cpf);
+
+    const existMemberCPF = await this.memberRepository.findByCPF(normalizedCpf);
     if (existMemberCPF) throw new AlreadyExistError("member with this CPF");
 
     if (id_church === undefined) throw new Error("id_church pass undefined");
@@ -43,7 +50,7 @@ export default class CreateNewMemberService {
 
     if (!confirmIsDate(batism_date)) throw new DateError();
 
-    if (cpf.toString().length !== 11)
+    if (normalizedCpfDigits.length !== 11)
       throw new Error("CPF format is incorrect");
 
     if (birth_date.toString() === batism_date.toString())
@@ -53,7 +60,10 @@ export default class CreateNewMemberService {
 
     if (existUser) throw new Error("Already exist this user!");
 
-    const hashedPassword = await hashPassword(password);
+    const initialPassword = resolveInitialMemberPassword(normalizedCpfDigits, password);
+    const hashedPassword = await hashPassword(initialPassword, {
+      skipPolicy: true,
+    });
 
     const user = await this.userRepository.create({
       login,
@@ -65,7 +75,7 @@ export default class CreateNewMemberService {
     const member = await this.memberRepository.create({
       batism_date,
       birth_date,
-      cpf,
+      cpf: normalizedCpf,
       email,
       id_church,
       id_user: user.id,
